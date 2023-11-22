@@ -1,0 +1,15 @@
+export const ImagesAssets = {
+  builder: require('./builder.png'),
+  electrician: require('./electrician.png'),
+  gardener: require('./gardener.png'),
+  loader: require('./loader.png'),
+  worker: require('./worker.png'),
+  information: require('./information.png'),
+  important: require('./important.png'),
+  house: require('./house.png'),
+  newspaper: require('./newspaper.png'),
+  alert: require('./alert.png'),
+  add: require('./add.png'),
+  service: require('./service.png'),
+  refresh: require('./refresh.png'),
+};

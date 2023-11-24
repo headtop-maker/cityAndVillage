@@ -7,6 +7,8 @@ enum SCREENS {
   AddContentScreen = 'AddContentScreen',
   ServiceScreen = 'ServiceScreen',
   CurrentNewsScreen = 'CurrentNewsScreen',
+  LoginScreen = 'LoginScreen',
+  RegistrationScreen = 'RegistrationScreen',
 }
 
 export default SCREENS;

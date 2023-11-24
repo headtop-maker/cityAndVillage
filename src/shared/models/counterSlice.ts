@@ -20,6 +20,7 @@ const initialState: CounterState = {
     showIndicator: true,
   },
   currentNewsId: '',
+  currentUser: undefined,
 };
 
 export const counterSlice = createSlice({

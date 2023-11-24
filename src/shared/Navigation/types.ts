@@ -8,4 +8,6 @@ export type IRouteParamList = {
   [SCREENS.ImportantScreen]: undefined;
   [SCREENS.AddContentScreen]: undefined;
   [SCREENS.CurrentNewsScreen]: undefined;
+  [SCREENS.LoginScreen]: undefined;
+  [SCREENS.RegistrationScreen]: undefined;
 };

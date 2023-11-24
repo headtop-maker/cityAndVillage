@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {CounterState} from '../../../shared/models/counterSlice';
+import {CounterState} from '../../../shared/models/types';
 
 type TImageItem = {
   setImageSrc: (data: string) => void;

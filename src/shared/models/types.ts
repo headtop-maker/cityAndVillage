@@ -25,4 +25,18 @@ export interface CounterState {
     modalText: string;
     showIndicator: boolean;
   };
+  currentUser:
+    | {
+        userName: string;
+        userEmail: string;
+        userToken: string;
+        role: userRole;
+      }
+    | undefined;
+}
+
+export enum userRole {
+  admin = 'admin',
+  simpleUser = 'simpleUser',
+  worker = 'worker',
 }

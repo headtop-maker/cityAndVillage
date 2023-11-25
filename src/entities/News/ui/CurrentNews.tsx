@@ -19,6 +19,7 @@ const CurrentNews = () => {
           uri: current?.image,
         }}
       />
+
       <ScrollView style={styles.newsContainer}>
         <View style={styles.newsItem}>
           <Text style={styles.newsText}>{current?.title}</Text>
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     top: -10,
     borderRadius: 10,
+    padding: 10,
   },
   newsItem: {marginLeft: 5, marginRight: 5, marginTop: 15},
   newsImage: {

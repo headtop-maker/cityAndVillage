@@ -7,3 +7,13 @@ export const selectimageForNewsFromServer = createSelector(
   selectRootCounter,
   state => state.imageForNewsFromServer,
 );
+
+export const selectCurrentUserRole = createSelector(
+  selectRootCounter,
+  state => state.currentUser?.role,
+);
+
+export const selectCurrentUserName = createSelector(
+  selectRootCounter,
+  state => state.currentUser?.userName,
+);

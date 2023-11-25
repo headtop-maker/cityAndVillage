@@ -12,7 +12,12 @@ export const getNews = createAsyncThunk(
   async (limit: number, {rejectWithValue}) => {
     try {
       const response = await getCurrentNews(limit);
-      return response.data;
+
+      return response.data.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
     } catch (err) {
       return rejectWithValue(err);
     }

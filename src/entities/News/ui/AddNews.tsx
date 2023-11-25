@@ -14,9 +14,14 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {crateNews, getImageForNews} from '../../../entities/News/models/models';
-import {selectimageForNewsFromServer} from '../models/selectors';
+import {
+  selectCurrentUserName,
+  selectCurrentUserRole,
+  selectimageForNewsFromServer,
+} from '../models/selectors';
 import ImageItem from './ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
+import {userRole} from '../../../shared/models/types';
 
 // interface AddContentScreeProps {}
 
@@ -25,6 +30,8 @@ const AddNews = () => {
   const [description, setDescription] = useState('');
   const [imageSrc, setImageSrc] = useState('');
   const images = useAppSelector(selectimageForNewsFromServer);
+  const currentRole = useAppSelector(selectCurrentUserRole);
+  const userName = useAppSelector(selectCurrentUserName);
 
   const dispatch = useAppDispatch();
 
@@ -35,12 +42,16 @@ const AddNews = () => {
   const isLockSend = !!title && !!description && !!imageSrc;
 
   const handleClick = () => {
+    if (!currentRole || currentRole !== userRole.admin || !userName) {
+      return;
+    }
+
     dispatch(
       crateNews({
         description,
         title,
         image: imageSrc,
-        author: 'Admin', //пока хардкод
+        author: userName,
       }),
     );
     setTitle('');

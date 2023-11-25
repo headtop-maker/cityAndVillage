@@ -30,6 +30,7 @@ const News = () => {
             createdAt={item.createdAt}
             description={item.description}
             id={item.id}
+            author={item.author}
           />
         )}
         keyExtractor={(id, index) => id + 'news' + index}

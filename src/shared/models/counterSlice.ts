@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import type {PayloadAction} from '@reduxjs/toolkit';
+import type {Action, AnyAction, PayloadAction} from '@reduxjs/toolkit';
 import {
   crateNews,
   getImageForNews,
@@ -7,6 +7,16 @@ import {
 } from '../../entities/News/models/models';
 import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
+import {createUsers} from '../../entities/Registration/models/models';
+import {loginUsers} from '../../entities/Login/model/models';
+
+interface RejectedAction extends Action {
+  error: Error;
+}
+
+function isRejectedAction(action: AnyAction): action is RejectedAction {
+  return action.type.endsWith('rejected');
+}
 
 const initialState: CounterState = {
   value: 0,
@@ -30,7 +40,9 @@ export const counterSlice = createSlice({
     resetModalText: state => {
       state.actionState.modalText = '';
     },
-
+    resetCurrentUser: state => {
+      state.currentUser = undefined;
+    },
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
@@ -50,11 +62,7 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
         state.news = action.payload;
       })
-      .addCase(getNews.rejected, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = 'Ошибка получения данных';
-        state.actionState.error = action.error.message;
-      })
+
       .addCase(getImportant.pending, state => {
         state.actionState.loadind = true;
         state.actionState.error = undefined;
@@ -65,11 +73,7 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
         state.important = action.payload;
       })
-      .addCase(getImportant.rejected, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = 'Ошибка получения данных';
-        state.actionState.error = action.error.message;
-      })
+
       .addCase(crateNews.pending, state => {
         state.actionState.loadind = true;
         state.actionState.error = undefined;
@@ -80,11 +84,7 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
         state.important = action.payload;
       })
-      .addCase(crateNews.rejected, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = 'Ошибка обновления данных';
-        state.actionState.error = action.error.message;
-      })
+
       .addCase(getImageForNews.pending, state => {
         state.actionState.loadind = true;
         state.actionState.error = undefined;
@@ -95,7 +95,28 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
         state.imageForNewsFromServer = action.payload;
       })
-      .addCase(getImageForNews.rejected, (state, action) => {
+
+      .addCase(createUsers.pending, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Информация обновляется';
+      })
+      .addCase(createUsers.fulfilled, (state, action) => {
+        state.actionState.loadind = false;
+        state.actionState.modalText = '';
+        state.currentUser = action.payload;
+      })
+      .addCase(loginUsers.pending, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Информация обновляется';
+      })
+      .addCase(loginUsers.fulfilled, (state, action) => {
+        state.actionState.loadind = false;
+        state.actionState.modalText = '';
+        state.currentUser = action.payload;
+      })
+      .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = 'Ошибка получения данных';
         state.actionState.error = action.error.message;
@@ -103,7 +124,11 @@ export const counterSlice = createSlice({
   },
 });
 
-export const {resetModalText, incrementByAmount, setCurrentNewsId} =
-  counterSlice.actions;
+export const {
+  resetModalText,
+  incrementByAmount,
+  setCurrentNewsId,
+  resetCurrentUser,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

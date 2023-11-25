@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import {IRouteParamList} from '../../../shared/Navigation/types';
 import SCREENS from '../../../shared/Navigation/screens';
+import {useAppDispatch} from '../../../shared/models/storeHooks';
+import {loginUsers} from '../model/models';
 
 // interface SetLoginProps {}
 
@@ -18,11 +20,14 @@ const SetLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const isLockSend = !!email && !!password;
+
+  const dispatch = useAppDispatch();
+
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
 
   const handleClick = () => {
-    console.log('jjj');
+    dispatch(loginUsers({password, email}));
   };
 
   const handleRegisterNavigate = () => {
@@ -30,7 +35,7 @@ const SetLogin = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle}>Войти в приложение </Text>
       <TextInput
         style={styles.input}
@@ -70,7 +75,25 @@ const SetLogin = () => {
 export default SetLogin;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    borderWidth: 0.3,
+    borderColor: '#7cacf8',
+    margin: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
   input: {
     height: 40,
     margin: 12,

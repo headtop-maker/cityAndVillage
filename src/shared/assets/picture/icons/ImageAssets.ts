@@ -12,4 +12,5 @@ export const ImagesAssets = {
   add: require('./add.png'),
   service: require('./service.png'),
   refresh: require('./refresh.png'),
+  defaultImage: require('./defaultImage.png'),
 };

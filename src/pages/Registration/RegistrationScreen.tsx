@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
-import SetRegistration from '../../entities/Registration/SetRegistration';
+import SetRegistration from '../../entities/Registration/ui/SetRegistration';
 
 // interface RegistrationScreenProps {}
 

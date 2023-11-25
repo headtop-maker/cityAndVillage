@@ -8,6 +8,7 @@ import SCREENS from '../../../shared/Navigation/screens';
 import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
+import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 
 const NewsItem: FC<CounterState['news'][0]> = ({
   id,
@@ -25,17 +26,20 @@ const NewsItem: FC<CounterState['news'][0]> = ({
       navigation.navigate(SCREENS.CurrentNewsScreen);
     }
   };
-
   return (
     <TouchableOpacity
       style={[styles.newsContainer, styles.shadow]}
       onPress={handleNavigate}>
-      <Image
-        style={styles.newsImage}
-        source={{
-          uri: image,
-        }}
-      />
+      {image ? (
+        <Image
+          style={styles.newsImage}
+          source={{
+            uri: image,
+          }}
+        />
+      ) : (
+        <Image style={styles.defaultImage} source={ImagesAssets.defaultImage} />
+      )}
 
       <View style={styles.newsTextBlock}>
         <Text style={styles.newsText}>{title}</Text>
@@ -62,6 +66,12 @@ const styles = StyleSheet.create({
   newsImage: {
     height: 200,
     borderRadius: 10,
+  },
+  defaultImage: {
+    height: 200,
+    width: 225,
+    borderRadius: 10,
+    alignSelf: 'center',
   },
   newsContainer: {
     borderRadius: 10,

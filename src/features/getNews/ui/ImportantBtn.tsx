@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {getNews} from '../../../entities/News/models/models';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
+import {resetCurrentUser} from '../../../shared/models/counterSlice';
 
 // interface ImportantBtnProps {}
 
@@ -12,8 +12,8 @@ const ImportantBtn = () => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => dispatch(getNews(1))}>
-      <Text style={styles.text}>+ Загрузить новости</Text>
+      onPress={() => dispatch(resetCurrentUser())}>
+      <Text style={styles.text}>Выйти из приложения</Text>
     </TouchableOpacity>
   );
 };

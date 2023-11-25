@@ -1,12 +1,14 @@
 import axios, {AxiosResponse} from 'axios';
 
 import {TImageResponse} from '../../entities/News/models/types';
-import {CounterState} from '../models/types';
+import {CounterState, userRole} from '../models/types';
+import {createUserData} from '../../entities/Registration/models/types';
+import {loginUserData} from '../../entities/Login/model/types';
 
 const API_URL =
   'https://65463ee9fe036a2fa95563b7.mockapi.io/apiCityAndVillage/1/';
 
-const TEMP_API = 'http://192.168.0.106:3000';
+const TEMP_API = 'http://192.168.0.100:3000';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -63,4 +65,26 @@ export const getImageFromServer = (): Promise<
     timeout: 10000,
     method: 'get',
     url: `${IMAGE_URL}sample-data/photos`,
+  });
+
+export const createUser = (
+  data: createUserData,
+): Promise<AxiosResponse<{token: string; role: userRole}, unknown>> =>
+  axiosInstance({
+    data,
+    timeout: 10000,
+    method: 'post',
+    url: `${TEMP_API}/auth/signup`,
+  });
+
+export const loginUser = (
+  data: loginUserData,
+): Promise<
+  AxiosResponse<{token: string; role: userRole; name: string}, unknown>
+> =>
+  axiosInstance({
+    data,
+    timeout: 10000,
+    method: 'post',
+    url: `${TEMP_API}/auth/login`,
   });

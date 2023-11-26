@@ -2,13 +2,13 @@ import axios, {AxiosResponse} from 'axios';
 
 import {TImageResponse} from '../../entities/News/models/types';
 import {CounterState, userRole} from '../models/types';
-import {createUserData} from '../../entities/Registration/models/types';
-import {loginUserData} from '../../entities/Login/model/types';
+import {createUserData} from '../../widgets/Registration/models/types';
+import {loginUserData} from '../../widgets/Login/model/types';
 
 const API_URL =
   'https://65463ee9fe036a2fa95563b7.mockapi.io/apiCityAndVillage/1/';
 
-const TEMP_API = 'http://192.168.0.100:3000';
+const TEMP_API = 'http://192.168.1.101:3000';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 

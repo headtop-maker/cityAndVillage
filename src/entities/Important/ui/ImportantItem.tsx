@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
-import {CounterState} from '../../../shared/models/counterSlice';
+import {CounterState} from '../../../shared/models/types';
 
 const ImportantItem: FC<CounterState['important'][0]> = ({
   title,

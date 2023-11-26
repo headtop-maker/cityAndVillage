@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
-import SetLogin from '../../../entities/Login/ui/SetLogin';
+import SetLogin from '../../../widgets/Login/ui/SetLogin';
 
 // interface LoginScreenProps {}
 

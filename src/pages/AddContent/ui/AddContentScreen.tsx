@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import AddNews from '../../../entities/News/ui/AddNews';
+import AddNews from '../../../widgets/News/ui/AddNews';
 
 // interface AddContentScreeProps {}
 

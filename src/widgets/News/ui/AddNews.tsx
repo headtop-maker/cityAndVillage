@@ -18,8 +18,8 @@ import {
   selectCurrentUserName,
   selectCurrentUserRole,
   selectimageForNewsFromServer,
-} from '../models/selectors';
-import ImageItem from './ImageItem';
+} from '../../../entities/News/models/selectors';
+import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 

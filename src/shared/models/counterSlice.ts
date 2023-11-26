@@ -7,8 +7,8 @@ import {
 } from '../../entities/News/models/models';
 import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
-import {createUsers} from '../../entities/Registration/models/models';
-import {loginUsers} from '../../entities/Login/model/models';
+import {createUsers} from '../../widgets/Registration/models/models';
+import {loginUsers} from '../../widgets/Login/model/models';
 
 interface RejectedAction extends Action {
   error: Error;

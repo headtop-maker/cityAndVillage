@@ -2,10 +2,8 @@ import React, {useLayoutEffect, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
-  TextInput,
   View,
   TouchableOpacity,
-  Text,
   FlatList,
   Image,
 } from 'react-native';
@@ -22,6 +20,7 @@ import {
 import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
+import {Button, TextInput, Text} from 'react-native-paper';
 
 // interface AddContentScreeProps {}
 
@@ -62,9 +61,10 @@ const AddNews = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.inputContainer, styles.shadow]}>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Добавить новость</Text>
-        </View>
+        <Text style={styles.titleTextStyle} variant="titleLarge">
+          Добавить новость
+        </Text>
+
         <TouchableOpacity
           style={{alignItems: 'flex-end', margin: 10}}
           onPress={() => dispatch(getImageForNews())}>
@@ -74,7 +74,7 @@ const AddNews = () => {
           showsHorizontalScrollIndicator={false}
           legacyImplementation={false}
           data={images}
-          style={{height: 250}}
+          style={{height: 200}}
           renderItem={({item}) => (
             <ImageItem
               id={item.id}
@@ -87,39 +87,40 @@ const AddNews = () => {
           )}
           keyExtractor={(id, index) => id + 'images' + index}
         />
+
         <TextInput
           style={styles.input}
-          onChangeText={setTitle}
+          label="Заголовок"
           value={title}
-          placeholder="Заголовок"
-          keyboardType="default"
+          onChangeText={setTitle}
+          mode="outlined"
         />
         <TextInput
-          style={[styles.input, {height: 100, textAlignVertical: 'top'}]}
-          onChangeText={setDescription}
+          style={styles.input}
+          label="Описание новости"
           value={description}
-          placeholder="Описание новости"
-          keyboardType="default"
+          onChangeText={setDescription}
+          mode="outlined"
           multiline={true}
           numberOfLines={4}
         />
+
         <TextInput
           style={styles.input}
-          onChangeText={setImageSrc}
+          label="Ссылка на изображение"
           value={imageSrc}
-          placeholder="Ссылка на изображение"
-          keyboardType="default"
-          editable={false}
+          onChangeText={setImageSrc}
+          mode="outlined"
+          disabled={true}
         />
-        <TouchableOpacity
-          style={[
-            styles.createButton,
-            {backgroundColor: !isLockSend ? '#ececec' : '#a2ff6b'},
-          ]}
+
+        <Button
+          mode="elevated"
+          style={styles.createButton}
           disabled={!isLockSend}
           onPress={handleClick}>
-          <Text>Добавить</Text>
-        </TouchableOpacity>
+          Добавить
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -134,12 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderRadius: 5,
-    borderColor: '#1467ed',
+    margin: 5,
   },
   inputContainer: {
     margin: 10,
@@ -147,13 +143,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   createButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
     margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderColor: '#1467ed',
+  },
+  titleTextStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
   },
   shadow: {
     shadowColor: '#000',

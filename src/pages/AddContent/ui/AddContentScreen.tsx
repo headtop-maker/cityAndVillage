@@ -1,14 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import AddNews from '../../../widgets/News/ui/AddNews';
+import {SegmentedButtons} from 'react-native-paper';
 
 // interface AddContentScreeProps {}
 
 const AddContentScreen = () => {
+  const [value, setValue] = useState('createNews');
   return (
     <View style={styles.container}>
-      <AddNews />
+      <SegmentedButtons
+        style={styles.sigment}
+        value={value}
+        onValueChange={setValue}
+        buttons={[
+          {
+            value: 'createNews',
+            label: 'Новости',
+          },
+          {
+            value: 'createImportant',
+            label: 'Важное',
+          },
+          {value: 'users', label: 'Пользователи'},
+        ]}
+      />
+      {value === 'createNews' && <AddNews />}
     </View>
   );
 };
@@ -18,5 +36,7 @@ export default AddContentScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
+  sigment: {backgroundColor: '#FFFFFF', margin: 10},
 });

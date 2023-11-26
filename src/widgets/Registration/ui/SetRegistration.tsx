@@ -1,12 +1,8 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 import {createUsers} from '../models/models';
 
@@ -27,38 +23,37 @@ const SetRegistration = () => {
   };
   return (
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.titleTextStyle}>Регистрация </Text>
+      <Text style={styles.titleTextStyle} variant="titleLarge">
+        Регистрация
+      </Text>
       <TextInput
         style={styles.input}
-        onChangeText={setName}
+        label="Имя и Фамилия"
         value={name}
-        placeholder="Имя и Фамилия"
-        keyboardType="default"
+        onChangeText={setName}
+        mode="outlined"
       />
       <TextInput
         style={styles.input}
-        onChangeText={setEmail}
+        label="Почта"
         value={email}
-        placeholder="Почта"
-        keyboardType="default"
+        onChangeText={setEmail}
+        mode="outlined"
       />
-
       <TextInput
         style={styles.input}
-        onChangeText={setPassword}
+        label="Пароль"
         value={password}
-        placeholder="Пароль"
-        keyboardType="default"
+        onChangeText={setPassword}
+        mode="outlined"
       />
-      <TouchableOpacity
-        style={[
-          styles.createButton,
-          {backgroundColor: !isLockSend ? '#ececec' : '#a2ff6b'},
-        ]}
+      <Button
+        mode="elevated"
+        style={styles.createButton}
         disabled={!isLockSend}
         onPress={handleClick}>
-        <Text>Зарегистрировать</Text>
-      </TouchableOpacity>
+        Зарегистрировать
+      </Button>
     </View>
   );
 };
@@ -72,6 +67,8 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   shadow: {
     shadowColor: '#000',
@@ -84,21 +81,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   input: {
-    height: 40,
     margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderRadius: 5,
-    borderColor: '#1467ed',
   },
   createButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
     margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderColor: '#1467ed',
   },
   registerButton: {
     justifyContent: 'center',
@@ -110,9 +96,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   titleTextStyle: {
-    color: '#0019c1',
-    fontSize: 25,
-    fontWeight: 'bold',
     alignSelf: 'center',
   },
 });

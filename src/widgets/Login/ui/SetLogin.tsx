@@ -2,17 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {useState} from 'react';
-import {
-  TextInput,
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {IRouteParamList} from '../../../shared/Navigation/types';
 import SCREENS from '../../../shared/Navigation/screens';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {loginUsers} from '../model/models';
+import {Button, TextInput} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 // interface SetLoginProps {}
 
@@ -36,38 +32,34 @@ const SetLogin = () => {
 
   return (
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.titleTextStyle}>Войти в приложение </Text>
+      <Text style={styles.titleTextStyle} variant="titleLarge">
+        Войти в приложение
+      </Text>
       <TextInput
         style={styles.input}
-        onChangeText={setEmail}
+        label="Почта"
         value={email}
-        placeholder="Почта"
-        keyboardType="default"
+        onChangeText={setEmail}
+        mode="outlined"
       />
       <TextInput
         style={styles.input}
-        onChangeText={setPassword}
+        label="Пароль"
         value={password}
-        placeholder="Пароль"
-        keyboardType="default"
+        onChangeText={setPassword}
+        mode="outlined"
       />
-      <TouchableOpacity
-        style={[
-          styles.createButton,
-          {backgroundColor: !isLockSend ? '#ececec' : '#a2ff6b'},
-        ]}
-        disabled={!isLockSend}
-        onPress={handleClick}>
-        <Text>Войти</Text>
-      </TouchableOpacity>
+      <Button
+        mode="elevated"
+        style={styles.createButton}
+        onPress={handleClick}
+        disabled={!isLockSend}>
+        ВОЙТИ
+      </Button>
 
-      <TouchableOpacity
-        style={styles.registerButton}
-        onPress={handleRegisterNavigate}>
-        <Text style={{color: 'blue', fontSize: 16, fontWeight: 'bold'}}>
-          Регистрация
-        </Text>
-      </TouchableOpacity>
+      <Button mode="text" onPress={handleRegisterNavigate}>
+        Регистрация
+      </Button>
     </View>
   );
 };
@@ -95,35 +87,12 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   input: {
-    height: 40,
     margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderRadius: 5,
-    borderColor: '#1467ed',
   },
   createButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
     margin: 12,
-    borderWidth: 0.5,
-    padding: 10,
-    borderColor: '#1467ed',
-  },
-  registerButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  registerTextStyle: {
-    color: 'blue',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   titleTextStyle: {
-    color: '#0019c1',
-    fontSize: 25,
-    fontWeight: 'bold',
     alignSelf: 'center',
   },
 });

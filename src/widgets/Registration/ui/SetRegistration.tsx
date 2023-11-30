@@ -97,5 +97,6 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     alignSelf: 'center',
+    color: '#21009e',
   },
 });

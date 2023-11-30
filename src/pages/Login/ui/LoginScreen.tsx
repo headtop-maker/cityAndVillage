@@ -1,21 +1,30 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ImageBackground} from 'react-native';
 import SetLogin from '../../../widgets/Login/ui/SetLogin';
-
-// interface LoginScreenProps {}
+import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
+import withModal from '../../../shared/HOC/withModal';
 
 const LoginScreen = () => {
   return (
     <View style={styles.container}>
-      <SetLogin />
+      <ImageBackground
+        source={ImagesAssets.backGroundImage}
+        resizeMode="cover"
+        style={styles.image}>
+        <SetLogin />
+      </ImageBackground>
     </View>
   );
 };
 
-export default LoginScreen;
+export default withModal(LoginScreen);
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  image: {
     flex: 1,
     justifyContent: 'center',
   },

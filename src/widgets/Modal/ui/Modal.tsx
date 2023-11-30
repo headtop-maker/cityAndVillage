@@ -1,17 +1,10 @@
 import React from 'react';
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import {Alert, Modal, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectModalError, selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
+import {Button, Text} from 'react-native-paper';
 
 const ModalScreen = () => {
   const modalText = useAppSelector(selectModalText);
@@ -28,13 +21,14 @@ const ModalScreen = () => {
       }}>
       <View style={styles.centeredView}>
         <View style={[styles.modalView]}>
-          <Text style={styles.modalText}>{modalText ? modalText : ''}</Text>
+          <Text style={styles.modalText} variant="bodyLarge">
+            {modalText ? modalText : ''}
+          </Text>
           {!error && <ActivityIndicator size="large" />}
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => dispatch(resetModalText())}>
-            <Text style={styles.textStyle}>Закрыть</Text>
-          </Pressable>
+
+          <Button mode="outlined" onPress={() => dispatch(resetModalText())}>
+            Закрыть
+          </Button>
         </View>
       </View>
     </Modal>
@@ -67,17 +61,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 10,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
+
   textStyle: {
     color: 'white',
     fontWeight: 'bold',

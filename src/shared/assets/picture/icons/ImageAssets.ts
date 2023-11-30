@@ -13,4 +13,5 @@ export const ImagesAssets = {
   service: require('./service.png'),
   refresh: require('./refresh.png'),
   defaultImage: require('./defaultImage.png'),
+  backGroundImage: require('../../appJpg/backGround.jpg'),
 };

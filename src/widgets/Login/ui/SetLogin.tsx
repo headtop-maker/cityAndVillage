@@ -10,8 +10,6 @@ import {loginUsers} from '../model/models';
 import {Button, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
-// interface SetLoginProps {}
-
 const SetLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +31,7 @@ const SetLogin = () => {
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant="titleLarge">
-        Войти в приложение
+        Авторизация
       </Text>
       <TextInput
         style={styles.input}
@@ -57,7 +55,10 @@ const SetLogin = () => {
         ВОЙТИ
       </Button>
 
-      <Button mode="text" onPress={handleRegisterNavigate}>
+      <Button
+        mode="text"
+        onPress={handleRegisterNavigate}
+        style={styles.createButton}>
         Регистрация
       </Button>
     </View>
@@ -94,5 +95,6 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     alignSelf: 'center',
+    color: '#21009e',
   },
 });

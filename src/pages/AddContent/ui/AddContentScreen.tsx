@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 
 import AddNews from '../../../widgets/News/ui/AddNews';
 import {SegmentedButtons} from 'react-native-paper';
+import Users from '../../../widgets/Users/ui/Users';
 
 // interface AddContentScreeProps {}
 
@@ -27,6 +28,7 @@ const AddContentScreen = () => {
         ]}
       />
       {value === 'createNews' && <AddNews />}
+      {value === 'users' && <Users />}
     </View>
   );
 };

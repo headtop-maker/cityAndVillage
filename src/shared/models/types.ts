@@ -25,6 +25,14 @@ export interface CounterState {
     modalText: string;
     showIndicator: boolean;
   };
+  allUsers:
+    | {
+        name: string;
+        email: string;
+        banned: boolean;
+        userRole: userRole;
+      }
+    | undefined;
   currentUser:
     | {
         userName: string;

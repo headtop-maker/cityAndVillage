@@ -4,7 +4,7 @@ export type TImageResponse = {
   offset: number;
   photos: {
     description: string;
-    id: 1;
+    id: number;
     title: string;
     url: string;
     user: number;

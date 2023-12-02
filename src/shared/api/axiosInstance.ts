@@ -8,7 +8,7 @@ import {loginUserData} from '../../widgets/Login/model/types';
 const API_URL =
   'https://65463ee9fe036a2fa95563b7.mockapi.io/apiCityAndVillage/1/';
 
-const TEMP_API = 'http://192.168.0.105:3000';
+const TEMP_API = 'http://192.168.1.101:3000';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -87,4 +87,13 @@ export const loginUser = (
     timeout: 10000,
     method: 'post',
     url: `${TEMP_API}/auth/login`,
+  });
+
+export const getAllUsersApi = (): Promise<
+  AxiosResponse<CounterState['allUsers'], unknown>
+> =>
+  axiosInstance({
+    timeout: 10000,
+    method: 'get',
+    url: `${TEMP_API}/auth`,
   });

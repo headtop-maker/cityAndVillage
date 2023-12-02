@@ -58,6 +58,26 @@ const AddNews = () => {
     setImageSrc('');
   };
 
+  const imageItems = ({
+    item,
+  }: {
+    item: {
+      description: string;
+      id: number;
+      title: string;
+      url: string;
+      user: number;
+    };
+  }) => (
+    <ImageItem
+      id={item.id}
+      description={item.description}
+      title={item.title}
+      url={item.url}
+      user={item.user}
+      setImageSrc={setImageSrc}
+    />
+  );
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.inputContainer, styles.shadow]}>
@@ -75,16 +95,7 @@ const AddNews = () => {
           legacyImplementation={false}
           data={images}
           style={{height: 200}}
-          renderItem={({item}) => (
-            <ImageItem
-              id={item.id}
-              description={item.description}
-              title={item.title}
-              url={item.url}
-              user={item.user}
-              setImageSrc={setImageSrc}
-            />
-          )}
+          renderItem={imageItems}
           keyExtractor={(id, index) => id + 'images' + index}
         />
 

@@ -9,6 +9,7 @@ import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
 import {createUsers} from '../../widgets/Registration/models/models';
 import {loginUsers} from '../../widgets/Login/model/models';
+import {getAllUsers} from '../../widgets/Users/model/models';
 
 interface RejectedAction extends Action {
   error: Error;
@@ -29,6 +30,7 @@ const initialState: CounterState = {
     modalText: '',
     showIndicator: true,
   },
+  allUsers: undefined,
   currentNewsId: '',
   currentUser: undefined,
 };
@@ -115,6 +117,16 @@ export const counterSlice = createSlice({
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.currentUser = action.payload;
+      })
+      .addCase(getAllUsers.pending, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Информация обновляется';
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.actionState.loadind = false;
+        state.actionState.modalText = '';
+        state.allUsers = action.payload;
       })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;

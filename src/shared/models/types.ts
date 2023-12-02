@@ -27,11 +27,12 @@ export interface CounterState {
   };
   allUsers:
     | {
+        id: number;
         name: string;
         email: string;
         banned: boolean;
         userRole: userRole;
-      }
+      }[]
     | undefined;
   currentUser:
     | {

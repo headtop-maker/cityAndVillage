@@ -7,13 +7,12 @@ import {IRouteParamList} from '../../../shared/Navigation/types';
 import SCREENS from '../../../shared/Navigation/screens';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {loginUsers} from '../model/models';
-import {Button, TextInput} from 'react-native-paper';
+import {Button, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
 const SetLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const isLockSend = !!email && !!password;
 
   const dispatch = useAppDispatch();
 
@@ -28,6 +27,17 @@ const SetLogin = () => {
     navigation.navigate(SCREENS.RegistrationScreen);
   };
 
+  const hasErrors = () => {
+    return !email.includes('@');
+  };
+
+  const hasPasswordErrors = () => {
+    return password.length < 7;
+  };
+
+  const isLockSend =
+    !!email && !!password && !hasErrors() && !hasPasswordErrors();
+
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant="titleLarge">
@@ -40,6 +50,9 @@ const SetLogin = () => {
         onChangeText={setEmail}
         mode="outlined"
       />
+      <HelperText type="error" visible={hasErrors()}>
+        Адрес электронной почты недействителен!
+      </HelperText>
       <TextInput
         style={styles.input}
         label="Пароль"
@@ -47,6 +60,9 @@ const SetLogin = () => {
         onChangeText={setPassword}
         mode="outlined"
       />
+      <HelperText type="error" visible={hasPasswordErrors()}>
+        Длина пароля менее 8 символов
+      </HelperText>
       <Button
         mode="elevated"
         style={styles.createButton}

@@ -18,7 +18,6 @@ const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
   const currentUserToken = useAppSelector(selectCurrentUserToken);
-  console.log('currentUserToken', currentUserToken);
   return (
     <NavigationContainer>
       <Stack.Navigator

@@ -1,25 +1,27 @@
-import React, {useCallback, useLayoutEffect} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {getAllUsers} from '../model/models';
 import {selectAllUsers} from '../model/selectors';
-import {
-  Avatar,
-  Button,
-  Card,
-  Icon,
-  IconButton,
-  MD3Colors,
-  Text,
-} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {userRole} from '../../../shared/models/types';
+import UserItem from '../../../entities/User/ui/UserItem';
+import DialogItem from '../../../entities/Dialog/ui/DialogItem';
 
 // interface UsersProps {}
 
 const Users = () => {
+  const [selectedId, setSelectedId] = useState<number>();
+
+  const [visible, setVisible] = useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+
   const allUsers = useAppSelector(selectAllUsers);
   const dispatch = useAppDispatch();
 
@@ -42,30 +44,21 @@ const Users = () => {
       userRole: userRole;
     };
   }) => (
-    <View
-      style={{
-        margin: 10,
-        backgroundColor: item.banned ? '#e9e9e9' : '#bbffbb',
-        borderRadius: 10,
-        padding: 10,
-      }}>
-      <Text variant="titleSmall">Имя : {item.name}</Text>
-      <Text variant="titleSmall">E-mail : {item.email}</Text>
-      <View style={{flexDirection: 'row'}}>
-        <Text variant="bodyLarge">
-          Роль : {item.userRole}
-          {'  '}
-        </Text>
-
-        <Text variant="bodyLarge">
-          Статус : {item.banned ? 'Заблокирован' : 'Активен'}
-        </Text>
-      </View>
-    </View>
+    <UserItem
+      item={item}
+      selectedId={selectedId}
+      setSelectedId={setSelectedId}
+      showDialog={showDialog}
+    />
   );
 
   return (
     <View style={styles.container}>
+      <DialogItem
+        visible={visible}
+        hideDialog={hideDialog}
+        dialogText={'Заблокировать/Активировать пользователя'}
+      />
       <FlatList
         data={allUsers}
         renderItem={userItems}
@@ -82,7 +75,7 @@ export default Users;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ecf3fe',
     justifyContent: 'center',
   },
   item: {
@@ -93,5 +86,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });

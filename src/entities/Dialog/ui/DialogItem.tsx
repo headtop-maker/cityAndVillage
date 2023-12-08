@@ -1,24 +1,37 @@
 import React, {FC} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button, Dialog, Portal, Text} from 'react-native-paper';
+import {Button, Dialog, Portal, Text, TextInput} from 'react-native-paper';
 
 interface DialogItemProps {
   hideDialog: () => void;
   visible: boolean;
   dialogText: string;
+  confirmAction: () => void;
 }
 
-const DialogItem: FC<DialogItemProps> = ({hideDialog, visible, dialogText}) => {
+const DialogItem: FC<DialogItemProps> = ({
+  hideDialog,
+  visible,
+  dialogText,
+  confirmAction,
+}) => {
+  const handleConfirm = () => {
+    confirmAction();
+    hideDialog();
+  };
+
   return (
     <View style={styles.container}>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Подтверердите</Dialog.Title>
+          <Dialog.Title>Подтвердите</Dialog.Title>
           <Dialog.Content>
             <Text variant="bodyMedium">{dialogText}</Text>
           </Dialog.Content>
+
           <Dialog.Actions>
-            <Button onPress={hideDialog}>Done</Button>
+            <Button onPress={handleConfirm}>Ok</Button>
+            <Button onPress={hideDialog}>Отмена</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

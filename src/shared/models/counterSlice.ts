@@ -9,7 +9,10 @@ import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
 import {createUsers} from '../../widgets/Registration/models/models';
 import {loginUsers} from '../../widgets/Login/model/models';
-import {getAllUsers} from '../../widgets/Users/model/models';
+import {
+  getAllUsers,
+  setImportantMessage,
+} from '../../widgets/Users/model/models';
 
 interface RejectedAction extends Action {
   error: Error;
@@ -128,6 +131,16 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
         state.allUsers = action.payload;
       })
+      .addCase(setImportantMessage.pending, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Обращение отправляется';
+      })
+      .addCase(setImportantMessage.fulfilled, state => {
+        state.actionState.loadind = false;
+        state.actionState.error = undefined;
+      })
+
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = 'Ошибка получения данных';

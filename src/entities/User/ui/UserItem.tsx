@@ -15,6 +15,7 @@ interface UserItemProps {
   setSelectedId: (data: number | undefined) => void;
   selectedId: number | undefined;
   showDialog: () => void;
+  showImportant: () => void;
 }
 
 const UserItem: FC<UserItemProps> = ({
@@ -22,6 +23,7 @@ const UserItem: FC<UserItemProps> = ({
   setSelectedId,
   selectedId,
   showDialog,
+  showImportant,
 }) => {
   return (
     <View style={styles.container}>
@@ -44,7 +46,12 @@ const UserItem: FC<UserItemProps> = ({
       </TouchableOpacity>
       {item.id === selectedId && (
         <View style={styles.btnBlock}>
-          <Button mode="contained-tonal" onPress={() => console.log('kkk')}>
+          <Button
+            mode="contained-tonal"
+            onPress={() => {
+              showImportant();
+              setSelectedId(item.id);
+            }}>
             Создать обращение
           </Button>
           <Button mode="outlined" onPress={() => setSelectedId(undefined)}>

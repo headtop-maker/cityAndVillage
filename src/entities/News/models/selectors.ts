@@ -17,3 +17,8 @@ export const selectCurrentUserName = createSelector(
   selectRootCounter,
   state => state.currentUser?.userName,
 );
+
+export const selectCurrentUserEmail = createSelector(
+  selectRootCounter,
+  state => state.currentUser?.userEmail,
+);

@@ -4,11 +4,12 @@ import {TImageResponse} from '../../entities/News/models/types';
 import {CounterState, userRole} from '../models/types';
 import {createUserData} from '../../widgets/Registration/models/types';
 import {loginUserData} from '../../widgets/Login/model/types';
+import {setImportantDataType} from '../../widgets/Users/types/types';
 
 const API_URL =
   'https://65463ee9fe036a2fa95563b7.mockapi.io/apiCityAndVillage/1/';
 
-const TEMP_API = 'http://192.168.0.105:3000';
+const TEMP_API = 'http://192.168.0.100:3000';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -41,11 +42,12 @@ export const getCurrentNews = (
 
 export const getCurrentImportant = (
   limit: number,
+  userEmail: string,
 ): Promise<AxiosResponse<CounterState['important'], unknown>> =>
   axiosInstance({
     timeout: 10000,
     method: 'get',
-    url: `${API_URL}/important/?page=1&limit=${limit}`,
+    url: `${TEMP_API}/important/${userEmail}`,
   });
 
 export const createNews = (
@@ -96,4 +98,16 @@ export const getAllUsersApi = (): Promise<
     timeout: 10000,
     method: 'get',
     url: `${TEMP_API}/auth`,
+  });
+
+export const setImportantMessageApi = (
+  data: setImportantDataType,
+): Promise<
+  AxiosResponse<{token: string; role: userRole; name: string}, unknown>
+> =>
+  axiosInstance({
+    data,
+    timeout: 10000,
+    method: 'post',
+    url: `${TEMP_API}/important`,
   });

@@ -4,7 +4,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../shared/models/storeHooks';
-import {getAllUsers, setImportantMessage} from '../model/models';
+import {getAllUsers, setBannedUser, setImportantMessage} from '../model/models';
 import {selectAllUsers} from '../model/selectors';
 import {userRole} from '../../../shared/models/types';
 import UserItem from '../../../entities/User/ui/UserItem';
@@ -32,6 +32,9 @@ const Users = () => {
   const allUsers = useAppSelector(selectAllUsers);
   const dispatch = useAppDispatch();
 
+  const recipient = allUsers?.find(item => item.id === selectedId)?.email;
+  const currentBanned = allUsers?.find(item => item.id === selectedId)?.banned;
+
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
@@ -42,6 +45,9 @@ const Users = () => {
   useLayoutEffect(() => {
     fetchUsers();
   }, [dispatch, fetchUsers]);
+
+  const lock =
+    !currentRole || currentRole !== userRole.admin || !userName || !userEmail;
 
   const userItems = ({
     item,
@@ -70,15 +76,9 @@ const Users = () => {
   };
 
   const handleMessage = () => {
-    if (
-      !currentRole ||
-      currentRole !== userRole.admin ||
-      !userName ||
-      !userEmail
-    ) {
+    if (lock) {
       return;
     }
-    const recipient = allUsers?.find(item => item.id === selectedId)?.email;
 
     !!recipient &&
       dispatch(
@@ -93,12 +93,20 @@ const Users = () => {
     clearData();
   };
 
+  const bannedUser = () => {
+    console.log('selectedId', selectedId);
+    !!recipient &&
+      selectedId &&
+      dispatch(setBannedUser({id: selectedId, banned: !currentBanned}));
+    clearData();
+  };
+
   return (
     <View style={styles.container}>
       <DialogItem
         visible={visible}
         hideDialog={hideDialog}
-        confirmAction={() => console.log('jjjj')}
+        confirmAction={bannedUser}
         dialogText={'Заблокировать/Активировать пользователя'}
       />
       <DialogText

@@ -6,7 +6,7 @@ import {createUserData} from '../../widgets/Registration/models/types';
 import {loginUserData} from '../../widgets/Login/model/types';
 import {setImportantDataType} from '../../widgets/Users/types/types';
 
-const TEMP_API = 'http://192.168.1.101:3000';
+const TEMP_API = 'http://192.168.0.104:3000';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -107,4 +107,26 @@ export const setImportantMessageApi = (
     timeout: 10000,
     method: 'post',
     url: `${TEMP_API}/important`,
+  });
+
+export const setBannedUserApi = (
+  id: number,
+  banned: boolean,
+): Promise<
+  AxiosResponse<
+    {
+      id: number;
+      name: string;
+      email: string;
+      banned: boolean;
+      userRole: userRole;
+    },
+    unknown
+  >
+> =>
+  axiosInstance({
+    data: {banned},
+    timeout: 10000,
+    method: 'put',
+    url: `${TEMP_API}/auth/banned/${id}`,
   });

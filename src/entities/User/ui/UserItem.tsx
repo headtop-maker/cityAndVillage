@@ -39,7 +39,12 @@ const UserItem: FC<UserItemProps> = ({
         </View>
 
         <View style={styles.actionBtn}>
-          <Button mode="contained" onPress={showDialog}>
+          <Button
+            mode={item.banned ? 'outlined' : 'contained'}
+            onPress={() => {
+              setSelectedId(item.id);
+              showDialog();
+            }}>
             {item.banned ? 'Активировать' : 'Заблокировать'}
           </Button>
         </View>

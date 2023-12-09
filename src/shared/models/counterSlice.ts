@@ -11,6 +11,7 @@ import {createUsers} from '../../widgets/Registration/models/models';
 import {loginUsers} from '../../widgets/Login/model/models';
 import {
   getAllUsers,
+  setBannedUser,
   setImportantMessage,
 } from '../../widgets/Users/model/models';
 
@@ -139,6 +140,30 @@ export const counterSlice = createSlice({
       .addCase(setImportantMessage.fulfilled, state => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
+      })
+      .addCase(setBannedUser.pending, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Обращение отправляется';
+      })
+      .addCase(setBannedUser.fulfilled, (state, action) => {
+        const payload = action.payload;
+        state.actionState.loadind = false;
+        state.actionState.modalText = '';
+        state.allUsers = state.allUsers?.map(current => {
+          console.log(action.payload);
+          if (current.id === payload.id) {
+            console.log('payload', payload.id);
+            return {
+              id: payload.id,
+              name: payload.name,
+              email: payload.email,
+              banned: payload.banned,
+              userRole: payload.userRole,
+            };
+          }
+          return current;
+        });
       })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;

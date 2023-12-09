@@ -22,8 +22,8 @@ export const setImportantMessage = createAsyncThunk(
   `${fetchApiDomain}/setImportantMessage`,
   async (data: setImportantDataType, {rejectWithValue}) => {
     try {
-      const response = await setImportantMessageApi(data);
-      return response.data;
+      await setImportantMessageApi(data);
+      return 'success';
     } catch (err) {
       return rejectWithValue(err);
     }

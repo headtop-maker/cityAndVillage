@@ -138,9 +138,8 @@ export const counterSlice = createSlice({
       })
       .addCase(setImportantMessage.fulfilled, state => {
         state.actionState.loadind = false;
-        state.actionState.error = undefined;
+        state.actionState.modalText = '';
       })
-
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = 'Ошибка получения данных';

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {userRole} from '../../../shared/models/types';
 import {FC} from 'react';
+const {KotlinModules} = NativeModules;
 
 interface UserItemProps {
   item: {
@@ -59,7 +60,12 @@ const UserItem: FC<UserItemProps> = ({
             }}>
             Создать обращение
           </Button>
-          <Button mode="outlined" onPress={() => setSelectedId(undefined)}>
+          <Button
+            mode="outlined"
+            onPress={() => {
+              KotlinModules.show('Отправляю запрос', 500);
+              setSelectedId(undefined);
+            }}>
             Скрыть
           </Button>
         </View>

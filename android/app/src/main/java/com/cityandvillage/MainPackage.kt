@@ -10,7 +10,7 @@ import java.util.ArrayList
 
 import java.util.Collections.emptyList
 
-class Main:ReactPackage{
+class MainPackage:ReactPackage{
     override fun createViewManagers(
             reactContext: ReactApplicationContext):
         List<ViewManager<*,*>>{

@@ -23,6 +23,7 @@ import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text} from 'react-native-paper';
 import {FileParamsType} from '../../../shared/types';
+import axios from 'axios';
 
 // interface AddContentScreeProps {}
 
@@ -66,6 +67,23 @@ const AddNews = () => {
     try {
       const file: FileParamsType = await KotlinModules.openFile();
       console.log('file', file);
+      const formData = new FormData();
+
+      formData.append('file', {
+        uri: file.fileUri,
+        type: 'image/jpeg',
+        name: 'photo.jpg', // поправить имя
+      });
+      const response = await axios({
+        method: 'post',
+        url: 'http://192.168.1.101:3000/upload',
+        data: formData,
+        headers: {
+          accept: 'application/json',
+          'content-type': 'multipart/form-data',
+        },
+      });
+      console.log('response', response);
     } catch (e) {
       console.error(e);
     }

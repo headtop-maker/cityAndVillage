@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   Button,
-  Checkbox,
   Dialog,
   Portal,
   Switch,
@@ -54,6 +53,7 @@ const DialogText: FC<DialogItemProps> = ({
               onChangeText={onChangeText}
               mode="flat"
               style={{marginTop: 10}}
+              multiline={true}
             />
           </Dialog.Content>
 

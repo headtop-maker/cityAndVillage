@@ -10,3 +10,10 @@ export type TServiceItem = {
   nameService: string;
   imgSrc: keyof typeof ImagesAssets;
 };
+
+export type FileParamsType = {
+  fileName: string;
+  fileType: string;
+  fileByteSize: number;
+  fileUri: string;
+};

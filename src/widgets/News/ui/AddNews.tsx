@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  NativeModules,
 } from 'react-native';
 import {
   useAppDispatch,
@@ -21,8 +22,11 @@ import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text} from 'react-native-paper';
+import {FileParamsType} from '../../../shared/types';
 
 // interface AddContentScreeProps {}
+
+const {KotlinModules} = NativeModules;
 
 const AddNews = () => {
   const [title, setTitle] = useState('');
@@ -58,6 +62,15 @@ const AddNews = () => {
     setImageSrc('');
   };
 
+  const handleAddImage = async () => {
+    try {
+      const file: FileParamsType = await KotlinModules.openFile();
+      console.log('file', file);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const imageItems = ({
     item,
   }: {
@@ -84,12 +97,20 @@ const AddNews = () => {
         <Text style={styles.titleTextStyle} variant="titleLarge">
           Добавить новость
         </Text>
+        <View style={styles.addFileContainer}>
+          <Button
+            mode="outlined"
+            style={styles.createButton}
+            onPress={handleAddImage}>
+            Загрузить
+          </Button>
+          <TouchableOpacity
+            style={{alignItems: 'flex-end', margin: 10}}
+            onPress={() => dispatch(getImageForNews())}>
+            <Image style={styles.imageRef} source={ImagesAssets.refresh} />
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          style={{alignItems: 'flex-end', margin: 10}}
-          onPress={() => dispatch(getImageForNews())}>
-          <Image style={styles.imageRef} source={ImagesAssets.refresh} />
-        </TouchableOpacity>
         <FlatList
           showsHorizontalScrollIndicator={false}
           legacyImplementation={false}
@@ -113,7 +134,6 @@ const AddNews = () => {
           onChangeText={setDescription}
           mode="outlined"
           multiline={true}
-          numberOfLines={4}
         />
 
         <TextInput
@@ -141,7 +161,7 @@ export default AddNews;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 0.6,
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
@@ -173,4 +193,9 @@ const styles = StyleSheet.create({
   textContainer: {justifyContent: 'center', alignItems: 'center', padding: 10},
   text: {fontWeight: 'bold', fontSize: 17},
   imageRef: {width: 30, height: 30},
+  addFileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
 });

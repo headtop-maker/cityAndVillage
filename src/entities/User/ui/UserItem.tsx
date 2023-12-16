@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {View, StyleSheet, TouchableOpacity, NativeModules} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {userRole} from '../../../shared/models/types';
 import {FC} from 'react';
-const {KotlinModules} = NativeModules;
 
 interface UserItemProps {
   item: {
@@ -30,7 +29,9 @@ const UserItem: FC<UserItemProps> = ({
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.selectedItem}
-        onPress={() => setSelectedId(item.id)}>
+        onPress={() => {
+          setSelectedId(item.id);
+        }}>
         <View style={styles.userInfo}>
           <Text variant="titleMedium">{item.name}</Text>
           <Text variant="titleSmall">{item.email}</Text>
@@ -63,7 +64,6 @@ const UserItem: FC<UserItemProps> = ({
           <Button
             mode="outlined"
             onPress={() => {
-              KotlinModules.show('Отправляю запрос', 500);
               setSelectedId(undefined);
             }}>
             Скрыть

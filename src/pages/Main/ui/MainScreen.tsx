@@ -4,9 +4,8 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import ProfService from '../../../widgets/ProfessionalServices/ProfService';
 import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
-import {importantDataMocks, newsDataMocks} from '../../../shared/mocks';
+import {newsDataMocks} from '../../../shared/mocks';
 import NewsItem from '../../../entities/News/ui/NewsItem';
-import ImportantItem from '../../../entities/Important/ui/ImportantItem';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import withModal from '../../../shared/HOC/withModal';
 

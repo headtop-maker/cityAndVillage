@@ -6,7 +6,7 @@ import {createUserData} from '../../widgets/Registration/models/types';
 import {loginUserData} from '../../widgets/Login/model/types';
 import {setImportantDataType} from '../../widgets/Users/types/types';
 
-const TEMP_API = 'http://192.168.0.104:3000';
+const TEMP_API = 'http://172.20.10.10:3000/';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -34,7 +34,7 @@ export const getCurrentNews = (
   axiosInstance({
     timeout: 10000,
     method: 'get',
-    url: `${TEMP_API}/news`,
+    url: `${TEMP_API}news`,
   });
 
 export const getCurrentImportant = (
@@ -44,7 +44,7 @@ export const getCurrentImportant = (
   axiosInstance({
     timeout: 10000,
     method: 'get',
-    url: `${TEMP_API}/important/${userEmail}`,
+    url: `${TEMP_API}important/${userEmail}`,
   });
 
 export const createNews = (
@@ -54,7 +54,7 @@ export const createNews = (
     data,
     timeout: 10000,
     method: 'post',
-    url: `${TEMP_API}/news`,
+    url: `${TEMP_API}news`,
   });
 
 export const getImageFromServer = (): Promise<
@@ -73,7 +73,7 @@ export const createUser = (
     data,
     timeout: 10000,
     method: 'post',
-    url: `${TEMP_API}/auth/signup`,
+    url: `${TEMP_API}auth/signup`,
   });
 
 export const loginUser = (
@@ -85,7 +85,7 @@ export const loginUser = (
     data,
     timeout: 10000,
     method: 'post',
-    url: `${TEMP_API}/auth/login`,
+    url: `${TEMP_API}auth/login`,
   });
 
 export const getAllUsersApi = (): Promise<
@@ -94,7 +94,7 @@ export const getAllUsersApi = (): Promise<
   axiosInstance({
     timeout: 10000,
     method: 'get',
-    url: `${TEMP_API}/auth`,
+    url: `${TEMP_API}auth`,
   });
 
 export const setImportantMessageApi = (
@@ -106,7 +106,7 @@ export const setImportantMessageApi = (
     data,
     timeout: 10000,
     method: 'post',
-    url: `${TEMP_API}/important`,
+    url: `${TEMP_API}important`,
   });
 
 export const setBannedUserApi = (
@@ -128,5 +128,5 @@ export const setBannedUserApi = (
     data: {banned},
     timeout: 10000,
     method: 'put',
-    url: `${TEMP_API}/auth/banned/${id}`,
+    url: `${TEMP_API}auth/banned/${id}`,
   });

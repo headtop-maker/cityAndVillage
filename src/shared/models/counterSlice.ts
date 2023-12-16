@@ -151,9 +151,7 @@ export const counterSlice = createSlice({
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.allUsers = state.allUsers?.map(current => {
-          console.log(action.payload);
           if (current.id === payload.id) {
-            console.log('payload', payload.id);
             return {
               id: payload.id,
               name: payload.name,

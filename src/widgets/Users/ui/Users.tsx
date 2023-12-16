@@ -94,7 +94,6 @@ const Users = () => {
   };
 
   const bannedUser = () => {
-    console.log('selectedId', selectedId);
     !!recipient &&
       selectedId &&
       dispatch(setBannedUser({id: selectedId, banned: !currentBanned}));

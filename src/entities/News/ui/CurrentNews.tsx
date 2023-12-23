@@ -12,6 +12,9 @@ import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
 import {selectNews} from '../../../widgets/News/models/selectors';
 import {Icon} from 'react-native-paper';
 
+import SCREENS from '../../../shared/Navigation/screens';
+import {navigate} from '../../../shared/Navigation/MainStack';
+
 const CurrentNews = () => {
   const currentNewsId = useAppSelector(selectCurrentNewsId);
   const news = useAppSelector(selectNews);
@@ -19,7 +22,9 @@ const CurrentNews = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconContainer}>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        onPress={() => navigate(SCREENS.NewsScreen, undefined)}>
         <Icon source="chevron-left" color="#6e26f3" size={40} />
       </TouchableOpacity>
 

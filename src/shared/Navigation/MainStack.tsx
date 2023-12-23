@@ -1,5 +1,9 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  StackActions,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SCREENS from './screens';
 import MainScreen from '../../pages/Main/ui/MainScreen';
@@ -13,13 +17,26 @@ import {useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
+const navigationRef = createNavigationContainerRef();
 
 const Stack = createNativeStackNavigator();
+
+export function navigate(name, params) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
+}
+
+export function push(...args) {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(StackActions.push(...args));
+  }
+}
 
 const MainStack = () => {
   const currentUserToken = useAppSelector(selectCurrentUserToken);
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName="TabScreen"
         screenOptions={{headerShown: false}}>

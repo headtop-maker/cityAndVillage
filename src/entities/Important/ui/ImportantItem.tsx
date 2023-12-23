@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
+import {convertDate} from '../../../shared/lib/convertDate';
 
 const ImportantItem: FC<CounterState['important'][0]> = ({
   title,
@@ -32,7 +33,9 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
         <View style={styles.importantTextBox}>
           <Text style={styles.importantTitle}>{title}</Text>
           <Text>{description ? description : ''}</Text>
-          <Text style={styles.importantDate}>{`${createdAt}`}</Text>
+          <Text style={styles.importantDate}>
+            {convertDate(new Date(createdAt))}
+          </Text>
         </View>
       </TouchableOpacity>
     </View>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Linking} from 'react-native';
 
-import ProfService from '../../../widgets/ProfessionalServices/ProfService';
+// import ProfService from '../../../widgets/ProfessionalServices/ProfService';
 import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
 import {newsDataMocks} from '../../../shared/mocks';
 import NewsItem from '../../../entities/News/ui/NewsItem';
@@ -12,7 +12,7 @@ import {List} from 'react-native-paper';
 
 const MainScreen = () => {
   const [, , , rem] = useDimensions();
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const handlePress = () => setExpanded(!expanded);
   console.log('rem', rem);
@@ -35,17 +35,12 @@ const MainScreen = () => {
             onPress={handlePress}>
             <List.Item
               title="Газовая служба"
-              onPress={() => console.log('kkk')}
+              onPress={() => Linking.openURL(`tel:+79527111111`)}
               left={props => <List.Icon {...props} icon="call-made" />}
             />
             <List.Item
               title="МЧС"
-              onPress={() => console.log('kkk')}
-              left={props => <List.Icon {...props} icon="call-made" />}
-            />
-            <List.Item
-              title="Электрик"
-              onPress={() => console.log('kkk')}
+              onPress={() => Linking.openURL(`tel:+79527111111`)}
               left={props => <List.Icon {...props} icon="call-made" />}
             />
           </List.Accordion>

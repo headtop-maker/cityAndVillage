@@ -14,6 +14,7 @@ import {Icon} from 'react-native-paper';
 
 import SCREENS from '../../../shared/Navigation/screens';
 import {navigate} from '../../../shared/Navigation/MainStack';
+import {convertDate} from '../../../shared/lib/convertDate';
 
 const CurrentNews = () => {
   const currentNewsId = useAppSelector(selectCurrentNewsId);
@@ -24,7 +25,7 @@ const CurrentNews = () => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.iconContainer}
-        onPress={() => navigate(SCREENS.NewsScreen, undefined)}>
+        onPress={() => navigate(SCREENS.TabScreen, undefined)}>
         <Icon source="chevron-left" color="#6e26f3" size={40} />
       </TouchableOpacity>
 
@@ -40,12 +41,14 @@ const CurrentNews = () => {
       </View>
       <ScrollView style={styles.newsContainer}>
         <Text style={styles.newsDescription}>{current?.description}</Text>
-        <Text style={styles.newsCreateAt}>{`${current?.createdAt}`}</Text>
+        <Text style={styles.newsCreateAt}>
+          {convertDate(new Date(current?.createdAt))}
+        </Text>
       </ScrollView>
     </View>
   );
 };
-
+// convertDate(new Date(createdAt))
 export default CurrentNews;
 
 const styles = StyleSheet.create({

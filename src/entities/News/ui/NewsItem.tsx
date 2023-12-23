@@ -9,6 +9,8 @@ import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
+import {Button} from 'react-native-paper';
+import {convertDate} from '../../../shared/lib/convertDate';
 
 const NewsItem: FC<CounterState['news'][0]> = ({
   id,
@@ -43,10 +45,12 @@ const NewsItem: FC<CounterState['news'][0]> = ({
 
       <View style={styles.newsTextBlock}>
         <Text style={styles.newsText}>{title}</Text>
-        <TouchableOpacity style={styles.newsMetaText} onPress={handleNavigate}>
-          <Text>{`${createdAt}`}</Text>
-          <Text style={{fontWeight: 'bold'}}>еще...</Text>
-        </TouchableOpacity>
+        <View style={styles.newsMetaText}>
+          <Text>{convertDate(new Date(createdAt))}</Text>
+          <Button mode="text" onPress={handleNavigate}>
+            еще...
+          </Button>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -96,6 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 5,
+    alignItems: 'center',
   },
 });
 

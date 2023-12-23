@@ -17,6 +17,7 @@ import {useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
+
 const navigationRef = createNavigationContainerRef();
 
 const Stack = createNativeStackNavigator();

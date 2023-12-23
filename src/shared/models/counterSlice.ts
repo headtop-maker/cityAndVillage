@@ -23,6 +23,10 @@ function isRejectedAction(action: AnyAction): action is RejectedAction {
   return action.type.endsWith('rejected');
 }
 
+function isPendingAction(action: AnyAction) {
+  return action.type.endsWith('pending');
+}
+
 const initialState: CounterState = {
   value: 0,
   news: [],
@@ -58,94 +62,50 @@ export const counterSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getNews.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
-      })
+
       .addCase(getNews.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.news = action.payload;
-      })
-
-      .addCase(getImportant.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
       })
       .addCase(getImportant.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.important = action.payload;
       })
-
-      .addCase(crateNews.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
-      })
       .addCase(crateNews.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.important = action.payload;
-      })
-
-      .addCase(getImageForNews.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
       })
       .addCase(getImageForNews.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.imageForNewsFromServer = action.payload;
       })
-
-      .addCase(createUsers.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
-      })
       .addCase(createUsers.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.currentUser = action.payload;
       })
-      .addCase(loginUsers.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
-      })
+
       .addCase(loginUsers.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.currentUser = action.payload;
       })
-      .addCase(getAllUsers.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Информация обновляется';
-      })
+
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
         state.allUsers = action.payload;
       })
-      .addCase(setImportantMessage.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Обращение отправляется';
-      })
+
       .addCase(setImportantMessage.fulfilled, state => {
         state.actionState.loadind = false;
         state.actionState.modalText = '';
       })
-      .addCase(setBannedUser.pending, state => {
-        state.actionState.loadind = true;
-        state.actionState.error = undefined;
-        state.actionState.modalText = 'Обращение отправляется';
-      })
+
       .addCase(setBannedUser.fulfilled, (state, action) => {
         const payload = action.payload;
         state.actionState.loadind = false;
@@ -162,6 +122,11 @@ export const counterSlice = createSlice({
           }
           return current;
         });
+      })
+      .addMatcher(isPendingAction, state => {
+        state.actionState.loadind = true;
+        state.actionState.error = undefined;
+        state.actionState.modalText = 'Информация обновляется';
       })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;

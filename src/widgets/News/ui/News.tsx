@@ -9,6 +9,7 @@ import {
 } from '../../../shared/models/storeHooks';
 import {selectNews, selectNewsLoading} from '../models/selectors';
 import {getNews} from '../../../entities/News/models/models';
+import {CounterState} from '../../../shared/models/types';
 
 const News = () => {
   const news = useAppSelector(selectNews);
@@ -19,20 +20,24 @@ const News = () => {
     dispatch(getNews(10));
   }, [dispatch]);
 
+  const renderItem = ({item}: {item: CounterState['news'][0]}) => {
+    return (
+      <NewsItem
+        title={item.title}
+        image={item.image}
+        createdAt={item.createdAt}
+        description={item.description}
+        id={item.id}
+        author={item.author}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={news}
-        renderItem={({item}) => (
-          <NewsItem
-            title={item.title}
-            image={item.image}
-            createdAt={item.createdAt}
-            description={item.description}
-            id={item.id}
-            author={item.author}
-          />
-        )}
+        renderItem={renderItem}
         keyExtractor={(id, index) => id + 'news' + index}
         refreshing={isLoading}
         onRefresh={() => dispatch(getNews(10))}

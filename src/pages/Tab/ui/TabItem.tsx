@@ -14,7 +14,7 @@ const TabItem: FC<ITabItemProps> = ({focused, imgSrc}) => {
         styles.tabStyle,
         {
           borderWidth: focused ? 0.5 : 0,
-          backgroundColor: focused ? '#b2ffb9' : '#ffffff',
+          backgroundColor: focused ? '#deb7ff' : '#ffffff',
         },
       ]}>
       <Image style={styles.tabImage} source={ImagesAssets[imgSrc]} />
@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
     borderColor: '#7ed07e',
     padding: 5,
     borderRadius: 50,
+    width: 40,
+    alignItems: 'center',
   },
   tabImage: {width: 20, height: 20},
 });

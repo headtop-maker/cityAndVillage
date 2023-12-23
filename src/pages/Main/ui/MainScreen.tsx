@@ -8,9 +8,13 @@ import {newsDataMocks} from '../../../shared/mocks';
 import NewsItem from '../../../entities/News/ui/NewsItem';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import withModal from '../../../shared/HOC/withModal';
+import {List} from 'react-native-paper';
 
 const MainScreen = () => {
   const [, , , rem] = useDimensions();
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handlePress = () => setExpanded(!expanded);
   console.log('rem', rem);
   return (
     <ScrollView style={styles.container}>
@@ -25,6 +29,20 @@ const MainScreen = () => {
         <Text style={styles.sectionTitle}>Услуги</Text>
         <ProfService />
         <Text style={styles.sectionTitle}>Важное</Text>
+
+        <List.Section>
+          <List.Accordion
+            title="Аварийные службы"
+            left={props => <List.Icon {...props} icon="information" />}
+            expanded={expanded}
+            onPress={handlePress}>
+            <List.Item
+              title="Газовая служба"
+              onPress={() => console.log('kkk')}
+            />
+            <List.Item title="МЧС" onPress={() => console.log('kkk')} />
+          </List.Accordion>
+        </List.Section>
 
         <ImportantBtn />
       </View>

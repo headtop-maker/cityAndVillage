@@ -1,5 +1,5 @@
 export const convertDate = (d: Date | undefined) => {
-  if (undefined) {
+  if (!d) {
     return '';
   }
   const datestring =

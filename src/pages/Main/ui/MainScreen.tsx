@@ -26,24 +26,32 @@ const MainScreen = () => {
           createdAt={newsDataMocks[0].newsDate}
           description="Полное описание"
         />
-        <Text style={styles.sectionTitle}>Услуги</Text>
-        <ProfService />
-        <Text style={styles.sectionTitle}>Важное</Text>
 
         <List.Section>
           <List.Accordion
             title="Аварийные службы"
-            left={props => <List.Icon {...props} icon="information" />}
+            left={props => <List.Icon {...props} icon="folder" />}
             expanded={expanded}
             onPress={handlePress}>
             <List.Item
               title="Газовая служба"
               onPress={() => console.log('kkk')}
+              left={props => <List.Icon {...props} icon="call-made" />}
             />
-            <List.Item title="МЧС" onPress={() => console.log('kkk')} />
+            <List.Item
+              title="МЧС"
+              onPress={() => console.log('kkk')}
+              left={props => <List.Icon {...props} icon="call-made" />}
+            />
+            <List.Item
+              title="Электрик"
+              onPress={() => console.log('kkk')}
+              left={props => <List.Icon {...props} icon="call-made" />}
+            />
           </List.Accordion>
         </List.Section>
-
+        <Text style={styles.sectionTitle}>Услуги</Text>
+        {/* <ProfService /> */}
         <ImportantBtn />
       </View>
     </ScrollView>

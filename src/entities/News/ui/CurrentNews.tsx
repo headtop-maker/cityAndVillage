@@ -1,10 +1,16 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Image, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
 import {selectNews} from '../../../widgets/News/models/selectors';
-
-// interface CurrentNewsProps {}
+import {Icon} from 'react-native-paper';
 
 const CurrentNews = () => {
   const currentNewsId = useAppSelector(selectCurrentNewsId);
@@ -13,19 +19,23 @@ const CurrentNews = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.iconContainer}>
+        <Icon source="chevron-left" color="#6e26f3" size={40} />
+      </TouchableOpacity>
+
       <Image
-        style={styles.newsImage}
+        style={[styles.newsImage]}
         source={{
           uri: current?.image,
         }}
       />
 
+      <View style={styles.newsItem}>
+        <Text style={styles.newsText}>{current?.title}</Text>
+      </View>
       <ScrollView style={styles.newsContainer}>
-        <View style={styles.newsItem}>
-          <Text style={styles.newsText}>{current?.title}</Text>
-          <Text style={styles.newsDescription}>{current?.description}</Text>
-          <Text style={styles.newsCreateAt}>{`${current?.createdAt}`}</Text>
-        </View>
+        <Text style={styles.newsDescription}>{current?.description}</Text>
+        <Text style={styles.newsCreateAt}>{`${current?.createdAt}`}</Text>
       </ScrollView>
     </View>
   );
@@ -37,18 +47,41 @@ const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#FFFFFF'},
   newsContainer: {
     backgroundColor: '#FFFFFF',
-    top: -10,
-    borderRadius: 10,
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
-  newsItem: {marginLeft: 5, marginRight: 5, marginTop: 15},
+
+  surface: {
+    padding: 8,
+    height: 80,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    position: 'absolute',
+    zIndex: 2,
+    top: 15,
+    left: 15,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+  },
+  newsItem: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 15,
+    borderColor: '#5e0788',
+    borderBottomLeftRadius: 10,
+  },
   newsImage: {
     height: '55%',
+    margin: 5,
+    borderRadius: 20,
   },
   newsText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
   },
   newsDescription: {
     fontSize: 15,

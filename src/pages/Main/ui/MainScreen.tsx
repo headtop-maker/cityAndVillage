@@ -1,20 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import {ScrollView, StyleSheet, Text, View, Linking} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-// import ProfService from '../../../widgets/ProfessionalServices/ProfService';
-import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
 import {newsDataMocks} from '../../../shared/mocks';
 import NewsItem from '../../../entities/News/ui/NewsItem';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import withModal from '../../../shared/HOC/withModal';
-import {List} from 'react-native-paper';
+import CityServices from '../../../features/cityServices/ui/CityServices';
+import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
 
 const MainScreen = () => {
   const [, , , rem] = useDimensions();
-  const [expanded, setExpanded] = useState(false);
 
-  const handlePress = () => setExpanded(!expanded);
   console.log('rem', rem);
   return (
     <ScrollView style={styles.container}>
@@ -23,31 +20,17 @@ const MainScreen = () => {
         <NewsItem
           image={newsDataMocks[0].imgSrc}
           title={newsDataMocks[0].title}
-          createdAt={newsDataMocks[0].newsDate}
+          createdAt={new Date()}
           description="Полное описание"
+          author="Vasil"
+          id="1111"
+          key="news"
         />
-
-        <List.Section>
-          <List.Accordion
-            title="Аварийные службы"
-            left={props => <List.Icon {...props} icon="folder" />}
-            expanded={expanded}
-            onPress={handlePress}>
-            <List.Item
-              title="Газовая служба"
-              onPress={() => Linking.openURL(`tel:+79527111111`)}
-              left={props => <List.Icon {...props} icon="call-made" />}
-            />
-            <List.Item
-              title="МЧС"
-              onPress={() => Linking.openURL(`tel:+79527111111`)}
-              left={props => <List.Icon {...props} icon="call-made" />}
-            />
-          </List.Accordion>
-        </List.Section>
+        <CityServices />
         <Text style={styles.sectionTitle}>Услуги</Text>
         {/* <ProfService /> */}
-        <ImportantBtn />
+
+        <ServiceList />
       </View>
     </ScrollView>
   );

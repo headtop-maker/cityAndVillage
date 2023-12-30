@@ -6,7 +6,7 @@ import {createUserData} from '../../widgets/Registration/models/types';
 import {loginUserData} from '../../widgets/Login/model/types';
 import {setImportantDataType} from '../../widgets/Users/types/types';
 
-const TEMP_API = 'http://192.168.0.106:3000/';
+const TEMP_API = 'http://192.168.1.101:3000/';
 
 const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, FlatList} from 'react-native';
 
 import {servicesMock} from '../../shared/mocks';
-import ServiceItem from '../../entities/ProfessionalServices/ServiceItem';
+import ServiceItem from '../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
 
 const ProfService = () => {
   return (

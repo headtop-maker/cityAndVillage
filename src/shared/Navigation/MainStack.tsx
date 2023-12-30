@@ -22,11 +22,11 @@ const navigationRef = createNavigationContainerRef();
 
 const Stack = createNativeStackNavigator();
 
-export function navigate(name, params) {
+export const navigate: typeof navigationRef.navigate = (name, params?) => {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);
   }
-}
+};
 
 export function push(...args) {
   if (navigationRef.isReady()) {

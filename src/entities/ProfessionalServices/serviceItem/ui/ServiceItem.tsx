@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {TServiceItem} from '../../shared/types';
-import {ImagesAssets} from '../../shared/assets/picture/icons/ImageAssets';
+import {TServiceItem} from '../../../../shared/types';
+import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
 
 const ServiceItem: FC<TServiceItem> = ({nameService, imgSrc, id}) => {
   return (

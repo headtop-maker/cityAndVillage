@@ -42,7 +42,7 @@ const CurrentNews = () => {
       <ScrollView style={styles.newsContainer}>
         <Text style={styles.newsDescription}>{current?.description}</Text>
         <Text style={styles.newsCreateAt}>
-          {convertDate(new Date(current?.createdAt))}
+          {current?.createdAt && convertDate(new Date(current?.createdAt))}
         </Text>
       </ScrollView>
     </View>

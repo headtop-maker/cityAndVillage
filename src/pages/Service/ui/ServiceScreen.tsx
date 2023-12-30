@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, Text, Button} from 'react-native-paper';
 import Animated, {
   Extrapolation,
@@ -9,6 +9,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
 
 const {width} = Dimensions.get('screen');
 const itemWidth = width / 1.2;
@@ -40,6 +41,22 @@ const DATA = [
     id: '58694a0f-3da1-471f-bd96-145571e29d7y',
     title: 'Third Item',
   },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d7d',
+    title: 'Third Item',
+  },
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bh',
+    title: 'First Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd911a97f6r',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145575e29d7y',
+    title: 'Third Item',
+  },
 ];
 
 const ItemFlat = ({title}: ItemProps) => (
@@ -63,8 +80,10 @@ const ServiceScreen = () => {
   });
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
-      <View style={styles.container}>
+    <Animated.ScrollView
+      style={{flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column'}}
+      stickyHeaderIndices={[1]}>
+      <SafeAreaView>
         <Animated.FlatList
           data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
           keyExtractor={x => x.toString() + 'serviceTitle'}
@@ -76,13 +95,19 @@ const ServiceScreen = () => {
           onScroll={scrollHandler}
           decelerationRate="fast"
         />
-      </View>
-      <Animated.FlatList
-        data={DATA}
-        renderItem={({item}) => <ItemFlat title={item.title} />}
-        keyExtractor={item => item.id}
-      />
-    </View>
+      </SafeAreaView>
+      <SafeAreaView style={{margin: 5}}>
+        <ServiceList />
+      </SafeAreaView>
+
+      <SafeAreaView>
+        <Animated.FlatList
+          data={DATA}
+          renderItem={({item}) => <ItemFlat title={item.title} />}
+          keyExtractor={item => item.id}
+        />
+      </SafeAreaView>
+    </Animated.ScrollView>
   );
 };
 
@@ -125,9 +150,7 @@ const Item = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
+  container: {},
   item: {
     width: itemWidth,
     padding: 4,
@@ -137,7 +160,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: (width - itemWidth) / 2,
   },
   itemFlat: {
-    margin: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
   },
   title: {
     fontSize: 32,

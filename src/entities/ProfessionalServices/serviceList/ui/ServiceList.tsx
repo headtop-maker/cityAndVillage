@@ -54,7 +54,7 @@ const ServiceList = () => {
   };
   console.log('scrollPosition', scrollPosition);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <FlatList
         data={DATA}
         renderItem={({item}) => <Item title={item.title} />}
@@ -72,9 +72,6 @@ const ServiceList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   item: {margin: 3},
   title: {
     fontSize: 32,

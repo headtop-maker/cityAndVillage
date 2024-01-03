@@ -8,11 +8,19 @@ import useDimensions from '../../../shared/HOC/useDimensions';
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
+import {Button} from 'react-native-paper';
+import ApiCall from '../../../shared/api/ApiCall';
 
 const MainScreen = () => {
   const [, , , rem] = useDimensions();
 
   console.log('rem', rem);
+
+  const handle = async () => {
+    const response = new ApiCall();
+    const data = await response.apiRequest();
+    console.log(data);
+  };
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -29,7 +37,9 @@ const MainScreen = () => {
         <CityServices />
         <Text style={styles.sectionTitle}>Услуги</Text>
         {/* <ProfService /> */}
-
+        <Button mode="outlined" onPress={handle}>
+          Call api
+        </Button>
         <ServiceList />
       </View>
     </ScrollView>

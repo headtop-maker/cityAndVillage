@@ -1,24 +1,17 @@
-import axios, {AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
 
 import {TImageResponse} from '../../entities/News/models/types';
 import {CounterState, userRole} from '../models/types';
 import {createUserData} from '../../widgets/Registration/models/types';
 import {loginUserData} from '../../widgets/Login/model/types';
 import {setImportantDataType} from '../../widgets/Users/types/types';
+import ApiCall from './ApiCall';
 
-const TEMP_API = 'http://192.168.1.101:3000/';
+const TEMP_API = 'http://192.168.0.106:3000/';
 
-const IMAGE_URL = 'https://api.slingacademy.com/v1/';
+export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
-const headers = {
-  Accept: 'application/json',
-};
-
-const axiosInstance = axios.create({
-  headers,
-  timeout: 10000,
-});
-
+const response = new ApiCall();
 // export const getCurrentNews = (
 //   limit: number,
 // ): Promise<AxiosResponse<CounterState['news'], unknown>> =>
@@ -28,11 +21,10 @@ const axiosInstance = axios.create({
 //     url: `${API_URL}/News/?page=1&limit=${limit}`,
 //   });
 
-export const getCurrentNews = (
-  limit: number,
-): Promise<AxiosResponse<CounterState['news'], unknown>> =>
-  axiosInstance({
-    timeout: 10000,
+export const getCurrentNews = (): // limit: number,
+Promise<AxiosResponse<CounterState['news'], unknown>> =>
+  response.apiRequest({
+    timeout: 3000,
     method: 'get',
     url: `${TEMP_API}news`,
   });
@@ -41,8 +33,8 @@ export const getCurrentImportant = (
   limit: number,
   userEmail: string,
 ): Promise<AxiosResponse<CounterState['important'], unknown>> =>
-  axiosInstance({
-    timeout: 10000,
+  response.apiRequest({
+    timeout: 3000,
     method: 'get',
     url: `${TEMP_API}important/${userEmail}`,
   });
@@ -50,9 +42,9 @@ export const getCurrentImportant = (
 export const createNews = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
 ): Promise<AxiosResponse<any, unknown>> =>
-  axiosInstance({
+  response.apiRequest({
     data,
-    timeout: 10000,
+    timeout: 3000,
     method: 'post',
     url: `${TEMP_API}news`,
   });
@@ -60,8 +52,8 @@ export const createNews = (
 export const getImageFromServer = (): Promise<
   AxiosResponse<TImageResponse, unknown>
 > =>
-  axiosInstance({
-    timeout: 10000,
+  response.apiRequest({
+    timeout: 3000,
     method: 'get',
     url: `${IMAGE_URL}sample-data/photos`,
   });
@@ -69,9 +61,9 @@ export const getImageFromServer = (): Promise<
 export const createUser = (
   data: createUserData,
 ): Promise<AxiosResponse<{token: string; role: userRole}, unknown>> =>
-  axiosInstance({
+  response.apiRequest({
     data,
-    timeout: 10000,
+    timeout: 3000,
     method: 'post',
     url: `${TEMP_API}auth/signup`,
   });
@@ -81,9 +73,9 @@ export const loginUser = (
 ): Promise<
   AxiosResponse<{token: string; role: userRole; name: string}, unknown>
 > =>
-  axiosInstance({
+  response.apiRequest({
     data,
-    timeout: 10000,
+    timeout: 3000,
     method: 'post',
     url: `${TEMP_API}auth/login`,
   });
@@ -91,8 +83,8 @@ export const loginUser = (
 export const getAllUsersApi = (): Promise<
   AxiosResponse<CounterState['allUsers'], unknown>
 > =>
-  axiosInstance({
-    timeout: 10000,
+  response.apiRequest({
+    timeout: 3000,
     method: 'get',
     url: `${TEMP_API}auth`,
   });
@@ -102,9 +94,9 @@ export const setImportantMessageApi = (
 ): Promise<
   AxiosResponse<{token: string; role: userRole; name: string}, unknown>
 > =>
-  axiosInstance({
+  response.apiRequest({
     data,
-    timeout: 10000,
+    timeout: 3000,
     method: 'post',
     url: `${TEMP_API}important`,
   });
@@ -124,9 +116,9 @@ export const setBannedUserApi = (
     unknown
   >
 > =>
-  axiosInstance({
+  response.apiRequest({
     data: {banned},
-    timeout: 10000,
+    timeout: 3000,
     method: 'put',
     url: `${TEMP_API}auth/banned/${id}`,
   });

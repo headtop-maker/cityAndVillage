@@ -9,6 +9,11 @@ export function log() {
       try {
         const out = await value.apply(this, args);
         console.log('response', out);
+        if (typeof out === 'object') {
+          if ('data' in out) {
+            console.log('response data', out.data);
+          }
+        }
         return out;
       } catch (e) {
         console.log('e', e);

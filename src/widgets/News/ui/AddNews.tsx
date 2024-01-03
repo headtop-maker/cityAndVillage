@@ -79,7 +79,7 @@ const AddNews = () => {
         url: 'http://192.168.1.101:3000/upload',
         data: formData,
         headers: {
-          accept: 'application/json',
+          Accept: 'application/json',
           'content-type': 'multipart/form-data',
         },
       });

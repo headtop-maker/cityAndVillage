@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
-import {selectNews} from '../../../widgets/News/models/selectors';
+import {selectNews} from '../../../features/News/models/selectors';
 import {Icon} from 'react-native-paper';
 
 import SCREENS from '../../../shared/Navigation/screens';

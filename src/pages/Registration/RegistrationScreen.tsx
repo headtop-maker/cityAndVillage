@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, ImageBackground} from 'react-native';
-import SetRegistration from '../../widgets/Registration/ui/SetRegistration';
+import SetRegistration from '../../features/Registration/ui/SetRegistration';
 import {ImagesAssets} from '../../shared/assets/picture/icons/ImageAssets';
 import withModal from '../../shared/HOC/withModal';
 

@@ -1,8 +1,17 @@
-import {AxiosInstance, Method} from 'axios';
+import {AxiosHeaderValue, AxiosInstance, Method} from 'axios';
 import axios from 'axios';
 import {log} from './decorators/perfDecorators';
 
-const headers = {
+type THeaders = Partial<{
+  Accept: AxiosHeaderValue;
+  'Content-Length': AxiosHeaderValue;
+  'User-Agent': AxiosHeaderValue;
+  'Content-Encoding': AxiosHeaderValue;
+  'Content-type': AxiosHeaderValue;
+  Authorization: AxiosHeaderValue;
+}>;
+
+const headers: THeaders = {
   Accept: 'application/json',
 };
 
@@ -18,10 +27,11 @@ export default class ApiCall {
     method: Method;
     url: string;
     data?: T;
+    headers?: THeaders;
   }) {
     const call = this.axiosInstance({
       ...reqData,
-      headers,
+      headers: reqData.headers ? reqData.headers : headers,
     });
     return call;
   }

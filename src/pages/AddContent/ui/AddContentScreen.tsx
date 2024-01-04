@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import AddNews from '../../../widgets/News/ui/AddNews';
+import AddNews from '../../../features/News/ui/AddNews';
 import {SegmentedButtons} from 'react-native-paper';
-import Users from '../../../widgets/Users/ui/Users';
+import Users from '../../../features/Users/ui/Users';
 
 // interface AddContentScreeProps {}
 

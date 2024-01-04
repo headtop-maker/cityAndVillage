@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  NativeModules,
 } from 'react-native';
 import {
   useAppDispatch,
@@ -22,12 +21,10 @@ import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text} from 'react-native-paper';
-import {FileParamsType} from '../../../shared/types';
-import axios from 'axios';
+
+import {setFile} from '../models/models';
 
 // interface AddContentScreeProps {}
-
-const {KotlinModules} = NativeModules;
 
 const AddNews = () => {
   const [title, setTitle] = useState('');
@@ -64,29 +61,7 @@ const AddNews = () => {
   };
 
   const handleAddImage = async () => {
-    try {
-      const file: FileParamsType = await KotlinModules.openFile();
-      console.log('file', file);
-      const formData = new FormData();
-
-      formData.append('file', {
-        uri: file.fileUri,
-        type: 'image/jpeg',
-        name: 'photo.jpg', // поправить имя
-      });
-      const response = await axios({
-        method: 'post',
-        url: 'http://192.168.1.101:3000/upload',
-        data: formData,
-        headers: {
-          Accept: 'application/json',
-          'content-type': 'multipart/form-data',
-        },
-      });
-      console.log('response', response);
-    } catch (e) {
-      console.error(e);
-    }
+    dispatch(setFile());
   };
 
   const imageItems = ({

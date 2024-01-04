@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, ImageBackground} from 'react-native';
-import SetLogin from '../../../widgets/Login/ui/SetLogin';
+import SetLogin from '../../../features/Login/ui/SetLogin';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import withModal from '../../../shared/HOC/withModal';
 

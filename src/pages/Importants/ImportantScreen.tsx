@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {SafeAreaView, StyleSheet} from 'react-native';
-import Important from '../../widgets/Important/ui/Important';
+import Important from '../../features/Important/ui/Important';
 import withModal from '../../shared/HOC/withModal';
 
 const ImportantScreen = () => {

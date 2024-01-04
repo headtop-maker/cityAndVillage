@@ -2,12 +2,12 @@ import {AxiosResponse} from 'axios';
 
 import {TImageResponse} from '../../entities/News/models/types';
 import {CounterState, userRole} from '../models/types';
-import {createUserData} from '../../widgets/Registration/models/types';
-import {loginUserData} from '../../widgets/Login/model/types';
-import {setImportantDataType} from '../../widgets/Users/types/types';
+import {createUserData} from '../../features/Registration/models/types';
+import {loginUserData} from '../../features/Login/model/types';
+import {setImportantDataType} from '../../features/Users/types/types';
 import ApiCall from './ApiCall';
 
-const TEMP_API = 'http://192.168.0.106:3000/';
+const TEMP_API = 'http://192.168.1.101:3000/';
 
 export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -121,4 +121,18 @@ export const setBannedUserApi = (
     timeout: 3000,
     method: 'put',
     url: `${TEMP_API}auth/banned/${id}`,
+  });
+
+export const setFileApi = (
+  formData: FormData,
+): Promise<AxiosResponse<{}, unknown>> =>
+  response.apiRequest({
+    timeout: 3000,
+    data: formData,
+    method: 'post',
+    url: `${TEMP_API}upload`,
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'multipart/form-data',
+    },
   });

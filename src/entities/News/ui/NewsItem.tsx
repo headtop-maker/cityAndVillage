@@ -48,7 +48,7 @@ const NewsItem: FC<CounterState['news'][0]> = ({
         <View style={styles.newsMetaText}>
           <Text>{convertDate(new Date(createdAt))}</Text>
           <Button mode="text" onPress={handleNavigate}>
-            еще...
+            подробнее...
           </Button>
         </View>
       </View>

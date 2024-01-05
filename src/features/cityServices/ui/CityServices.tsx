@@ -17,12 +17,12 @@ const CityServices = () => {
         <List.Item
           title="Газовая служба"
           onPress={() => Linking.openURL(`tel:+79527111111`)}
-          left={props => <List.Icon {...props} icon="call-made" />}
+          left={props => <List.Icon {...props} icon="phone" />}
         />
         <List.Item
           title="МЧС"
           onPress={() => Linking.openURL(`tel:+79527111111`)}
-          left={props => <List.Icon {...props} icon="call-made" />}
+          left={props => <List.Icon {...props} icon="phone" />}
         />
       </List.Accordion>
     </List.Section>

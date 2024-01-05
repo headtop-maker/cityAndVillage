@@ -7,6 +7,7 @@ export function log() {
     const value = descriptor.value;
     descriptor.value = async function (...args: any[]) {
       try {
+        console.log('params', ...args);
         const out = await value.apply(this, args);
         console.log('response', out);
         if (typeof out === 'object') {

@@ -20,19 +20,22 @@ import {
 import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
-import {Button, TextInput, Text} from 'react-native-paper';
+import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 
 import {setFile} from '../models/models';
 
 // interface AddContentScreeProps {}
 
 const AddNews = () => {
+  const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageSrc, setImageSrc] = useState('');
   const images = useAppSelector(selectimageForNewsFromServer);
   const currentRole = useAppSelector(selectCurrentUserRole);
   const userName = useAppSelector(selectCurrentUserName);
+
+  const hideDialog = () => setVisible(false);
 
   const dispatch = useAppDispatch();
 
@@ -81,11 +84,27 @@ const AddNews = () => {
       title={item.title}
       url={item.url}
       user={item.user}
-      setImageSrc={setImageSrc}
+      setImageSrc={data => {
+        setImageSrc(data);
+        hideDialog();
+      }}
     />
   );
   return (
     <SafeAreaView style={styles.container}>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.ScrollArea>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              legacyImplementation={false}
+              data={images}
+              renderItem={imageItems}
+              keyExtractor={(id, index) => id + 'images' + index}
+            />
+          </Dialog.ScrollArea>
+        </Dialog>
+      </Portal>
       <View style={[styles.inputContainer, styles.shadow]}>
         <Text style={styles.titleTextStyle} variant="titleLarge">
           Добавить новость
@@ -98,21 +117,17 @@ const AddNews = () => {
             Загрузить
           </Button>
           <TouchableOpacity
-            style={{alignItems: 'flex-end', margin: 10}}
+            style={styles.refresh}
             onPress={() => dispatch(getImageForNews())}>
             <Image style={styles.imageRef} source={ImagesAssets.refresh} />
           </TouchableOpacity>
         </View>
-
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          legacyImplementation={false}
-          data={images}
-          style={{height: 200}}
-          renderItem={imageItems}
-          keyExtractor={(id, index) => id + 'images' + index}
-        />
-
+        <Button
+          mode="contained"
+          style={styles.createButton}
+          onPress={() => setVisible(true)}>
+          Выбрать изображение
+        </Button>
         <TextInput
           style={styles.input}
           label="Заголовок"
@@ -158,6 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
+  refresh: {alignItems: 'flex-end', margin: 10},
   input: {
     margin: 5,
   },

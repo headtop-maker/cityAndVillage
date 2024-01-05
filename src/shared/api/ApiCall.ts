@@ -11,6 +11,14 @@ type THeaders = Partial<{
   Authorization: AxiosHeaderValue;
 }>;
 
+type TRequestData<T> = {
+  timeout: number;
+  method: Method;
+  url: string;
+  data?: T;
+  headers?: THeaders;
+};
+
 const headers: THeaders = {
   Accept: 'application/json',
 };
@@ -22,13 +30,7 @@ export default class ApiCall {
   }
 
   @log()
-  apiRequest<T>(reqData: {
-    timeout: number;
-    method: Method;
-    url: string;
-    data?: T;
-    headers?: THeaders;
-  }) {
+  apiRequest<T>(reqData: TRequestData<T>) {
     const call = this.axiosInstance({
       ...reqData,
       headers: reqData.headers ? reqData.headers : headers,

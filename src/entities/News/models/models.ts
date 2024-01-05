@@ -9,9 +9,9 @@ import {CounterState} from '../../../shared/models/types';
 
 export const getNews = createAsyncThunk(
   `${fetchApiDomain}/getNews`,
-  async (limit: number, {rejectWithValue}) => {
+  async (_, {rejectWithValue}) => {
     try {
-      const response = await getCurrentNews(limit);
+      const response = await getCurrentNews();
 
       return response.data.sort((a, b) => {
         return (

@@ -24,6 +24,11 @@ const CityServices = () => {
           onPress={() => Linking.openURL(`tel:+79527111111`)}
           left={props => <List.Icon {...props} icon="phone" />}
         />
+        <List.Item
+          title="Администрация"
+          onPress={() => Linking.openURL(`tel:+79527111111`)}
+          left={props => <List.Icon {...props} icon="phone" />}
+        />
       </List.Accordion>
     </List.Section>
   );

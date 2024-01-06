@@ -17,7 +17,7 @@ const News = () => {
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    dispatch(getNews(10));
+    dispatch(getNews());
   }, [dispatch]);
 
   const renderItem = ({item}: {item: CounterState['news'][0]}) => {
@@ -40,7 +40,7 @@ const News = () => {
         renderItem={renderItem}
         keyExtractor={(id, index) => id + 'news' + index}
         refreshing={isLoading}
-        onRefresh={() => dispatch(getNews(10))}
+        onRefresh={() => dispatch(getNews())}
       />
     </View>
   );

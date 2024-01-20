@@ -25,16 +25,31 @@ const headers: THeaders = {
 
 export default class ApiCall {
   private axiosInstance: AxiosInstance;
+  token: string;
+
   constructor() {
     this.axiosInstance = axios.create();
+    this.token = '';
   }
 
   @log()
   apiRequest<T>(reqData: TRequestData<T>) {
     const call = this.axiosInstance({
       ...reqData,
-      headers: reqData.headers ? reqData.headers : headers,
+      headers: reqData.headers
+        ? {
+            Authorization: 'Bearer ' + this.token,
+            ...reqData.headers,
+          }
+        : {
+            ...headers,
+            Authorization: 'Bearer ' + this.token,
+          },
     });
     return call;
+  }
+
+  setToken(data: string) {
+    this.token = data;
   }
 }

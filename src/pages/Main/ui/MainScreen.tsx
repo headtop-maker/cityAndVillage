@@ -9,6 +9,7 @@ import CityServices from '../../../features/cityServices/ui/CityServices';
 import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectNews} from '../../../features/News/models/selectors';
+import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
 
 const MainScreen = () => {
   const news = useAppSelector(selectNews)[0];
@@ -43,6 +44,7 @@ const MainScreen = () => {
           <ServiceItem nameService="службы" imgSrc="information" id={100} />
         </View>
         <CityServices />
+        <ImportantBtn />
       </View>
     </ScrollView>
   );

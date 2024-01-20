@@ -11,7 +11,7 @@ const TEMP_API = 'http://192.168.1.101:3000/';
 
 export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
-const response = new ApiCall();
+export const response = new ApiCall();
 // export const getCurrentNews = (
 //   limit: number,
 // ): Promise<AxiosResponse<CounterState['news'], unknown>> =>

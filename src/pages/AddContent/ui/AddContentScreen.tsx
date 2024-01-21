@@ -22,7 +22,7 @@ const AddContentScreen = () => {
           },
           {
             value: 'createImportant',
-            label: 'Важное',
+            label: 'Центр сообщений',
           },
           {value: 'users', label: 'Пользователи'},
         ]}

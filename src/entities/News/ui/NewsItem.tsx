@@ -68,11 +68,11 @@ const styles = StyleSheet.create({
   },
 
   newsImage: {
-    height: 200,
+    height: 190,
     borderRadius: 10,
   },
   defaultImage: {
-    height: 200,
+    height: 190,
     width: 225,
     borderRadius: 10,
     alignSelf: 'center',
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     marginLeft: 5,
-    marginBottom: 5,
+    marginBottom: 3,
     marginRight: 5,
     backgroundColor: '#fafbff',
   },
   newsTextBlock: {
-    margin: 15,
+    margin: 10,
   },
   newsTitleText: {
     fontSize: 18,

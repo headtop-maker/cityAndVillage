@@ -51,7 +51,7 @@ const TabScreen = () => {
       />
       <Tab.Screen
         options={{
-          title: 'Важное',
+          title: 'Сообщения',
           tabBarIcon: ({focused}) => {
             return <TabItem focused={focused} imgSrc="alert" />;
           },

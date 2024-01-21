@@ -49,3 +49,10 @@ export enum userRole {
   simpleUser = 'simpleUser',
   worker = 'worker',
 }
+
+export type ServiceTitleItem = {
+  id: string;
+  categoryName: string;
+  description: string;
+};
+export type ServiceTitle = ServiceTitleItem[] | undefined;

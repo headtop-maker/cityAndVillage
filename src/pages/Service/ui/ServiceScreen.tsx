@@ -61,13 +61,13 @@ const DATA = [
 
 const ItemFlat = ({title}: ItemProps) => (
   <View style={styles.itemFlat}>
-    <Card>
+    <Card mode="outlined">
       <Card.Content>
         <Text variant="titleLarge">{title}</Text>
         <Text variant="bodyMedium">Card content</Text>
       </Card.Content>
       <Card.Actions>
-        <Button mode="contained-tonal">Перейти</Button>
+        <Button mode="text">Перейти</Button>
       </Card.Actions>
     </Card>
   </View>

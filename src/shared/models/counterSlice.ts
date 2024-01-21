@@ -63,6 +63,9 @@ export const counterSlice = createSlice({
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
     },
+    setErrorText: (state, action: PayloadAction<string>) => {
+      state.actionState.modalText = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -135,6 +138,7 @@ export const {
   incrementByAmount,
   setCurrentNewsId,
   resetCurrentUser,
+  setErrorText,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

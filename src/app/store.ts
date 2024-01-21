@@ -2,6 +2,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import counterReducer from '../shared/models/counterSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, persistStore} from 'redux-persist';
+import {serviceApi} from '../shared/models/services';
 
 const reducers = combineReducers({
   counter: persistReducer(
@@ -12,6 +13,7 @@ const reducers = combineReducers({
     },
     counterReducer,
   ),
+  [serviceApi.reducerPath]: serviceApi.reducer,
 });
 
 export const store = configureStore({
@@ -19,7 +21,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(serviceApi.middleware),
 });
 
 export let persistor = persistStore(store);

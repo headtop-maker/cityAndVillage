@@ -34,6 +34,7 @@ export default class ApiCall {
 
   @log()
   apiRequest<T>(reqData: TRequestData<T>) {
+    console.log('token', this.token);
     const call = this.axiosInstance({
       ...reqData,
       headers: reqData.headers

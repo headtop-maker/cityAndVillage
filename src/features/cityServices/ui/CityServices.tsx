@@ -18,16 +18,19 @@ const CityServices = () => {
           title="Газовая служба"
           onPress={() => Linking.openURL(`tel:+79527111111`)}
           left={props => <List.Icon {...props} icon="phone" />}
+          description="+79527111111"
         />
         <List.Item
           title="МЧС"
           onPress={() => Linking.openURL(`tel:+79527111111`)}
           left={props => <List.Icon {...props} icon="phone" />}
+          description="+79527111111"
         />
         <List.Item
           title="Администрация"
           onPress={() => Linking.openURL(`tel:+79527111111`)}
           left={props => <List.Icon {...props} icon="phone" />}
+          description="+79527111111"
         />
       </List.Accordion>
     </List.Section>

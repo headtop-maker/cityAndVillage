@@ -9,6 +9,17 @@ import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
 
+const renderItem = ({item}: {item: CounterState['important'][0]}) => {
+  return (
+    <ImportantItem
+      title={item.title}
+      description={item.description}
+      createdAt={item.createdAt}
+      isImportant={item.isImportant}
+      id={item.id}
+    />
+  );
+};
 const Important = () => {
   const important = useAppSelector(selectImportant);
   const isLoading = useAppSelector(selectImportantLoading);
@@ -17,18 +28,6 @@ const Important = () => {
   useLayoutEffect(() => {
     dispatch(getImportant(10));
   }, [dispatch]);
-
-  const renderItem = ({item}: {item: CounterState['important'][0]}) => {
-    return (
-      <ImportantItem
-        title={item.title}
-        description={item.description}
-        createdAt={item.createdAt}
-        isImportant={item.isImportant}
-        id={item.id}
-      />
-    );
-  };
 
   return (
     <View>

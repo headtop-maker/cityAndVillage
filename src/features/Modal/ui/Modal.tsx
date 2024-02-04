@@ -1,20 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Modal, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectModalError, selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
 import {Button, Text} from 'react-native-paper';
+import {response} from '../../../shared/api/axiosInstance';
 
 const ModalScreen = () => {
+  const [otherText, setOtherText] = useState('');
   const modalText = useAppSelector(selectModalText);
-  const error = useAppSelector(selectModalError);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    response.setOtherFn(setOtherText);
+  }, []);
+
+  const handleCloseModal = () => {
+    dispatch(resetModalText());
+    response.getOtherFn('');
+  };
+
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      visible={!!modalText}
+      visible={!!modalText || !!otherText}
       style={styles.modalOpacity}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
@@ -23,10 +34,10 @@ const ModalScreen = () => {
         <View style={[styles.modalView]}>
           <Text style={styles.modalText} variant="bodyLarge">
             {modalText ? modalText : ''}
+            {otherText ? otherText : ''}
           </Text>
-          {!error && <ActivityIndicator size="large" />}
 
-          <Button mode="outlined" onPress={() => dispatch(resetModalText())}>
+          <Button mode="outlined" onPress={handleCloseModal}>
             Закрыть
           </Button>
         </View>

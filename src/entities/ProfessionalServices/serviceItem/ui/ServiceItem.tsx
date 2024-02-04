@@ -2,12 +2,13 @@ import React, {FC} from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {TServiceItem} from '../../../../shared/types';
 import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
+import {response} from '../../../../shared/api/axiosInstance';
 
 const ServiceItem: FC<TServiceItem> = ({nameService, imgSrc, id}) => {
   return (
     <TouchableOpacity
       style={[styles.mediumBox, styles.shadow]}
-      onPress={() => console.log(nameService)}
+      onPress={() => response.getOtherFn('OtherFnCall')}
       key={'service' + id}>
       <View style={styles.iconBorder}>
         <Image style={styles.professionsImage} source={ImagesAssets[imgSrc]} />

@@ -1,6 +1,7 @@
 import {AxiosHeaderValue, AxiosInstance, Method} from 'axios';
 import axios from 'axios';
 import {log} from './decorators/perfDecorators';
+import {Dispatch, SetStateAction} from 'react';
 
 type THeaders = Partial<{
   Accept: AxiosHeaderValue;
@@ -23,13 +24,17 @@ const headers: THeaders = {
   Accept: 'application/json',
 };
 
+type TcallOutFn = Dispatch<SetStateAction<string>> | undefined;
+
 export default class ApiCall {
   private axiosInstance: AxiosInstance;
   token: string;
+  callOutFn: TcallOutFn;
 
   constructor() {
     this.axiosInstance = axios.create();
     this.token = '';
+    this.callOutFn = undefined;
   }
 
   @log()
@@ -52,5 +57,17 @@ export default class ApiCall {
 
   setToken(data: string) {
     this.token = data;
+  }
+
+  setOtherFn(fn: Dispatch<SetStateAction<string>>) {
+    if (!this.callOutFn) {
+      this.callOutFn = fn;
+    }
+  }
+
+  getOtherFn(data: string) {
+    if (this.callOutFn) {
+      this.callOutFn(data);
+    }
   }
 }

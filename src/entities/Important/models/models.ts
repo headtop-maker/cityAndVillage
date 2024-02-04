@@ -16,6 +16,7 @@ export const getImportant = createAsyncThunk(
       const response = await getCurrentImportant(limit, userEmail);
       return response.data;
     } catch (err) {
+      console.log('err', err);
       return rejectWithValue(err);
     }
   },

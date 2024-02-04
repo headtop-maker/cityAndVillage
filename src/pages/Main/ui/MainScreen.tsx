@@ -3,7 +3,7 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import NewsItem from '../../../entities/News/ui/NewsItem';
-import useDimensions from '../../../shared/HOC/useDimensions';
+
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
@@ -13,9 +13,6 @@ import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
 
 const MainScreen = () => {
   const news = useAppSelector(selectNews)[0];
-  const [, , , rem] = useDimensions();
-
-  console.log('rem', rem);
 
   return (
     <ScrollView style={styles.container}>

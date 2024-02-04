@@ -13,11 +13,10 @@ import TabScreen from '../../pages/Tab/TabScreen';
 import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
 import ServiceScreen from '../../pages/Service/ui/ServiceScreen';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
-import {useAppDispatch, useAppSelector} from '../models/storeHooks';
+import {useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
-import {getToken} from '../api/actions';
 import {response} from '../api/axiosInstance';
 
 const navigationRef = createNavigationContainerRef();

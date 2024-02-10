@@ -5,6 +5,7 @@ import {useGetAllServiceCategoryQuery} from '../../../../shared/models/services'
 import {ServiceTitleItem} from '../../../../shared/models/types';
 import {useAppDispatch} from '../../../../shared/models/storeHooks';
 import {setErrorText} from '../../../../shared/models/counterSlice';
+import {getServices} from '../model/actions';
 
 const ServiceList = () => {
   const {data, error} = useGetAllServiceCategoryQuery();
@@ -21,6 +22,7 @@ const ServiceList = () => {
   useLayoutEffect(() => {
     if (!!data && data?.length > 0) {
       setChecked(data[0].id);
+      dispatch(getServices(data[0].categoryName));
     }
   }, [data]);
 
@@ -30,7 +32,10 @@ const ServiceList = () => {
         <Chip
           mode={item.id === checked ? 'flat' : 'outlined'}
           selected={item.id === checked}
-          onPress={() => setChecked(item.id)}>
+          onPress={() => {
+            setChecked(item.id);
+            dispatch(getServices(item.categoryName));
+          }}>
           {item.description}
         </Chip>
       </View>

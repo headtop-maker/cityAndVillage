@@ -56,3 +56,14 @@ export type ServiceTitleItem = {
   description: string;
 };
 export type ServiceTitle = ServiceTitleItem[] | undefined;
+
+export interface IServices {
+  response: {
+    phone: string;
+    email: string;
+    categoryName: string;
+    description: string;
+    image: string;
+    id: string;
+  }[];
+}

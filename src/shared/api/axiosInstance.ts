@@ -1,7 +1,7 @@
 import {AxiosResponse} from 'axios';
 
 import {TImageResponse} from '../../entities/News/models/types';
-import {CounterState, userRole} from '../models/types';
+import {CounterState, IServices, userRole} from '../models/types';
 import {createUserData} from '../../features/Registration/models/types';
 import {loginUserData} from '../../features/Login/model/types';
 import {setImportantDataType} from '../../features/Users/types/types';
@@ -135,4 +135,13 @@ export const setFileApi = (
       Accept: 'application/json',
       'Content-type': 'multipart/form-data',
     },
+  });
+
+export const getServicesByCategory = (
+  serviceCategory: string,
+): Promise<AxiosResponse<IServices['response'], unknown>> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}adsboard/${serviceCategory}`,
   });

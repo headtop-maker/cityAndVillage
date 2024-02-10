@@ -1,10 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import type {
-  Action,
-  AnyAction,
-  PayloadAction,
-  isPending,
-} from '@reduxjs/toolkit';
+import type {Action, AnyAction, PayloadAction} from '@reduxjs/toolkit';
 import {
   crateNews,
   getImageForNews,

@@ -26,15 +26,40 @@ const headers: THeaders = {
 
 type TcallOutFn = Dispatch<SetStateAction<string>> | undefined;
 
+class OtherCall {
+  callOutFn: TcallOutFn;
+  static instance: OtherCall;
+
+  constructor() {
+    if (OtherCall.instance) {
+      return OtherCall.instance;
+    }
+    OtherCall.instance = this;
+
+    this.callOutFn = undefined;
+  }
+  setOtherFn(fn: Dispatch<SetStateAction<string>>) {
+    if (!this.callOutFn) {
+      this.callOutFn = fn;
+    }
+  }
+
+  getOtherFn(data: string) {
+    if (this.callOutFn) {
+      this.callOutFn(data);
+    }
+  }
+}
+
+export const callOtherFn = new OtherCall();
+
 export default class ApiCall {
   private axiosInstance: AxiosInstance;
   token: string;
-  callOutFn: TcallOutFn;
 
   constructor() {
     this.axiosInstance = axios.create();
     this.token = '';
-    this.callOutFn = undefined;
   }
 
   @log()
@@ -57,17 +82,5 @@ export default class ApiCall {
 
   setToken(data: string) {
     this.token = data;
-  }
-
-  setOtherFn(fn: Dispatch<SetStateAction<string>>) {
-    if (!this.callOutFn) {
-      this.callOutFn = fn;
-    }
-  }
-
-  getOtherFn(data: string) {
-    if (this.callOutFn) {
-      this.callOutFn(data);
-    }
   }
 }

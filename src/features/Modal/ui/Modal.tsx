@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Modal, StyleSheet, View, ActivityIndicator} from 'react-native';
+import {Alert, Modal, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
-import {selectModalError, selectModalText} from '../model/selectors';
+import {selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
 import {Button, Text} from 'react-native-paper';
-import {response} from '../../../shared/api/axiosInstance';
+import {callOtherFn} from '../../../shared/api/ApiCall';
 
 const ModalScreen = () => {
   const [otherText, setOtherText] = useState('');
@@ -13,12 +13,12 @@ const ModalScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    response.setOtherFn(setOtherText);
+    callOtherFn.setOtherFn(setOtherText);
   }, []);
 
   const handleCloseModal = () => {
     dispatch(resetModalText());
-    response.getOtherFn('');
+    callOtherFn.getOtherFn('');
   };
 
   return (

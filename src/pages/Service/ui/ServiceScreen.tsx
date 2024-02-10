@@ -100,11 +100,11 @@ const ServiceScreen = () => {
         <ServiceList />
       </SafeAreaView>
 
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
         <Animated.FlatList
           data={DATA}
           renderItem={({item}) => <ItemFlat title={item.title} />}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id + 'list'}
         />
       </SafeAreaView>
     </Animated.ScrollView>

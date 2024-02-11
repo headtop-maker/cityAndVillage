@@ -62,6 +62,7 @@ export interface IServices {
     phone: string;
     email: string;
     categoryName: string;
+    title: string;
     description: string;
     image: string;
     id: string;

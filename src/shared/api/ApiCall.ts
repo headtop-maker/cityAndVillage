@@ -28,6 +28,7 @@ type TcallOutFn = Dispatch<SetStateAction<string>> | undefined;
 
 class OtherCall {
   callOutFn: TcallOutFn;
+  requestParams: string | undefined;
   static instance: OtherCall;
 
   constructor() {
@@ -35,7 +36,7 @@ class OtherCall {
       return OtherCall.instance;
     }
     OtherCall.instance = this;
-
+    this.requestParams = '';
     this.callOutFn = undefined;
   }
   setOtherFn(fn: Dispatch<SetStateAction<string>>) {
@@ -47,6 +48,18 @@ class OtherCall {
   getOtherFn(data: string) {
     if (this.callOutFn) {
       this.callOutFn(data);
+    }
+  }
+
+  setRequestParams(data: string) {
+    if (!!data) {
+      this.requestParams = data;
+    }
+  }
+
+  getRequestParams() {
+    if (!!this.requestParams) {
+      return this.requestParams;
     }
   }
 }

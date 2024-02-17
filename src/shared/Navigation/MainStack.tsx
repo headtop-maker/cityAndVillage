@@ -47,39 +47,37 @@ const MainStack = () => {
       <Stack.Navigator
         initialRouteName="TabScreen"
         screenOptions={{headerShown: false}}>
-        {currentUserToken ? (
-          <Stack.Group>
-            <Stack.Screen name={SCREENS.TabScreen} component={TabScreen} />
-            <Stack.Screen name={SCREENS.MainScreen} component={MainScreen} />
-            <Stack.Screen name={SCREENS.NewsScreen} component={NewsScreen} />
-            <Stack.Screen
-              name={SCREENS.ImportantScreen}
-              component={ImportantScreen}
-            />
-            <Stack.Screen
-              name={SCREENS.AddContentScreen}
-              component={AddContentScreen}
-            />
-            <Stack.Screen
-              name={SCREENS.ServiceScreen}
-              component={ServiceScreen}
-            />
+        <Stack.Group>
+          <Stack.Screen name={SCREENS.TabScreen} component={TabScreen} />
+          <Stack.Screen name={SCREENS.MainScreen} component={MainScreen} />
+          <Stack.Screen name={SCREENS.NewsScreen} component={NewsScreen} />
+          <Stack.Screen
+            name={SCREENS.ImportantScreen}
+            component={ImportantScreen}
+          />
+          <Stack.Screen
+            name={SCREENS.AddContentScreen}
+            component={AddContentScreen}
+          />
+          <Stack.Screen
+            name={SCREENS.ServiceScreen}
+            component={ServiceScreen}
+          />
 
-            <Stack.Screen
-              name={SCREENS.CurrentNewsScreen}
-              component={CurrentNewsScreen}
-            />
-          </Stack.Group>
-        ) : (
-          <Stack.Group>
-            <Stack.Screen name={SCREENS.LoginScreen} component={LoginScreen} />
+          <Stack.Screen
+            name={SCREENS.CurrentNewsScreen}
+            component={CurrentNewsScreen}
+          />
+        </Stack.Group>
 
-            <Stack.Screen
-              name={SCREENS.RegistrationScreen}
-              component={RegistrationScreen}
-            />
-          </Stack.Group>
-        )}
+        <Stack.Group>
+          <Stack.Screen name={SCREENS.LoginScreen} component={LoginScreen} />
+
+          <Stack.Screen
+            name={SCREENS.RegistrationScreen}
+            component={RegistrationScreen}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );

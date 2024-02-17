@@ -1,3 +1,5 @@
+import {callOtherFn} from '../ApiCall';
+
 export function log() {
   return function (
     target: any,

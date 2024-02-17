@@ -4,7 +4,7 @@ import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
-import {Button, Text} from 'react-native-paper';
+import {Snackbar} from 'react-native-paper';
 import {callOtherFn} from '../../../shared/api/ApiCall';
 
 const ModalScreen = () => {
@@ -21,6 +21,10 @@ const ModalScreen = () => {
     callOtherFn.getOtherFn('');
   };
 
+  const getText = () => {
+    if (!!modalText) return modalText;
+    if (!!otherText) return otherText;
+  };
   return (
     <Modal
       animationType="fade"
@@ -31,16 +35,17 @@ const ModalScreen = () => {
         Alert.alert('Modal has been closed.');
       }}>
       <View style={styles.centeredView}>
-        <View style={[styles.modalView]}>
-          <Text style={styles.modalText} variant="bodyLarge">
-            {modalText ? modalText : ''}
-            {otherText ? otherText : ''}
-          </Text>
-
-          <Button mode="outlined" onPress={handleCloseModal}>
-            Закрыть
-          </Button>
-        </View>
+        <Snackbar
+          visible={!!modalText || !!otherText}
+          onDismiss={handleCloseModal}
+          action={{
+            label: 'Закрыть',
+            onPress: () => {
+              handleCloseModal();
+            },
+          }}>
+          {!!getText() ? getText() : ''}
+        </Snackbar>
       </View>
     </Modal>
   );
@@ -55,7 +60,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalOpacity: {backgroundColor: 'rgba(0, 0, 0, 0.5)'},
   modalView: {
@@ -85,3 +89,18 @@ const styles = StyleSheet.create({
 });
 
 export default ModalScreen;
+
+{
+  /* <View style={[styles.modalView]}>
+          <Text style={styles.modalText} variant="bodyLarge">
+            {modalText ? modalText : ''}
+            {otherText ? otherText : ''}
+          </Text>
+
+          <Button mode="outlined" onPress={handleCloseModal}>
+            Закрыть
+          </Button>
+        </View> */
+}
+
+// backgroundColor: 'rgba(0, 0, 0, 0.5)',

@@ -1,18 +1,51 @@
 import React from 'react';
 
-import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
+import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Important from '../../features/Important/ui/Important';
 import withModal from '../../shared/HOC/withModal';
-import {Avatar} from 'react-native-paper';
+import {Avatar, Button, Text} from 'react-native-paper';
+import {useAppSelector} from '../../shared/models/storeHooks';
+import {selectCurrentUserToken} from '../../shared/models/selectors';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import SCREENS from '../../shared/Navigation/screens';
+import {IRouteParamList} from '../../shared/Navigation/types';
 
 const ImportantScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRouteParamList>>();
+
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.icon}>
-        <Avatar.Icon size={50} icon="pencil-plus-outline" color="#FFFFFF" />
-      </TouchableOpacity>
+      {currentUserToken ? (
+        <>
+          <TouchableOpacity style={styles.icon}>
+            <Avatar.Icon size={50} icon="pencil-plus-outline" color="#FFFFFF" />
+          </TouchableOpacity>
 
-      <Important />
+          <Important />
+        </>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <Text variant="titleLarge" style={{margin: 20}}>
+            Пользователь не авторизован
+          </Text>
+          <Button
+            icon="login"
+            mode="outlined"
+            onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
+            Войти или зарегистрироваться
+          </Button>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

@@ -4,7 +4,7 @@ import {TServiceItem} from '../../../../shared/types';
 import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
 import {callOtherFn} from '../../../../shared/api/ApiCall';
 
-const ServiceItem: FC<TServiceItem> = ({nameService, imgSrc, id}) => {
+const ServiceItem: FC<TServiceItem> = ({imgSrc, id}) => {
   return (
     <TouchableOpacity
       style={[styles.mediumBox, styles.shadow]}

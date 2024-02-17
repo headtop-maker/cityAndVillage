@@ -126,7 +126,6 @@ export const counterSlice = createSlice({
         state.actionState.modalText = '';
       })
       .addMatcher(isRejectedAction, (state, action) => {
-        console.log('isRejectedAction', action);
         state.actionState.loadind = false;
         state.actionState.modalText = 'Ошибка получения данных';
         state.actionState.error = action.error.message;

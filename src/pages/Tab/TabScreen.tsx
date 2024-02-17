@@ -7,10 +7,15 @@ import MainScreen from '../Main/ui/MainScreen';
 import TabItem from './ui/TabItem';
 import AddContentScreen from '../AddContent/ui/AddContentScreen';
 import ServiceScreen from '../Service/ui/ServiceScreen';
+import {useAppSelector} from '../../shared/models/storeHooks';
+import {selectCurrentUserRole} from '../../shared/models/selectors';
+import {userRole} from '../../shared/models/types';
 
 const Tab = createBottomTabNavigator();
 
 const TabScreen = () => {
+  const role = useAppSelector(selectCurrentUserRole);
+  const isAdmin = role === userRole.admin;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -39,16 +44,18 @@ const TabScreen = () => {
         name={SCREENS.NewsScreen}
         component={NewsScreen}
       />
-      <Tab.Screen
-        options={{
-          title: 'Создать',
-          tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="add" />;
-          },
-        }}
-        name={SCREENS.AddContentScreen}
-        component={AddContentScreen}
-      />
+      {!!isAdmin && (
+        <Tab.Screen
+          options={{
+            title: 'Создать',
+            tabBarIcon: ({focused}) => {
+              return <TabItem focused={focused} imgSrc="add" />;
+            },
+          }}
+          name={SCREENS.AddContentScreen}
+          component={AddContentScreen}
+        />
+      )}
       <Tab.Screen
         options={{
           title: 'Сообщения',

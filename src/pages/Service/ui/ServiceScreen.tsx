@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Card, Text, Button, IconButton, Tooltip} from 'react-native-paper';
 import Animated, {
   Extrapolation,
@@ -10,9 +17,16 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
-import {useSelector} from 'react-redux';
 import {servicesSelectors} from '../../../shared/models/servicesSlice';
 import {IServices} from '../../../shared/models/types';
+import {callOtherFn} from '../../../shared/api/ApiCall';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../shared/models/storeHooks';
+import {selectIsLoading} from '../../../shared/models/selectors';
+import withModal from '../../../shared/HOC/withModal';
+import {getServices} from '../../../entities/ProfessionalServices/serviceList/model/actions';
 
 const {width} = Dimensions.get('screen');
 const itemWidth = width / 1.3;
@@ -48,13 +62,30 @@ const ItemFlat = ({
           </Card.Content>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Tooltip title="Selected email">
-              <IconButton icon="email" selected size={20} onPress={() => {}} />
+              <IconButton
+                icon="email"
+                selected
+                size={20}
+                onPress={() => Linking.openURL(`mailto:${item.email}`)}
+              />
             </Tooltip>
-            <Text variant="titleMedium">{item.email}</Text>
-            <Tooltip title="Selected email">
-              <IconButton icon="phone" selected size={20} onPress={() => {}} />
+            <TouchableOpacity
+              onPress={() => Linking.openURL(`mailto:${item.email}`)}>
+              <Text variant="titleMedium">{item.email}</Text>
+            </TouchableOpacity>
+
+            <Tooltip title="Selected phone">
+              <IconButton
+                icon="phone"
+                selected
+                size={20}
+                onPress={() => Linking.openURL(`tel:${item.phone}`)}
+              />
             </Tooltip>
-            <Text variant="titleMedium">{item.phone}</Text>
+            <TouchableOpacity
+              onPress={() => Linking.openURL(`tel:${item.phone}`)}>
+              <Text variant="titleMedium">{item.phone}</Text>
+            </TouchableOpacity>
           </View>
         </>
       )}
@@ -65,11 +96,13 @@ const ItemFlat = ({
 const ServiceScreen = () => {
   const [selected, setSelected] = useState('');
   const scrollY = useSharedValue(0);
+  const isLoading = useAppSelector(selectIsLoading);
+  const lists = useAppSelector(servicesSelectors.selectAll);
+  const dispatch = useAppDispatch();
+
   const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.x;
   });
-
-  const lists = useSelector(servicesSelectors.selectAll);
 
   const handleSelected = (data: string) => {
     if (selected === data) {
@@ -77,6 +110,13 @@ const ServiceScreen = () => {
       return;
     }
     setSelected(data);
+  };
+
+  const handleOnRefrash = () => {
+    const param = callOtherFn.getRequestParams();
+    if (!!param) {
+      dispatch(getServices(param));
+    }
   };
 
   return (
@@ -108,6 +148,8 @@ const ServiceScreen = () => {
               setSelected={handleSelected}
             />
           )}
+          refreshing={isLoading}
+          onRefresh={handleOnRefrash}
           keyExtractor={item => item.id + 'list'}
         />
       </SafeAreaView>
@@ -172,4 +214,4 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
-export default ServiceScreen;
+export default withModal(ServiceScreen);

@@ -6,6 +6,7 @@ import {ServiceTitleItem} from '../../../../shared/models/types';
 import {useAppDispatch} from '../../../../shared/models/storeHooks';
 import {setErrorText} from '../../../../shared/models/counterSlice';
 import {getServices} from '../model/actions';
+import {callOtherFn} from '../../../../shared/api/ApiCall';
 
 const ServiceList = () => {
   const {data, error} = useGetAllServiceCategoryQuery();
@@ -23,6 +24,7 @@ const ServiceList = () => {
     if (!!data && data?.length > 0) {
       setChecked(data[0].id);
       dispatch(getServices(data[0].categoryName));
+      callOtherFn.setRequestParams(data[0].categoryName);
     }
   }, [data]);
 
@@ -35,6 +37,7 @@ const ServiceList = () => {
           onPress={() => {
             setChecked(item.id);
             dispatch(getServices(item.categoryName));
+            callOtherFn.setRequestParams(item.categoryName);
           }}>
           {item.description}
         </Chip>

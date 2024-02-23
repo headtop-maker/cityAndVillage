@@ -60,7 +60,7 @@ export const getImageFromServer = (): Promise<
 
 export const createUser = (
   data: createUserData,
-): Promise<AxiosResponse<{token: string; role: userRole}, unknown>> =>
+): Promise<AxiosResponse<{message: string}, unknown>> =>
   response.apiRequest({
     data,
     timeout: 3000,

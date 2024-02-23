@@ -12,9 +12,7 @@ const ModalScreen = () => {
   const modalText = useAppSelector(selectModalText);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    callOtherFn.setOtherFn(setOtherText);
-  }, []);
+  callOtherFn.setOtherFn(setOtherText);
 
   const handleCloseModal = () => {
     dispatch(resetModalText());

@@ -8,17 +8,24 @@ import TabItem from './ui/TabItem';
 import AddContentScreen from '../AddContent/ui/AddContentScreen';
 import ServiceScreen from '../Service/ui/ServiceScreen';
 import {useAppSelector} from '../../shared/models/storeHooks';
-import {selectCurrentUserRole} from '../../shared/models/selectors';
+import {
+  selectCurrentUserRole,
+  selectCurrentUserToken,
+} from '../../shared/models/selectors';
 import {userRole} from '../../shared/models/types';
+
+import ImportantBtn from '../../features/getNews/ui/ImportantBtn';
 
 const Tab = createBottomTabNavigator();
 
 const TabScreen = () => {
   const role = useAppSelector(selectCurrentUserRole);
   const isAdmin = role === userRole.admin;
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
   return (
     <Tab.Navigator
       screenOptions={{
+        headerRight: () => !!currentUserToken && <ImportantBtn />,
         tabBarStyle: {
           backgroundColor: '#f9f9f9',
           height: 55,

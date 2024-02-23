@@ -83,7 +83,8 @@ export const counterSlice = createSlice({
         state.imageForNewsFromServer = action.payload;
       })
       .addCase(createUsers.fulfilled, (state, action) => {
-        state.currentUser = action.payload;
+        state.actionState.error = undefined;
+        state.actionState.modalText = action.payload;
       })
 
       .addCase(loginUsers.fulfilled, (state, action) => {

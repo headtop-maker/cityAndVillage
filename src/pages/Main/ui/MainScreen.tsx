@@ -41,7 +41,6 @@ const MainScreen = () => {
           <ServiceItem nameService="службы" imgSrc="information" id={100} />
         </View>
         <CityServices />
-        <ImportantBtn />
       </View>
     </ScrollView>
   );

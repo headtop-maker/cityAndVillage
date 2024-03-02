@@ -68,3 +68,9 @@ export interface IServices {
     id: string;
   }[];
 }
+
+export type ImportantContact = {
+  id: string;
+  contactName: string;
+  contacts: string[];
+};

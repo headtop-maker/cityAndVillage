@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {ServiceTitle} from './types';
+import {ServiceTitle, ImportantContact} from './types';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
@@ -11,8 +11,11 @@ export const serviceApi = createApi({
     getServiceByName: builder.query<ServiceTitle, string>({
       query: name => `/category/${name}`,
     }),
+    getAllImportantContacts: builder.query<ImportantContact[], void>({
+      query: () => '/important-contacts',
+    }),
   }),
 });
 
-export const {useGetAllServiceCategoryQuery, useGetServiceByNameQuery} =
+export const {useGetAllServiceCategoryQuery, useGetServiceByNameQuery,useGetAllImportantContactsQuery} =
   serviceApi;

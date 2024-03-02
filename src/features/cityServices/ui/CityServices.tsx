@@ -1,38 +1,51 @@
-import React, {useState} from 'react';
-import {Linking} from 'react-native';
+import React, {FC, useState} from 'react';
+import {FlatList, Linking} from 'react-native';
 
 import {List} from 'react-native-paper';
+import {ImportantContact} from '../../../shared/models/types';
 
-const CityServices = () => {
-  const [expanded, setExpanded] = useState(false);
-  const handlePress = () => setExpanded(!expanded);
+type ICityServices = {
+  importantContacts: ImportantContact[];
+};
+
+const CityServices: FC<ICityServices> = ({importantContacts}) => {
+  const [expanded, setExpanded] = useState<string>('');
+  const handlePress = (id: string) => {
+    if (id === expanded) {
+      setExpanded('');
+    }
+    setExpanded(id);
+  };
+
+  const getExpanded = (id: string) => {
+    return id === expanded ? true : false;
+  };
+
+  const ContactItem = ({item}: {item: ImportantContact}) => (
+    <List.Accordion
+      title={item.contactName}
+      left={props => <List.Icon {...props} icon="folder" />}
+      expanded={getExpanded(item.id)}
+      onPress={() => handlePress(item.id)}>
+      {item.contacts.map((contact, index) => (
+        <List.Item
+          key={'contact' + index}
+          title="Газовая служба"
+          onPress={() => Linking.openURL(`tel:${contact}}`)}
+          left={props => <List.Icon {...props} icon="phone" />}
+          description={contact}
+        />
+      ))}
+    </List.Accordion>
+  );
 
   return (
     <List.Section>
-      <List.Accordion
-        title="Аварийные службы"
-        left={props => <List.Icon {...props} icon="folder" />}
-        expanded={expanded}
-        onPress={handlePress}>
-        <List.Item
-          title="Газовая служба"
-          onPress={() => Linking.openURL(`tel:+79527111111`)}
-          left={props => <List.Icon {...props} icon="phone" />}
-          description="+79527111111"
-        />
-        <List.Item
-          title="МЧС"
-          onPress={() => Linking.openURL(`tel:+79527111111`)}
-          left={props => <List.Icon {...props} icon="phone" />}
-          description="+79527111111"
-        />
-        <List.Item
-          title="Администрация"
-          onPress={() => Linking.openURL(`tel:+79527111111`)}
-          left={props => <List.Icon {...props} icon="phone" />}
-          description="+79527111111"
-        />
-      </List.Accordion>
+      <FlatList
+        data={importantContacts}
+        renderItem={ContactItem}
+        keyExtractor={item => item.id + 'ImportantContacts'}
+      />
     </List.Section>
   );
 };

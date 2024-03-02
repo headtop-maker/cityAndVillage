@@ -2,47 +2,23 @@ import React from 'react';
 
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import NewsItem from '../../../entities/News/ui/NewsItem';
-
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
-import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
-import {useAppSelector} from '../../../shared/models/storeHooks';
-import {selectNews} from '../../../features/News/models/selectors';
-import ImportantBtn from '../../../features/getNews/ui/ImportantBtn';
+
+import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 
 const MainScreen = () => {
-  const news = useAppSelector(selectNews)[0];
-
+  const {data, error} = useGetAllImportantContactsQuery();
+  console.log('data', data, error);
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View>
-        <Text style={styles.sectionTitle}>Новости</Text>
-        {news && (
-          <NewsItem
-            title={news.title}
-            image={news.image}
-            createdAt={news.createdAt}
-            description={news.description}
-            id={news.id}
-            author={news.author}
-          />
+        <View style={styles.wrapper}></View>
+        {!!data && data?.length > 0 && (
+          <CityServices importantContacts={data} />
         )}
-        <Text style={styles.sectionTitle}>Быстрый доступ</Text>
-        <View
-          style={{
-            flexWrap: 'wrap',
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <ServiceItem nameService="службы" imgSrc="service" id={100} />
-          <ServiceItem nameService="службы" imgSrc="add" id={100} />
-          <ServiceItem nameService="службы" imgSrc="information" id={100} />
-        </View>
-        <CityServices />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -51,7 +27,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fbfbfb',
   },
-
+  wrapper: {
+    flexWrap: 'wrap',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   surface: {
     padding: 8,
     height: 100,
@@ -68,3 +49,21 @@ const styles = StyleSheet.create({
 });
 
 export default withModal(MainScreen);
+
+/* <ServiceItem nameService="службы" imgSrc="service" id={100} /> */
+/* <ServiceItem nameService="службы" imgSrc="add" id={100} /> */
+/* <ServiceItem nameService="службы" imgSrc="information" id={100} /> */
+
+{
+  /* <Text style={styles.sectionTitle}>Новости</Text>
+{news && (
+  <NewsItem
+    title={news.title}
+    image={news.image}
+    createdAt={news.createdAt}
+    description={news.description}
+    id={news.id}
+    author={news.author}
+  />
+)} */
+}

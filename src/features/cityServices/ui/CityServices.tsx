@@ -13,6 +13,7 @@ const CityServices: FC<ICityServices> = ({importantContacts}) => {
   const handlePress = (id: string) => {
     if (id === expanded) {
       setExpanded('');
+      return;
     }
     setExpanded(id);
   };

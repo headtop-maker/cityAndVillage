@@ -1,6 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {fetchApiDomain} from '../../../shared/constants';
 import {
+  TEMP_API,
   createNews,
   getCurrentNews,
   getImageFromServer,
@@ -44,7 +45,10 @@ export const getImageForNews = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const response = await getImageFromServer();
-      return response.data.photos;
+
+      return response.data.map(item => {
+        return {url: `${TEMP_API}upload/${item}`};
+      });
     } catch (err) {
       return rejectWithValue(err);
     }

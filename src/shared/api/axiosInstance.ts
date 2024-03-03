@@ -7,7 +7,7 @@ import {loginUserData} from '../../features/Login/model/types';
 import {setImportantDataType} from '../../features/Users/types/types';
 import ApiCall from './ApiCall';
 
-const TEMP_API = 'http://192.168.1.101:3000/';
+export const TEMP_API = 'http://192.168.1.101:3000/';
 
 export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
@@ -50,12 +50,12 @@ export const createNews = (
   });
 
 export const getImageFromServer = (): Promise<
-  AxiosResponse<TImageResponse, unknown>
+  AxiosResponse<string[], unknown>
 > =>
   response.apiRequest({
     timeout: 3000,
     method: 'get',
-    url: `${IMAGE_URL}sample-data/photos`,
+    url: `${TEMP_API}upload`,
   });
 
 export const createUser = (

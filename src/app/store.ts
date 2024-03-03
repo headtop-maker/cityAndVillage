@@ -15,7 +15,14 @@ const reducers = combineReducers({
     counterReducer,
   ),
   service: serviceReducer,
-  [serviceApi.reducerPath]: serviceApi.reducer,
+  [serviceApi.reducerPath]: persistReducer(
+    {
+      key: 'rootServiceApi',
+      storage: AsyncStorage,
+    },
+    serviceApi.reducer,
+  ),
+  // [serviceApi.reducerPath]: serviceApi.reducer,
 });
 
 export const store = configureStore({

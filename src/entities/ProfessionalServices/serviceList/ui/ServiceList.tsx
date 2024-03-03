@@ -1,6 +1,6 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet} from 'react-native';
-import {Chip} from 'react-native-paper';
+import {Button, Chip} from 'react-native-paper';
 import {useGetAllServiceCategoryQuery} from '../../../../shared/models/services';
 import {ServiceTitleItem} from '../../../../shared/models/types';
 import {useAppDispatch} from '../../../../shared/models/storeHooks';
@@ -9,7 +9,7 @@ import {getServices} from '../model/actions';
 import {callOtherFn} from '../../../../shared/api/ApiCall';
 
 const ServiceList = () => {
-  const {data, error} = useGetAllServiceCategoryQuery();
+  const {data, error, refetch} = useGetAllServiceCategoryQuery();
 
   const [checked, setChecked] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -47,18 +47,21 @@ const ServiceList = () => {
 
   return (
     <SafeAreaView>
-      {data && (
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id + 'service'}
-          horizontal={true}
-          snapToAlignment={'start'}
-          scrollEventThrottle={16}
-          decelerationRate={'fast'}
-          showsHorizontalScrollIndicator={false}
-        />
-      )}
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id + 'service'}
+        horizontal={true}
+        snapToAlignment={'start'}
+        scrollEventThrottle={16}
+        decelerationRate={'fast'}
+        showsHorizontalScrollIndicator={false}
+        ListEmptyComponent={
+          <Button mode="text" onPress={() => refetch()}>
+            Обновить список категорий
+          </Button>
+        }
+      />
     </SafeAreaView>
   );
 };

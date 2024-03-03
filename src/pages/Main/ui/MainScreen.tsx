@@ -1,22 +1,23 @@
 import React from 'react';
 
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 
 import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
+import {Surface, Text} from 'react-native-paper';
 
 const MainScreen = () => {
-  const {data, error} = useGetAllImportantContactsQuery();
-  console.log('data', data, error);
+  const {data, refetch} = useGetAllImportantContactsQuery();
+
   return (
     <View style={styles.container}>
       <View>
-        <View style={styles.wrapper}></View>
-        {!!data && data?.length > 0 && (
-          <CityServices importantContacts={data} />
-        )}
+        <View style={styles.wrapper}>
+          <Text variant="titleLarge">Городские службы</Text>
+          <CityServices importantContacts={data} refetch={refetch} />
+        </View>
       </View>
     </View>
   );
@@ -28,19 +29,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbfbfb',
   },
   wrapper: {
-    flexWrap: 'wrap',
-    flex: 1,
-    flexDirection: 'row',
+    padding: 10,
     justifyContent: 'space-between',
   },
-  surface: {
-    padding: 8,
-    height: 100,
-    width: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   sectionTitle: {
     margin: 5,
     fontSize: 18,

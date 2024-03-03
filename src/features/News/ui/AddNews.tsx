@@ -71,19 +71,11 @@ const AddNews = () => {
     item,
   }: {
     item: {
-      description: string;
-      id: number;
-      title: string;
       url: string;
-      user: number;
     };
   }) => (
     <ImageItem
-      id={item.id}
-      description={item.description}
-      title={item.title}
       url={item.url}
-      user={item.user}
       setImageSrc={data => {
         setImageSrc(data);
         hideDialog();

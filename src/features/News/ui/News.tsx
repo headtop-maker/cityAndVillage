@@ -10,6 +10,7 @@ import {
 import {selectNews, selectNewsLoading} from '../models/selectors';
 import {getNews} from '../../../entities/News/models/models';
 import {CounterState} from '../../../shared/models/types';
+import {Button} from 'react-native-paper';
 
 const News = () => {
   const news = useAppSelector(selectNews);
@@ -41,6 +42,11 @@ const News = () => {
         keyExtractor={(id, index) => id + 'news' + index}
         refreshing={isLoading}
         onRefresh={() => dispatch(getNews())}
+        ListEmptyComponent={
+          <Button mode="text" onPress={() => dispatch(getNews())}>
+            Обновить список новостей
+          </Button>
+        }
       />
     </View>
   );

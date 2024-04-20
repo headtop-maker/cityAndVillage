@@ -1,6 +1,5 @@
 import {AxiosResponse} from 'axios';
 
-import {TImageResponse} from '../../entities/News/models/types';
 import {CounterState, IServices, userRole} from '../models/types';
 import {createUserData} from '../../features/Registration/models/types';
 import {loginUserData} from '../../features/Login/model/types';
@@ -12,14 +11,6 @@ export const TEMP_API = 'http://192.168.1.101:3000/';
 export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
 export const response = new ApiCall();
-// export const getCurrentNews = (
-//   limit: number,
-// ): Promise<AxiosResponse<CounterState['news'], unknown>> =>
-//   axiosInstance({
-//     timeout: 10000,
-//     method: 'get',
-//     url: `${API_URL}/News/?page=1&limit=${limit}`,
-//   });
 
 export const getCurrentNews = (): // limit: number,
 Promise<AxiosResponse<CounterState['news'], unknown>> =>

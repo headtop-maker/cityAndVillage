@@ -9,7 +9,7 @@ import SetRegistration from '../../features/Registration/ui/SetRegistration';
 import {ImagesAssets} from '../../shared/assets/picture/icons/ImageAssets';
 import withModal from '../../shared/HOC/withModal';
 import {Icon} from 'react-native-paper';
-import {navigate} from '../../shared/Navigation/MainStack';
+import {navigate} from '../../shared/lib/navigationRef';
 import SCREENS from '../../shared/Navigation/screens';
 
 // interface RegistrationScreenProps {}

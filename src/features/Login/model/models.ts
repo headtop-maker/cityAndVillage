@@ -2,7 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {loginUser} from '../../../shared/api/axiosInstance';
 import {fetchApiDomain} from '../../../shared/constants';
 import {loginUserData} from './types';
-import {navigate} from '../../../shared/Navigation/MainStack';
+import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';
 
 export const loginUsers = createAsyncThunk(

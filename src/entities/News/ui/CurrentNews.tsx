@@ -13,7 +13,7 @@ import {selectNews} from '../../../features/News/models/selectors';
 import {Icon} from 'react-native-paper';
 
 import SCREENS from '../../../shared/Navigation/screens';
-import {navigate} from '../../../shared/Navigation/MainStack';
+import {navigate} from '../../../shared/lib/navigationRef';
 import {convertDate} from '../../../shared/lib/convertDate';
 
 const CurrentNews = () => {

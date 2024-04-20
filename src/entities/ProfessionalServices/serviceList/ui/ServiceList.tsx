@@ -46,7 +46,7 @@ const ServiceList = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: '#FFFFFF'}}>
       <FlatList
         data={data}
         renderItem={renderItem}

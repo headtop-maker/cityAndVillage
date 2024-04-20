@@ -4,7 +4,7 @@ import {fetchApiDomain} from '../../../shared/constants';
 
 import {createUserData} from './types';
 import {callOtherFn} from '../../../shared/api/ApiCall';
-import {navigate} from '../../../shared/Navigation/MainStack';
+import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';
 
 export const createUsers = createAsyncThunk(

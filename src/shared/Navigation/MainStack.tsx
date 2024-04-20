@@ -1,10 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  NavigationContainer,
-  StackActions,
-  createNavigationContainerRef,
-} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useEffect, useLayoutEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import SCREENS from './screens';
 import MainScreen from '../../pages/Main/ui/MainScreen';
 import NewsScreen from '../../pages/News/ui/NewsScreen';
@@ -18,29 +13,25 @@ import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
-
-const navigationRef = createNavigationContainerRef();
-
-const Stack = createNativeStackNavigator();
-
-export const navigate: typeof navigationRef.navigate = (name, params?) => {
-  if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
-  }
-};
-
-export function push(...args) {
-  if (navigationRef.isReady()) {
-    navigationRef.dispatch(StackActions.push(...args));
-  }
-}
+import {requestStoragePermission} from '../lib/permissions';
+import {checkStoragePermission} from '../lib/checkPermissions';
+import {navigationRef, Stack} from '../lib/navigationRef';
 
 const MainStack = () => {
   const currentUserToken = useAppSelector(selectCurrentUserToken);
 
-  useEffect(() => {
+  const isPermissions = async () => {
+    const check = await checkStoragePermission();
+    !check && requestStoragePermission();
+  };
+
+  useLayoutEffect(() => {
     !!currentUserToken && response.setToken(currentUserToken);
   }, [currentUserToken]);
+
+  useLayoutEffect(() => {
+    isPermissions();
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef}>

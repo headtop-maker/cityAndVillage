@@ -9,7 +9,7 @@ import SetLogin from '../../../features/Login/ui/SetLogin';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import withModal from '../../../shared/HOC/withModal';
 import {Icon} from 'react-native-paper';
-import {navigate} from '../../../shared/Navigation/MainStack';
+import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';
 
 const LoginScreen = () => {

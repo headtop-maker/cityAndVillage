@@ -2,13 +2,13 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {setFileApi} from '../../../shared/api/axiosInstance';
 import {fetchApiDomain} from '../../../shared/constants';
 import {FileParamsType} from '../../../shared/types';
-import {NativeModules} from 'react-native';
-const {KotlinModules} = NativeModules;
+
+import {nativeFn} from '../../../shared/lib/nativeFn';
 
 export const setFile = createAsyncThunk(
   `${fetchApiDomain}/setFile`,
   async (_, {rejectWithValue}) => {
-    const file: FileParamsType = await KotlinModules.openFile();
+    const file: FileParamsType = await nativeFn.openFile();
 
     const formData = new FormData();
 

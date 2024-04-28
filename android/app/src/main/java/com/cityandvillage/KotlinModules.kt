@@ -10,13 +10,17 @@ import android.os.Environment
 import java.util.HashMap
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+
 
 
 class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -37,6 +41,24 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         return constants
     }
 
+    fun convertDpToPixel(dp: Float, context: Context?): Float {
+        return if (context != null) {
+            val resources = context.resources
+            val metrics = resources.displayMetrics
+            dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        } else {
+            val metrics = Resources.getSystem().displayMetrics
+            dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        }
+    }
+
+
+    @ReactMethod
+    fun getDpToPX(promise: Promise){
+        promise.resolve(convertDpToPixel(10f ,reactApplicationContext))
+    }
+
+
     @ReactMethod
     fun show(message:String,duration: Int){
         Toast.makeText(reactApplicationContext,message,duration).show()
@@ -44,7 +66,9 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
 
 
 
-    @RequiresApi(Build.VERSION_CODES.FROYO)
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod
     fun openFile(promise: Promise) {
         this.promise = promise;

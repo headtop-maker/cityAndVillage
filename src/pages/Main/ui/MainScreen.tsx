@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
@@ -6,7 +6,8 @@ import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 
 import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
-import {Surface, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
+import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbfbfb',
   },
   wrapper: {
-    padding: 10,
+    padding: 15,
     justifyContent: 'space-between',
   },
   sectionTitle: {

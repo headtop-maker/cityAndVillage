@@ -1,8 +1,9 @@
 import React, {FC, useState} from 'react';
-import {FlatList, Linking} from 'react-native';
+import {FlatList, Linking, NativeModules} from 'react-native';
 
 import {Button, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
+import useDimensions from '../../../shared/HOC/useDimensions';
 
 type ICityServices = {
   importantContacts: ImportantContact[] | undefined;
@@ -11,6 +12,7 @@ type ICityServices = {
 
 const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
   const [expanded, setExpanded] = useState<string>('');
+
   const handlePress = (id: string) => {
     if (id === expanded) {
       setExpanded('');
@@ -33,7 +35,9 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
         <List.Item
           key={'contact' + index}
           title={`Контакт # ${index + 1}`}
-          onPress={() => Linking.openURL(`tel:${contact}}`)}
+          onPress={() => {
+            Linking.openURL(`tel:${contact}}`);
+          }}
           left={props => <List.Icon {...props} icon="phone" />}
           description={contact}
         />
@@ -48,7 +52,11 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
         renderItem={ContactItem}
         keyExtractor={item => item.id + 'ImportantContacts'}
         ListEmptyComponent={
-          <Button mode="text" onPress={() => refetch()}>
+          <Button
+            mode="text"
+            onPress={() => {
+              refetch();
+            }}>
             Обновить список контактов
           </Button>
         }

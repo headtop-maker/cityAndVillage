@@ -4,7 +4,7 @@ import {nativeFn} from '../lib/nativeFn';
 
 const useDimensions = () => {
   const screen = Dimensions.get('screen');
-  const [rem, setRem] = useState<number | undefined>();
+  const [rem, setRem] = useState<number>(10);
   const [screenWidth, setScreenWidth] = useState<number>(screen.width);
   const [screenHeigth, setScreenHeigth] = useState<number>(screen.width);
   const [isLandScape, setIsLandScape] = useState(
@@ -17,11 +17,11 @@ const useDimensions = () => {
       setScreenHeigth(window.height);
       setIsLandScape(window.width > window.height ? true : false);
     },
-    [],
+    [screenWidth, screenHeigth, isLandScape],
   );
 
   const handleRem = async () => {
-    setRem(await nativeFn.getDpToPX());
+    setRem(Math.round(await nativeFn.getDpToPX()));
   };
 
   useEffect(() => {
@@ -29,6 +29,7 @@ const useDimensions = () => {
       memoizedCallback(window);
     });
     handleRem();
+
     return () => subscription?.remove();
   }, [memoizedCallback]);
   return {screenWidth, screenHeigth, isLandScape, rem};

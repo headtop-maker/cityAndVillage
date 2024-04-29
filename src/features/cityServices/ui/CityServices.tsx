@@ -3,7 +3,6 @@ import {FlatList, Linking, NativeModules} from 'react-native';
 
 import {Button, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
-import useDimensions from '../../../shared/HOC/useDimensions';
 
 type ICityServices = {
   importantContacts: ImportantContact[] | undefined;

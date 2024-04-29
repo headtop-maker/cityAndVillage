@@ -7,15 +7,16 @@ import CityServices from '../../../features/cityServices/ui/CityServices';
 
 import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 import {Text} from 'react-native-paper';
-import {nativeFn} from '../../../shared/lib/nativeFn';
+import useDimensions from '../../../shared/HOC/useDimensions';
 
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
+  const {rem} = useDimensions();
 
   return (
     <View style={styles.container}>
       <View>
-        <View style={styles.wrapper}>
+        <View style={[styles.wrapper, {padding: rem / 2}]}>
           <Text variant="titleLarge">Городские службы</Text>
           <CityServices importantContacts={data} refetch={refetch} />
         </View>
@@ -30,13 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbfbfb',
   },
   wrapper: {
-    padding: 15,
     justifyContent: 'space-between',
-  },
-  sectionTitle: {
-    margin: 5,
-    fontSize: 18,
-    fontWeight: '500',
   },
 });
 

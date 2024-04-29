@@ -23,6 +23,7 @@ import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 
 import {setFile} from '../models/models';
+import useDimensions from '../../../shared/HOC/useDimensions';
 
 // interface AddContentScreeProps {}
 
@@ -34,7 +35,7 @@ const AddNews = () => {
   const images = useAppSelector(selectimageForNewsFromServer);
   const currentRole = useAppSelector(selectCurrentUserRole);
   const userName = useAppSelector(selectCurrentUserName);
-
+  const {rem} = useDimensions();
   const hideDialog = () => setVisible(false);
 
   const dispatch = useAppDispatch();
@@ -97,26 +98,28 @@ const AddNews = () => {
           </Dialog.ScrollArea>
         </Dialog>
       </Portal>
-      <View style={[styles.inputContainer, styles.shadow]}>
-        <Text style={styles.titleTextStyle} variant="titleLarge">
+      <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
+        <Text
+          style={[styles.titleTextStyle, {marginTop: rem / 2.5}]}
+          variant="titleLarge">
           Добавить новость
         </Text>
         <View style={styles.addFileContainer}>
           <Button
             mode="outlined"
-            style={styles.createButton}
+            style={{margin: rem / 3}}
             onPress={handleAddImage}>
             Загрузить
           </Button>
           <TouchableOpacity
-            style={styles.refresh}
+            style={[styles.refresh, {margin: rem / 3}]}
             onPress={() => dispatch(getImageForNews())}>
             <Image style={styles.imageRef} source={ImagesAssets.refresh} />
           </TouchableOpacity>
         </View>
         <Button
           mode="contained"
-          style={styles.createButton}
+          style={{margin: rem / 3}}
           onPress={() => setVisible(true)}>
           Выбрать изображение
         </Button>
@@ -147,7 +150,7 @@ const AddNews = () => {
 
         <Button
           mode="elevated"
-          style={styles.createButton}
+          style={{margin: rem / 3}}
           disabled={!isLockSend}
           onPress={handleClick}>
           Добавить
@@ -165,20 +168,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
-  refresh: {alignItems: 'flex-end', margin: 10},
+  refresh: {
+    alignItems: 'flex-end',
+  },
   input: {
     margin: 5,
   },
   inputContainer: {
-    margin: 10,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
   },
-  createButton: {
-    margin: 12,
-  },
   titleTextStyle: {
-    marginTop: 10,
     alignSelf: 'center',
   },
   shadow: {
@@ -191,8 +191,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-  textContainer: {justifyContent: 'center', alignItems: 'center', padding: 10},
-  text: {fontWeight: 'bold', fontSize: 17},
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
   imageRef: {width: 30, height: 30},
   addFileContainer: {
     flexDirection: 'row',

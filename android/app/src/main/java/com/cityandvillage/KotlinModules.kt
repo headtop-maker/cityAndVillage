@@ -17,6 +17,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.facebook.react.bridge.BaseActivityEventListener
+import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
@@ -56,6 +57,11 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
     @ReactMethod
     fun getDpToPX(promise: Promise){
         promise.resolve(convertDpToPixel(10f ,reactApplicationContext))
+    }
+
+    @ReactMethod
+    fun getDpToPXCallback( callback: Callback) {
+        callback.invoke(convertDpToPixel(10f ,reactApplicationContext)) //
     }
 
 

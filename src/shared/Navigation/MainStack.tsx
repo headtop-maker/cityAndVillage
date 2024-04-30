@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useLayoutEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import SCREENS from './screens';
 import MainScreen from '../../pages/Main/ui/MainScreen';

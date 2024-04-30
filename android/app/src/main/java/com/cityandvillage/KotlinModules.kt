@@ -64,6 +64,12 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         callback.invoke(convertDpToPixel(10f ,reactApplicationContext)) //
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @ReactMethod
+    fun getFile (url:String,mimeType:String,title:String) {
+        val downloader = AndroidDownloader(reactApplicationContext)
+        downloader.downloadFile(url,mimeType,title)
+    }
 
     @ReactMethod
     fun show(message:String,duration: Int){

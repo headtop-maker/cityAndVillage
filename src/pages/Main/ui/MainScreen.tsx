@@ -16,7 +16,7 @@ const MainScreen = () => {
 
   const handleUpdate = () => {
     nativeFn.getFile({
-      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1025px-Cat03.jpg',
+      url: 'http://192.168.1.101:3000/upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
       mimeType: 'image/jpeg',
       title: 'images.jpg',
     });

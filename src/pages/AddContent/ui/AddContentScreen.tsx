@@ -18,11 +18,7 @@ const AddContentScreen = () => {
         buttons={[
           {
             value: 'createNews',
-            label: 'Новости',
-          },
-          {
-            value: 'createImportant',
-            label: 'Центр сообщений',
+            label: 'Создать новость',
           },
           {value: 'users', label: 'Пользователи'},
         ]}

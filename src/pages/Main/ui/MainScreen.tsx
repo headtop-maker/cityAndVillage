@@ -1,38 +1,28 @@
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 
-import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
-import {Button, Text} from 'react-native-paper';
+import {
+  useGetAdminsQuery,
+  useGetAllImportantContactsQuery,
+} from '../../../shared/models/services';
+import {Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
-import {nativeFn} from '../../../shared/lib/nativeFn';
+
+import UpdateApp from '../../../features/Update/ui/UpdateApp';
 
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
   const {rem} = useDimensions();
 
-  const handleUpdate = () => {
-    nativeFn.getFile({
-      url: 'http://192.168.1.101:3000/upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
-      mimeType: 'image/jpeg',
-      title: 'images.jpg',
-    });
-  };
-
   return (
     <View style={styles.container}>
       <View>
         <View style={[styles.wrapper, {padding: rem / 2}]}>
-          <Text variant="titleLarge">Доступно обновление</Text>
-          <Button
-            mode="outlined"
-            style={{margin: rem / 3}}
-            onPress={handleUpdate}>
-            Получить
-          </Button>
+          <UpdateApp />
           <Text variant="titleLarge">Городские службы</Text>
           <CityServices importantContacts={data} refetch={refetch} />
         </View>

@@ -13,6 +13,7 @@ import {Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
+import Rating from '../../../features/Rating/ui/Rating';
 
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
@@ -25,6 +26,10 @@ const MainScreen = () => {
           <UpdateApp />
           <Text variant="titleLarge">Городские службы</Text>
           <CityServices importantContacts={data} refetch={refetch} />
+          <Rating
+            count={5}
+            onChandge={(data: number) => console.log('currentRating', data)}
+          />
         </View>
       </View>
     </View>

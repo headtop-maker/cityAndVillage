@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, Animated, View} from 'react-native';
 
 type TStar = {
@@ -11,18 +11,20 @@ type TStar = {
 const Star: FC<TStar> = ({filled, setRating, starId, currentSeceted}) => {
   const value = useState(new Animated.Value(0))[0];
 
+  useEffect(() => {
+    console.log('mount');
+  }, []);
+
   const move = () => {
     Animated.sequence([
       Animated.timing(value, {
         toValue: 1,
-        duration: 200,
-        delay: 50 * starId,
+        duration: 100,
         useNativeDriver: false,
       }),
       Animated.timing(value, {
         toValue: 0,
         duration: 200,
-        delay: 500,
         useNativeDriver: false,
       }),
     ]).start();

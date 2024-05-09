@@ -11,10 +11,6 @@ type TStar = {
 const Star: FC<TStar> = ({filled, setRating, starId, currentSeceted}) => {
   const value = useState(new Animated.Value(0))[0];
 
-  useEffect(() => {
-    console.log('mount');
-  }, []);
-
   const move = () => {
     Animated.sequence([
       Animated.timing(value, {

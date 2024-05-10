@@ -10,11 +10,12 @@ import {
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
 import {selectNews} from '../../../features/News/models/selectors';
-import {Icon} from 'react-native-paper';
+import {Icon, IconButton, Tooltip} from 'react-native-paper';
 
 import SCREENS from '../../../shared/Navigation/screens';
 import {navigate} from '../../../shared/lib/navigationRef';
 import {convertDate} from '../../../shared/lib/convertDate';
+import Rating from '../../../features/Rating/ui/Rating';
 
 const CurrentNews = () => {
   const currentNewsId = useAppSelector(selectCurrentNewsId);
@@ -41,14 +42,38 @@ const CurrentNews = () => {
       </View>
       <ScrollView style={styles.newsContainer}>
         <Text style={styles.newsDescription}>{current?.description}</Text>
-        <Text style={styles.newsCreateAt}>
-          {current?.createdAt && convertDate(new Date(current?.createdAt))}
-        </Text>
       </ScrollView>
+      <Text style={styles.newsCreateAt}>
+        {current?.createdAt && convertDate(new Date(current?.createdAt))}
+      </Text>
+      <View style={styles.tools}>
+        <IconButton
+          icon="arrow-left-bold-box-outline"
+          selected
+          size={50}
+          onPress={() => {}}
+        />
+        <View style={{alignItems: 'center'}}>
+          <Text>Оценить новость</Text>
+          <Rating
+            count={5}
+            onChandge={(data: number) => console.log('currentRating', data)}
+            iconSize={25}
+            iconStyle={styles.star}
+          />
+        </View>
+
+        <IconButton
+          icon="arrow-right-bold-box-outline"
+          selected
+          size={50}
+          onPress={() => {}}
+        />
+      </View>
     </View>
   );
 };
-// convertDate(new Date(createdAt))
+
 export default CurrentNews;
 
 const styles = StyleSheet.create({
@@ -58,7 +83,16 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-
+  tools: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  star: {
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   surface: {
     padding: 8,
     height: 80,
@@ -84,7 +118,7 @@ const styles = StyleSheet.create({
   newsImage: {
     height: '55%',
     margin: 5,
-    borderRadius: 20,
+    borderRadius: 5,
   },
   newsText: {
     fontSize: 20,
@@ -99,7 +133,8 @@ const styles = StyleSheet.create({
 
   newsCreateAt: {
     marginTop: 10,
-    fontSize: 14,
+    marginRight: 10,
+    fontSize: 16,
     fontWeight: '500',
     alignSelf: 'flex-end',
   },

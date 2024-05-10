@@ -26,10 +26,6 @@ const MainScreen = () => {
           <UpdateApp />
           <Text variant="titleLarge">Городские службы</Text>
           <CityServices importantContacts={data} refetch={refetch} />
-          <Rating
-            count={5}
-            onChandge={(data: number) => console.log('currentRating', data)}
-          />
         </View>
       </View>
     </View>

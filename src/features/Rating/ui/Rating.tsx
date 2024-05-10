@@ -1,13 +1,15 @@
 import React, {FC, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StyleProp, ViewStyle} from 'react-native';
 import Star from '../../../entities/Rating/ui/Star';
 
 type TRating = {
   onChandge: (data: number) => void;
   count: number;
+  iconStyle?: StyleProp<ViewStyle>;
+  iconSize?: number;
 };
 
-const Rating: FC<TRating> = ({onChandge, count}) => {
+const Rating: FC<TRating> = ({onChandge, count, iconStyle, iconSize = 40}) => {
   const [rating, setRating] = useState(-1);
   const ratingCount = Array(count).fill(0);
 
@@ -28,33 +30,17 @@ const Rating: FC<TRating> = ({onChandge, count}) => {
       starId={index}
       setRating={handleRating}
       currentSeceted={rating}
+      iconStyle={iconStyle}
+      iconSize={iconSize}
     />
   ));
 
-  return (
-    <View>
-      <View style={styles.container}>{stars}</View>
-    </View>
-  );
+  return <View style={styles.container}>{stars}</View>;
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingHorizontal: 4,
-  },
-  star: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#ccc',
-    borderRadius: 10,
-    marginRight: 4,
-  },
-  filled: {
-    backgroundColor: 'gold',
-  },
-  empty: {
-    opacity: 0.5,
   },
 });
 

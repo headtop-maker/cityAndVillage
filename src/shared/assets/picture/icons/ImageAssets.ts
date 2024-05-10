@@ -14,4 +14,5 @@ export const ImagesAssets = {
   refresh: require('./refresh.png'),
   defaultImage: require('./defaultImage.png'),
   backGroundImage: require('../../appJpg/backGround.jpg'),
+  star: require('../../appSvg/star.svg'),
 };

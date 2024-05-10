@@ -7,13 +7,25 @@ import MainScreen from '../Main/ui/MainScreen';
 import TabItem from './ui/TabItem';
 import AddContentScreen from '../AddContent/ui/AddContentScreen';
 import ServiceScreen from '../Service/ui/ServiceScreen';
+import {useAppSelector} from '../../shared/models/storeHooks';
+import {
+  selectCurrentUserRole,
+  selectCurrentUserToken,
+} from '../../shared/models/selectors';
+import {userRole} from '../../shared/models/types';
+
+import ImportantBtn from '../../features/getNews/ui/ImportantBtn';
 
 const Tab = createBottomTabNavigator();
 
 const TabScreen = () => {
+  const role = useAppSelector(selectCurrentUserRole);
+  const isAdmin = role === userRole.admin;
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
   return (
     <Tab.Navigator
       screenOptions={{
+        headerRight: () => !!currentUserToken && <ImportantBtn />,
         tabBarStyle: {
           backgroundColor: '#f9f9f9',
           height: 55,
@@ -39,19 +51,21 @@ const TabScreen = () => {
         name={SCREENS.NewsScreen}
         component={NewsScreen}
       />
+      {!!isAdmin && (
+        <Tab.Screen
+          options={{
+            title: 'Создать',
+            tabBarIcon: ({focused}) => {
+              return <TabItem focused={focused} imgSrc="add" />;
+            },
+          }}
+          name={SCREENS.AddContentScreen}
+          component={AddContentScreen}
+        />
+      )}
       <Tab.Screen
         options={{
-          title: 'Создать',
-          tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="add" />;
-          },
-        }}
-        name={SCREENS.AddContentScreen}
-        component={AddContentScreen}
-      />
-      <Tab.Screen
-        options={{
-          title: 'Важное',
+          title: 'Сообщения',
           tabBarIcon: ({focused}) => {
             return <TabItem focused={focused} imgSrc="alert" />;
           },

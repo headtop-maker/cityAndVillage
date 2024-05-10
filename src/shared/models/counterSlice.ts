@@ -7,13 +7,13 @@ import {
 } from '../../entities/News/models/models';
 import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
-import {createUsers} from '../../widgets/Registration/models/models';
-import {loginUsers} from '../../widgets/Login/model/models';
+import {createUsers} from '../../features/Registration/models/models';
+import {loginUsers} from '../../features/Login/model/models';
 import {
   getAllUsers,
   setBannedUser,
   setImportantMessage,
-} from '../../widgets/Users/model/models';
+} from '../../features/Users/model/models';
 
 interface RejectedAction extends Action {
   error: Error;
@@ -25,6 +25,10 @@ function isRejectedAction(action: AnyAction): action is RejectedAction {
 
 function isPendingAction(action: AnyAction) {
   return action.type.endsWith('pending');
+}
+
+function isFulfilledAction(action: AnyAction) {
+  return action.type.endsWith('fulfilled');
 }
 
 const initialState: CounterState = {
@@ -59,45 +63,35 @@ export const counterSlice = createSlice({
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
     },
+    setErrorText: (state, action: PayloadAction<string>) => {
+      state.actionState.modalText = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
 
       .addCase(getNews.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.news = action.payload;
       })
       .addCase(getImportant.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.important = action.payload;
       })
       .addCase(crateNews.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.important = action.payload;
       })
       .addCase(getImageForNews.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.imageForNewsFromServer = action.payload;
       })
       .addCase(createUsers.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
-        state.currentUser = action.payload;
+        state.actionState.error = undefined;
+        state.actionState.modalText = action.payload;
       })
 
       .addCase(loginUsers.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.currentUser = action.payload;
       })
 
       .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.actionState.loadind = false;
-        state.actionState.modalText = '';
         state.allUsers = action.payload;
       })
 
@@ -128,6 +122,10 @@ export const counterSlice = createSlice({
         state.actionState.error = undefined;
         state.actionState.modalText = 'Информация обновляется';
       })
+      .addMatcher(isFulfilledAction, state => {
+        state.actionState.loadind = false;
+        state.actionState.modalText = '';
+      })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
         state.actionState.modalText = 'Ошибка получения данных';
@@ -141,6 +139,7 @@ export const {
   incrementByAmount,
   setCurrentNewsId,
   resetCurrentUser,
+  setErrorText,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

@@ -10,6 +10,7 @@ import {
 import {selectNews, selectNewsLoading} from '../models/selectors';
 import {getNews} from '../../../entities/News/models/models';
 import {CounterState} from '../../../shared/models/types';
+import {Button} from 'react-native-paper';
 
 const News = () => {
   const news = useAppSelector(selectNews);
@@ -17,7 +18,7 @@ const News = () => {
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    dispatch(getNews(10));
+    dispatch(getNews());
   }, [dispatch]);
 
   const renderItem = ({item}: {item: CounterState['news'][0]}) => {
@@ -40,7 +41,12 @@ const News = () => {
         renderItem={renderItem}
         keyExtractor={(id, index) => id + 'news' + index}
         refreshing={isLoading}
-        onRefresh={() => dispatch(getNews(10))}
+        onRefresh={() => dispatch(getNews())}
+        ListEmptyComponent={
+          <Button mode="text" onPress={() => dispatch(getNews())}>
+            Обновить список новостей
+          </Button>
+        }
       />
     </View>
   );

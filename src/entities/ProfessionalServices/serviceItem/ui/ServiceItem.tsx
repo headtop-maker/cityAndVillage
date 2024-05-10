@@ -2,12 +2,13 @@ import React, {FC} from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {TServiceItem} from '../../../../shared/types';
 import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
+import {callOtherFn} from '../../../../shared/api/ApiCall';
 
-const ServiceItem: FC<TServiceItem> = ({nameService, imgSrc, id}) => {
+const ServiceItem: FC<TServiceItem> = ({imgSrc, id}) => {
   return (
     <TouchableOpacity
       style={[styles.mediumBox, styles.shadow]}
-      onPress={() => console.log(nameService)}
+      onPress={() => callOtherFn.getOtherFn('OtherFnCall')}
       key={'service' + id}>
       <View style={styles.iconBorder}>
         <Image style={styles.professionsImage} source={ImagesAssets[imgSrc]} />
@@ -35,21 +36,21 @@ const styles = StyleSheet.create({
   },
   mediumBox: {
     margin: 5,
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     backgroundColor: '#fbfffe',
   },
   professionsImage: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
   },
   iconBorder: {
-    borderWidth: 1.5,
+    borderWidth: 0.5,
     padding: 15,
     borderRadius: 10,
-    borderColor: '#6dd58c',
+    borderColor: '#521cfd',
   },
 });

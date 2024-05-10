@@ -49,3 +49,28 @@ export enum userRole {
   simpleUser = 'simpleUser',
   worker = 'worker',
 }
+
+export type ServiceTitleItem = {
+  id: string;
+  categoryName: string;
+  description: string;
+};
+export type ServiceTitle = ServiceTitleItem[] | undefined;
+
+export interface IServices {
+  response: {
+    phone: string;
+    email: string;
+    categoryName: string;
+    title: string;
+    description: string;
+    image: string;
+    id: string;
+  }[];
+}
+
+export type ImportantContact = {
+  id: string;
+  contactName: string;
+  contacts: string[];
+};

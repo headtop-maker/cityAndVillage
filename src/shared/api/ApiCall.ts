@@ -1,44 +1,98 @@
-import {AxiosInstance} from 'axios';
+import {AxiosHeaderValue, AxiosInstance, Method} from 'axios';
 import axios from 'axios';
+import {log} from './decorators/perfDecorators';
+import {Dispatch, SetStateAction} from 'react';
 
-const headers = {
+type THeaders = Partial<{
+  Accept: AxiosHeaderValue;
+  'Content-Length': AxiosHeaderValue;
+  'User-Agent': AxiosHeaderValue;
+  'Content-Encoding': AxiosHeaderValue;
+  'Content-type': AxiosHeaderValue;
+  Authorization: AxiosHeaderValue;
+}>;
+
+type TRequestData<T> = {
+  timeout: number;
+  method: Method;
+  url: string;
+  data?: T;
+  headers?: THeaders;
+};
+
+const headers: THeaders = {
   Accept: 'application/json',
 };
-const IMAGE_URL = 'https://api.slingacademy.com/v1/';
 
-export type Target = Object;
-export type TPropertyKey = symbol | string;
-type TDescriptor<T> = TypedPropertyDescriptor<T>;
-type TUpdateTitleFn = (str: string) => string | void;
+type TcallOutFn = Dispatch<SetStateAction<string>> | undefined;
 
-export function log(
-  target: Target,
-  propertyKey: TPropertyKey,
-  decorator: TDescriptor<TUpdateTitleFn>,
-) {
-  const original = decorator.value;
+class OtherCall {
+  callOutFn: TcallOutFn;
+  requestParams: string | undefined;
+  static instance: OtherCall;
 
-  decorator.value = function (...args: any) {
-    console.log('args', args);
-    return original?.call(this, args);
-  };
-}
-
-export default class ApiCall {
-  axiosInstance: AxiosInstance;
   constructor() {
-    this.axiosInstance = axios.create({
-      headers,
-      timeout: 10000,
-    });
+    if (OtherCall.instance) {
+      return OtherCall.instance;
+    }
+    OtherCall.instance = this;
+    this.requestParams = '';
+    this.callOutFn = undefined;
+  }
+  setOtherFn(fn: Dispatch<SetStateAction<string>>) {
+    if (!this.callOutFn) {
+      this.callOutFn = fn;
+    }
   }
 
-  async apiRequest() {
-    const call = await this.axiosInstance({
-      timeout: 10000,
-      method: 'get',
-      url: `${IMAGE_URL}sample-data/photos`,
+  getOtherFn(data: string) {
+    if (this.callOutFn) {
+      this.callOutFn(data);
+    }
+  }
+
+  setRequestParams(data: string) {
+    if (!!data) {
+      this.requestParams = data;
+    }
+  }
+
+  getRequestParams() {
+    if (!!this.requestParams) {
+      return this.requestParams;
+    }
+  }
+}
+
+export const callOtherFn = new OtherCall();
+
+export default class ApiCall {
+  private axiosInstance: AxiosInstance;
+  token: string;
+
+  constructor() {
+    this.axiosInstance = axios.create();
+    this.token = '';
+  }
+
+  @log()
+  apiRequest<T>(reqData: TRequestData<T>) {
+    const call = this.axiosInstance({
+      ...reqData,
+      headers: reqData.headers
+        ? {
+            Authorization: 'Bearer ' + this.token,
+            ...reqData.headers,
+          }
+        : {
+            ...headers,
+            Authorization: 'Bearer ' + this.token,
+          },
     });
     return call;
+  }
+
+  setToken(data: string) {
+    this.token = data;
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {SafeAreaView, StyleSheet} from 'react-native';
-import News from '../../../widgets/News/ui/News';
+import News from '../../../features/News/ui/News';
 import withModal from '../../../shared/HOC/withModal';
 
 const NewsScreen = () => {

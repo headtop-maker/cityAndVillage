@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button, Dialog, Portal, Text, TextInput} from 'react-native-paper';
+import {Button, Dialog, Portal, Text} from 'react-native-paper';
 
 interface DialogItemProps {
   hideDialog: () => void;

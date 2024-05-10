@@ -12,9 +12,9 @@ const ImportantBtn = () => {
   return (
     <Button
       icon="logout"
-      mode="outlined"
+      mode="text"
       onPress={() => dispatch(resetCurrentUser())}>
-      Выйти из приложения
+      Выйти
     </Button>
   );
 };

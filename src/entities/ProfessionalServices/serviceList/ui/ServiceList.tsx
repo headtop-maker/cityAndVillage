@@ -1,71 +1,66 @@
-import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  StyleSheet,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
-import {Chip} from 'react-native-paper';
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bt',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6y',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7w',
-    title: 'Third Item',
-  },
-];
-
-type ItemProps = {title: string};
-
-const Item = ({title}: ItemProps) => (
-  <View style={styles.item}>
-    <Chip mode="outlined" onPress={() => console.log('Pressed')}>
-      {title}
-    </Chip>
-  </View>
-);
+import React, {useLayoutEffect, useState} from 'react';
+import {SafeAreaView, View, FlatList, StyleSheet} from 'react-native';
+import {Button, Chip} from 'react-native-paper';
+import {useGetAllServiceCategoryQuery} from '../../../../shared/models/services';
+import {ServiceTitleItem} from '../../../../shared/models/types';
+import {useAppDispatch} from '../../../../shared/models/storeHooks';
+import {setErrorText} from '../../../../shared/models/counterSlice';
+import {getServices} from '../model/actions';
+import {callOtherFn} from '../../../../shared/api/ApiCall';
 
 const ServiceList = () => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    let yOffset = event.nativeEvent.contentOffset.x / 1;
-    setScrollPosition(yOffset);
+  const {data, error, refetch} = useGetAllServiceCategoryQuery();
+
+  const [checked, setChecked] = useState<string>('');
+  const dispatch = useAppDispatch();
+
+  useLayoutEffect(() => {
+    if (error) {
+      dispatch(setErrorText('Ошибка запроса категорий'));
+    }
+  }, [dispatch, error]);
+
+  useLayoutEffect(() => {
+    if (!!data && data?.length > 0) {
+      setChecked(data[0].id);
+      dispatch(getServices(data[0].categoryName));
+      callOtherFn.setRequestParams(data[0].categoryName);
+    }
+  }, [data]);
+
+  const renderItem = ({item}: {item: ServiceTitleItem}) => {
+    return (
+      <View style={styles.item}>
+        <Chip
+          mode={item.id === checked ? 'flat' : 'outlined'}
+          selected={item.id === checked}
+          onPress={() => {
+            setChecked(item.id);
+            dispatch(getServices(item.categoryName));
+            callOtherFn.setRequestParams(item.categoryName);
+          }}>
+          {item.description}
+        </Chip>
+      </View>
+    );
   };
-  console.log('scrollPosition', scrollPosition);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: '#FFFFFF'}}>
       <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
+        data={data}
+        renderItem={renderItem}
         keyExtractor={item => item.id + 'service'}
         horizontal={true}
         snapToAlignment={'start'}
         scrollEventThrottle={16}
         decelerationRate={'fast'}
         showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onScroll={event => handleScroll(event)}
+        ListEmptyComponent={
+          <Button mode="text" onPress={() => refetch()}>
+            Обновить список категорий
+          </Button>
+        }
       />
     </SafeAreaView>
   );

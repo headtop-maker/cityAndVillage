@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  NativeModules,
 } from 'react-native';
 import {
   useAppDispatch,
@@ -21,21 +20,23 @@ import {
 import ImageItem from '../../../entities/News/ui/ImageItem';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
-import {Button, TextInput, Text} from 'react-native-paper';
-import {FileParamsType} from '../../../shared/types';
-import axios from 'axios';
+import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
+
+import {setFile} from '../models/models';
+import useDimensions from '../../../shared/HOC/useDimensions';
 
 // interface AddContentScreeProps {}
 
-const {KotlinModules} = NativeModules;
-
 const AddNews = () => {
+  const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageSrc, setImageSrc] = useState('');
   const images = useAppSelector(selectimageForNewsFromServer);
   const currentRole = useAppSelector(selectCurrentUserRole);
   const userName = useAppSelector(selectCurrentUserName);
+  const {rem} = useDimensions();
+  const hideDialog = () => setVisible(false);
 
   const dispatch = useAppDispatch();
 
@@ -64,80 +65,64 @@ const AddNews = () => {
   };
 
   const handleAddImage = async () => {
-    try {
-      const file: FileParamsType = await KotlinModules.openFile();
-      console.log('file', file);
-      const formData = new FormData();
-
-      formData.append('file', {
-        uri: file.fileUri,
-        type: 'image/jpeg',
-        name: 'photo.jpg', // поправить имя
-      });
-      const response = await axios({
-        method: 'post',
-        url: 'http://192.168.1.101:3000/upload',
-        data: formData,
-        headers: {
-          accept: 'application/json',
-          'content-type': 'multipart/form-data',
-        },
-      });
-      console.log('response', response);
-    } catch (e) {
-      console.error(e);
-    }
+    dispatch(setFile());
   };
 
   const imageItems = ({
     item,
   }: {
     item: {
-      description: string;
-      id: number;
-      title: string;
       url: string;
-      user: number;
     };
   }) => (
     <ImageItem
-      id={item.id}
-      description={item.description}
-      title={item.title}
       url={item.url}
-      user={item.user}
-      setImageSrc={setImageSrc}
+      setImageSrc={data => {
+        setImageSrc(data);
+        hideDialog();
+      }}
     />
   );
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.inputContainer, styles.shadow]}>
-        <Text style={styles.titleTextStyle} variant="titleLarge">
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.ScrollArea>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              legacyImplementation={false}
+              data={images}
+              renderItem={imageItems}
+              keyExtractor={(id, index) => id + 'images' + index}
+            />
+          </Dialog.ScrollArea>
+        </Dialog>
+      </Portal>
+      <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
+        <Text
+          style={[styles.titleTextStyle, {marginTop: rem / 2.5}]}
+          variant="titleLarge">
           Добавить новость
         </Text>
         <View style={styles.addFileContainer}>
           <Button
             mode="outlined"
-            style={styles.createButton}
+            style={{margin: rem / 3}}
             onPress={handleAddImage}>
             Загрузить
           </Button>
           <TouchableOpacity
-            style={{alignItems: 'flex-end', margin: 10}}
+            style={[styles.refresh, {margin: rem / 3}]}
             onPress={() => dispatch(getImageForNews())}>
             <Image style={styles.imageRef} source={ImagesAssets.refresh} />
           </TouchableOpacity>
         </View>
-
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          legacyImplementation={false}
-          data={images}
-          style={{height: 200}}
-          renderItem={imageItems}
-          keyExtractor={(id, index) => id + 'images' + index}
-        />
-
+        <Button
+          mode="contained"
+          style={{margin: rem / 3}}
+          onPress={() => setVisible(true)}>
+          Выбрать изображение
+        </Button>
         <TextInput
           style={styles.input}
           label="Заголовок"
@@ -165,7 +150,7 @@ const AddNews = () => {
 
         <Button
           mode="elevated"
-          style={styles.createButton}
+          style={{margin: rem / 3}}
           disabled={!isLockSend}
           onPress={handleClick}>
           Добавить
@@ -183,19 +168,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
+  refresh: {
+    alignItems: 'flex-end',
+  },
   input: {
     margin: 5,
   },
   inputContainer: {
-    margin: 10,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
   },
-  createButton: {
-    margin: 12,
-  },
   titleTextStyle: {
-    marginTop: 10,
     alignSelf: 'center',
   },
   shadow: {
@@ -208,8 +191,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-  textContainer: {justifyContent: 'center', alignItems: 'center', padding: 10},
-  text: {fontWeight: 'bold', fontSize: 17},
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
   imageRef: {width: 30, height: 30},
   addFileContainer: {
     flexDirection: 'row',

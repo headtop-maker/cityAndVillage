@@ -1,48 +1,34 @@
 import React from 'react';
 
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
-import {newsDataMocks} from '../../../shared/mocks';
-import NewsItem from '../../../entities/News/ui/NewsItem';
-import useDimensions from '../../../shared/HOC/useDimensions';
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
-import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
-import {Button} from 'react-native-paper';
-import ApiCall from '../../../shared/api/ApiCall';
+
+import {
+  useGetAdminsQuery,
+  useGetAllImportantContactsQuery,
+} from '../../../shared/models/services';
+import {Text} from 'react-native-paper';
+import useDimensions from '../../../shared/HOC/useDimensions';
+
+import UpdateApp from '../../../features/Update/ui/UpdateApp';
+import Rating from '../../../features/Rating/ui/Rating';
 
 const MainScreen = () => {
-  const [, , , rem] = useDimensions();
+  const {data, refetch} = useGetAllImportantContactsQuery();
+  const {rem} = useDimensions();
 
-  console.log('rem', rem);
-
-  const handle = async () => {
-    const response = new ApiCall();
-    const data = await response.apiRequest();
-    console.log(data);
-  };
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View>
-        <Text style={styles.sectionTitle}>Новости</Text>
-        <NewsItem
-          image={newsDataMocks[0].imgSrc}
-          title={newsDataMocks[0].title}
-          createdAt={new Date()}
-          description="Полное описание"
-          author="Vasil"
-          id="1111"
-          key="news"
-        />
-        <CityServices />
-        <Text style={styles.sectionTitle}>Услуги</Text>
-        {/* <ProfService /> */}
-        <Button mode="outlined" onPress={handle}>
-          Call api
-        </Button>
-        <ServiceList />
+        <View style={[styles.wrapper, {padding: rem / 2}]}>
+          <UpdateApp />
+          <Text variant="titleLarge">Городские службы</Text>
+          <CityServices importantContacts={data} refetch={refetch} />
+        </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -51,12 +37,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fbfbfb',
   },
-
-  sectionTitle: {
-    margin: 5,
-    fontSize: 18,
-    fontWeight: '500',
+  wrapper: {
+    justifyContent: 'space-between',
   },
 });
 
 export default withModal(MainScreen);
+
+/* <ServiceItem nameService="службы" imgSrc="service" id={100} /> */
+/* <ServiceItem nameService="службы" imgSrc="add" id={100} /> */
+/* <ServiceItem nameService="службы" imgSrc="information" id={100} /> */
+
+{
+  /* <Text style={styles.sectionTitle}>Новости</Text>
+{news && (
+  <NewsItem
+    title={news.title}
+    image={news.image}
+    createdAt={news.createdAt}
+    description={news.description}
+    id={news.id}
+    author={news.author}
+  />
+)} */
+}

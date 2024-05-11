@@ -12,8 +12,6 @@ import {Icon} from 'react-native-paper';
 import {navigate} from '../../shared/lib/navigationRef';
 import SCREENS from '../../shared/Navigation/screens';
 
-// interface RegistrationScreenProps {}
-
 const RegistrationScreen = () => {
   return (
     <View style={styles.container}>

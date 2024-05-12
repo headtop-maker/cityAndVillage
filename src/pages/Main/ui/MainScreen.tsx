@@ -1,20 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
 
-import {
-  useGetAdminsQuery,
-  useGetAllImportantContactsQuery,
-} from '../../../shared/models/services';
+import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 import {Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
-import Rating from '../../../features/Rating/ui/Rating';
-
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
   const {rem} = useDimensions();

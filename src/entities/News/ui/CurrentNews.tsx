@@ -16,8 +16,13 @@ import SCREENS from '../../../shared/Navigation/screens';
 import {navigate} from '../../../shared/lib/navigationRef';
 import {convertDate} from '../../../shared/lib/convertDate';
 import Rating from '../../../features/Rating/ui/Rating';
+import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
 
 const CurrentNews = () => {
+  const {childrenShakeElement, handleShake} = useAnimatedShake();
+  const {childrenShakeElement: secondChild, handleShake: secondHandleShake} =
+    useAnimatedShake();
+
   const currentNewsId = useAppSelector(selectCurrentNewsId);
   const news = useAppSelector(selectNews);
   const current = news.find(item => item.id === currentNewsId);
@@ -47,12 +52,15 @@ const CurrentNews = () => {
         {current?.createdAt && convertDate(new Date(current?.createdAt))}
       </Text>
       <View style={styles.tools}>
-        <IconButton
-          icon="arrow-left-bold-box-outline"
-          selected
-          size={50}
-          onPress={() => {}}
-        />
+        {childrenShakeElement(
+          <IconButton
+            icon="arrow-left-bold-box-outline"
+            selected
+            size={50}
+            onPress={() => handleShake()}
+          />,
+        )}
+
         <View style={{alignItems: 'center'}}>
           <Text>Оценить новость</Text>
           <Rating
@@ -62,13 +70,14 @@ const CurrentNews = () => {
             iconStyle={styles.star}
           />
         </View>
-
-        <IconButton
-          icon="arrow-right-bold-box-outline"
-          selected
-          size={50}
-          onPress={() => {}}
-        />
+        {secondChild(
+          <IconButton
+            icon="arrow-right-bold-box-outline"
+            selected
+            size={50}
+            onPress={() => secondHandleShake()}
+          />,
+        )}
       </View>
     </View>
   );
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   newsDescription: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: '400',
     marginTop: 10,
   },

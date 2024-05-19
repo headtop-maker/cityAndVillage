@@ -1,12 +1,5 @@
-import * as React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
 import {selectNews} from '../../../features/News/models/selectors';
@@ -17,6 +10,7 @@ import {navigate} from '../../../shared/lib/navigationRef';
 import {convertDate} from '../../../shared/lib/convertDate';
 import Rating from '../../../features/Rating/ui/Rating';
 import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
+import AnimatedNews from './AnimatedNews';
 
 const CurrentNews = () => {
   const {childrenShakeElement, handleShake} = useAnimatedShake();
@@ -34,20 +28,8 @@ const CurrentNews = () => {
         onPress={() => navigate(SCREENS.TabScreen, undefined)}>
         <Icon source="chevron-left" color="#6e26f3" size={40} />
       </TouchableOpacity>
+      <AnimatedNews uri={current?.image} current={current} />
 
-      <Image
-        style={[styles.newsImage]}
-        source={{
-          uri: current?.image,
-        }}
-      />
-
-      <View style={styles.newsItem}>
-        <Text style={styles.newsText}>{current?.title}</Text>
-      </View>
-      <ScrollView style={styles.newsContainer}>
-        <Text style={styles.newsDescription}>{current?.description}</Text>
-      </ScrollView>
       <Text style={styles.newsCreateAt}>
         {current?.createdAt && convertDate(new Date(current?.createdAt))}
       </Text>
@@ -87,11 +69,7 @@ export default CurrentNews;
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#FFFFFF'},
-  newsContainer: {
-    backgroundColor: '#FFFFFF',
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
+
   tools: {
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -117,27 +95,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
   },
-  newsItem: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 15,
-    borderColor: '#5e0788',
-    borderBottomLeftRadius: 10,
-  },
+
   newsImage: {
     height: '55%',
     margin: 5,
     borderRadius: 5,
-  },
-  newsText: {
-    fontSize: 20,
-    fontWeight: '600',
-    alignSelf: 'flex-start',
-  },
-  newsDescription: {
-    fontSize: 18,
-    fontWeight: '400',
-    marginTop: 10,
   },
 
   newsCreateAt: {

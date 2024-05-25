@@ -33,7 +33,7 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
       {item.contacts.map((contact, index) => (
         <List.Item
           key={'contact' + index}
-          title={`Контакт # ${index + 1}`}
+          title={`Контакт ${index + 1}`}
           onPress={() => {
             Linking.openURL(`tel:${contact}}`);
           }}

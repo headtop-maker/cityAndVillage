@@ -74,3 +74,9 @@ export type ImportantContact = {
   contactName: string;
   contacts: string[];
 };
+
+export type TDocuments = {
+  id: string;
+  documentTitle: string;
+  filePath: string;
+}[];

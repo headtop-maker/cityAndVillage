@@ -45,12 +45,12 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
       translationY.value = clamp(
         prevTranslationY.value + event.translationY,
         initY,
-        maxTranslateY / 1.3,
+        maxTranslateY / 1.4,
       );
     })
     .onFinalize(event => {
       if (event.translationY > 0) {
-        translationY.value = withTiming(height / 1.3);
+        translationY.value = withTiming(height / 1.4);
       } else {
         translationY.value = withTiming(initY);
       }
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   newsDescription: {
     fontSize: 18,
     fontWeight: '400',
-    marginTop: 10,
+    margin: 10,
   },
   newsContainer: {
     backgroundColor: '#FFFFFF',

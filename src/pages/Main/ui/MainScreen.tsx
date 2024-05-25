@@ -10,6 +10,7 @@ import {Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
+import Documents from '../../../features/documents/ui/Documents';
 const MainScreen = () => {
   const {data, refetch} = useGetAllImportantContactsQuery();
   const {rem} = useDimensions();
@@ -21,6 +22,8 @@ const MainScreen = () => {
           <UpdateApp />
           <Text variant="titleLarge">Городские службы</Text>
           <CityServices importantContacts={data} refetch={refetch} />
+          <Text variant="titleLarge">Документы</Text>
+          <Documents />
         </View>
       </View>
     </View>

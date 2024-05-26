@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
@@ -11,19 +11,62 @@ import useDimensions from '../../../shared/HOC/useDimensions';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
 import Documents from '../../../features/documents/ui/Documents';
+import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
+import {TServiceItem} from '../../../shared/types';
+
 const MainScreen = () => {
-  const {data, refetch} = useGetAllImportantContactsQuery();
+  const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
+
   const {rem} = useDimensions();
+
+  useLayoutEffect(() => {
+    if (!!section) {
+      setSection('government');
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
       <View>
         <View style={[styles.wrapper, {padding: rem / 2}]}>
           <UpdateApp />
-          <Text variant="titleLarge">Городские службы</Text>
-          <CityServices importantContacts={data} refetch={refetch} />
-          <Text variant="titleLarge">Документы</Text>
-          <Documents />
+          <View style={styles.service}>
+            <ServiceItem
+              setSection={setSection}
+              nameService="Cлужбы"
+              imgSrc="government"
+              id={100}
+            />
+            <ServiceItem
+              setSection={setSection}
+              nameService="Документы"
+              imgSrc="document"
+              id={100}
+            />
+            <ServiceItem
+              setSection={setSection}
+              nameService="Обращение"
+              imgSrc="mail"
+              id={100}
+            />
+          </View>
+          {section === 'government' && (
+            <>
+              <Text variant="titleLarge">Городские службы</Text>
+              <CityServices />
+            </>
+          )}
+          {section === 'document' && (
+            <>
+              <Text variant="titleLarge">Документы</Text>
+              <Documents />
+            </>
+          )}
+          {section === 'mail' && (
+            <>
+              <Text variant="titleLarge">Создать обращение</Text>
+            </>
+          )}
         </View>
       </View>
     </View>
@@ -38,24 +81,11 @@ const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'space-between',
   },
+  service: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
 });
 
 export default withModal(MainScreen);
-
-/* <ServiceItem nameService="службы" imgSrc="service" id={100} /> */
-/* <ServiceItem nameService="службы" imgSrc="add" id={100} /> */
-/* <ServiceItem nameService="службы" imgSrc="information" id={100} /> */
-
-{
-  /* <Text style={styles.sectionTitle}>Новости</Text>
-{news && (
-  <NewsItem
-    title={news.title}
-    image={news.image}
-    createdAt={news.createdAt}
-    description={news.description}
-    id={news.id}
-    author={news.author}
-  />
-)} */
-}

@@ -15,4 +15,7 @@ export const ImagesAssets = {
   defaultImage: require('./defaultImage.png'),
   backGroundImage: require('../../appJpg/backGround.jpg'),
   star: require('../../appSvg/star.svg'),
+  document: require('./document.png'),
+  government: require('./government.png'),
+  mail: require('./mail.png'),
 };

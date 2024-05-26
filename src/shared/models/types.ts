@@ -79,4 +79,5 @@ export type TDocuments = {
   id: string;
   documentTitle: string;
   filePath: string;
+  createdAt: Date;
 }[];

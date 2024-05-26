@@ -1,15 +1,15 @@
 import React, {FC} from 'react';
-import {Text, View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
+import {Text} from 'react-native-paper';
 import Animated, {
   clamp,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -74,14 +74,18 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
           <View style={styles.resize} />
           <Animated.View>
             <View style={styles.newsItem}>
-              <Text style={styles.newsText}>{current?.title}</Text>
+              <Text variant="titleLarge" style={styles.newsText}>
+                {current?.title}
+              </Text>
             </View>
           </Animated.View>
         </View>
       </GestureDetector>
 
       <Animated.ScrollView style={styles.newsContainer}>
-        <Text style={styles.newsDescription}>{current?.description}</Text>
+        <Text variant="bodyLarge" style={styles.newsDescription}>
+          {current?.description}
+        </Text>
       </Animated.ScrollView>
     </GestureHandlerRootView>
   );
@@ -93,8 +97,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   newsDescription: {
-    fontSize: 18,
-    fontWeight: '400',
     margin: 10,
   },
   newsContainer: {
@@ -104,20 +106,16 @@ const styles = StyleSheet.create({
   },
   resize: {
     height: 5,
-    width: 100,
+    width: 70,
     alignSelf: 'center',
     borderRadius: 10,
-    backgroundColor: '#564d4d',
+    backgroundColor: '#969696',
   },
   newsText: {
-    fontSize: 20,
-    fontWeight: '600',
     alignSelf: 'flex-start',
   },
   newsItem: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 15,
+    margin: 15,
     borderColor: '#5e0788',
     borderBottomLeftRadius: 10,
   },

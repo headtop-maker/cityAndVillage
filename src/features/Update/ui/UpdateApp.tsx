@@ -9,7 +9,6 @@ const UpdateApp = () => {
   const {rem} = useDimensions();
   const {data} = useGetAdminsQuery();
 
-  console.log('data', data);
   const handleUpdate = () => {
     nativeFn.getFile({
       url: 'http://192.168.1.101:3000/upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
@@ -19,9 +18,9 @@ const UpdateApp = () => {
   };
   return (
     <View>
-      <Text variant="titleLarge">Доступно обновление</Text>
+      <Text variant="titleLarge">Получить приложение</Text>
       <Button mode="outlined" style={{margin: rem / 3}} onPress={handleUpdate}>
-        Получить
+        Последняя версия
       </Button>
     </View>
   );

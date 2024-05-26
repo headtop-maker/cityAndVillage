@@ -2,30 +2,61 @@ import React from 'react';
 import {View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {useGetDocumentsQuery} from '../../../shared/models/services';
 import {TDocuments} from '../../../shared/models/types';
-import {Icon, Text} from 'react-native-paper';
+import {Button, Icon, Text} from 'react-native-paper';
+import {convertDate} from '../../../shared/lib/convertDate';
+import {nativeFn} from '../../../shared/lib/nativeFn';
+
+const getMemeType = async (url: string) => {
+  const reponse = await fetch(url, {
+    method: 'HEAD',
+  });
+
+  const memeType = reponse.headers.get('Content-Type');
+  if (memeType) {
+    nativeFn.getFile({
+      url: url,
+      mimeType: memeType,
+      title: url.split('/').pop() || 'document',
+    });
+  }
+};
 
 const renderItem = ({item}: {item: TDocuments[0]}) => {
+  const {documentTitle, createdAt, filePath} = item;
   return (
-    <View style={styles.item}>
-      <Text variant="bodyLarge">{item.documentTitle}</Text>
-    </View>
+    <TouchableOpacity style={styles.item} onPress={() => getMemeType(filePath)}>
+      <Text variant="bodyLarge">{documentTitle || ''}</Text>
+      <Text variant="bodySmall" style={{alignSelf: 'flex-end'}}>
+        {createdAt ? convertDate(new Date(createdAt)) : ''}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
 const Documents = () => {
-  const {data, error, refetch} = useGetDocumentsQuery();
-  console.log('data', data);
+  const {data, refetch, isLoading} = useGetDocumentsQuery();
   return (
     <View>
       <TouchableOpacity
         onPress={() => refetch()}
         style={{alignSelf: 'flex-end'}}>
-        <Icon source="refresh" color="#6e26f3" size={40} />
+        {!!data && <Icon source="refresh" color="#6e26f3" size={40} />}
       </TouchableOpacity>
       <FlatList
         data={data}
         keyExtractor={item => item.id}
         renderItem={renderItem}
+        refreshing={isLoading}
+        onRefresh={() => refetch()}
+        ListEmptyComponent={
+          <Button
+            mode="text"
+            onPress={() => {
+              refetch();
+            }}>
+            Обновить список документов
+          </Button>
+        }
       />
     </View>
   );

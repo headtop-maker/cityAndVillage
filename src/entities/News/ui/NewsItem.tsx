@@ -9,7 +9,7 @@ import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
-import {Button} from 'react-native-paper';
+import {Button, Icon} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 
 const NewsItem: FC<CounterState['news'][0]> = ({
@@ -47,7 +47,7 @@ const NewsItem: FC<CounterState['news'][0]> = ({
         <Text style={styles.newsText}>{title}</Text>
         <View style={styles.newsMetaText}>
           <Text>{convertDate(new Date(createdAt))}</Text>
-          <Button mode="text" onPress={handleNavigate}>
+          <Button mode='text' onPress={handleNavigate}>
             подробнее...
           </Button>
         </View>

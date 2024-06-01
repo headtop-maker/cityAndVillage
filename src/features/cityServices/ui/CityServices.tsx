@@ -3,15 +3,11 @@ import {FlatList, Linking, NativeModules} from 'react-native';
 
 import {Button, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
+import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 
-type ICityServices = {
-  importantContacts: ImportantContact[] | undefined;
-  refetch: () => void;
-};
-
-const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
+const CityServices: FC = () => {
   const [expanded, setExpanded] = useState<string>('');
-
+  const {data, refetch} = useGetAllImportantContactsQuery();
   const handlePress = (id: string) => {
     if (id === expanded) {
       setExpanded('');
@@ -33,7 +29,7 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
       {item.contacts.map((contact, index) => (
         <List.Item
           key={'contact' + index}
-          title={`Контакт # ${index + 1}`}
+          title={`Контакт ${index + 1}`}
           onPress={() => {
             Linking.openURL(`tel:${contact}}`);
           }}
@@ -47,7 +43,7 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
   return (
     <List.Section>
       <FlatList
-        data={importantContacts}
+        data={data}
         renderItem={ContactItem}
         keyExtractor={item => item.id + 'ImportantContacts'}
         ListEmptyComponent={
@@ -56,7 +52,7 @@ const CityServices: FC<ICityServices> = ({importantContacts, refetch}) => {
             onPress={() => {
               refetch();
             }}>
-            Обновить список контактов
+            Обновить список служб
           </Button>
         }
       />

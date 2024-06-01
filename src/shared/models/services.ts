@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {ServiceTitle, ImportantContact, userRole} from './types';
+import {ServiceTitle, ImportantContact, userRole, TDocuments} from './types';
 import {RootState} from '../../app/store';
 
 export const serviceApi = createApi({
@@ -19,6 +19,9 @@ export const serviceApi = createApi({
   endpoints: builder => ({
     getAllServiceCategory: builder.query<ServiceTitle, void>({
       query: () => '/category',
+    }),
+    getDocuments: builder.query<TDocuments, void>({
+      query: () => '/documents',
     }),
     getServiceByName: builder.query<ServiceTitle, string>({
       query: name => `/category/${name}`,
@@ -46,4 +49,5 @@ export const {
   useGetServiceByNameQuery,
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,
+  useGetDocumentsQuery,
 } = serviceApi;

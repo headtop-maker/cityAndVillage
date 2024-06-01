@@ -1,4 +1,9 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  plugins: ['react', 'react-native'],
+  extends: ['@react-native', 'eslint:recommended', 'plugin:react/recommended'],
+  rules: {
+    'no-console': 'warn',
+    'jsx-quotes': 'off',
+  },
 };

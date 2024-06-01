@@ -18,8 +18,8 @@ const UpdateApp = () => {
   };
   return (
     <View>
-      <Text variant="titleLarge">Получить приложение</Text>
-      <Button mode="outlined" style={{margin: rem / 3}} onPress={handleUpdate}>
+      <Text variant='titleLarge'>Получить приложение</Text>
+      <Button mode='outlined' style={{margin: rem / 3}} onPress={handleUpdate}>
         Последняя версия
       </Button>
     </View>

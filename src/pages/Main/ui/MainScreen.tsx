@@ -33,38 +33,38 @@ const MainScreen = () => {
           <View style={styles.service}>
             <ServiceItem
               setSection={setSection}
-              nameService="Cлужбы"
-              imgSrc="government"
+              nameService='Cлужбы'
+              imgSrc='government'
               id={100}
             />
             <ServiceItem
               setSection={setSection}
-              nameService="Документы"
-              imgSrc="document"
+              nameService='Документы'
+              imgSrc='document'
               id={100}
             />
             <ServiceItem
               setSection={setSection}
-              nameService="Обращение"
-              imgSrc="mail"
+              nameService='Обращение'
+              imgSrc='mail'
               id={100}
             />
           </View>
           {section === 'government' && (
             <>
-              <Text variant="titleLarge">Городские службы</Text>
+              <Text variant='titleLarge'>Городские службы</Text>
               <CityServices />
             </>
           )}
           {section === 'document' && (
             <>
-              <Text variant="titleLarge">Документы</Text>
+              <Text variant='titleLarge'>Документы</Text>
               <Documents />
             </>
           )}
           {section === 'mail' && (
             <>
-              <Text variant="titleLarge">Создать обращение</Text>
+              <Text variant='titleLarge'>Создать обращение</Text>
             </>
           )}
         </View>

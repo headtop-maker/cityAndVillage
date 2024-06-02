@@ -16,6 +16,10 @@ import {response} from '../api/axiosInstance';
 import {requestStoragePermission} from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
 import {navigationRef, Stack} from '../lib/navigationRef';
+import {requestUserPermission} from '../lib/requestUserPermission';
+
+import {Alert} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 
 const MainStack = () => {
   const currentUserToken = useAppSelector(selectCurrentUserToken);
@@ -25,18 +29,31 @@ const MainStack = () => {
     !check && requestStoragePermission();
   };
 
+  const firebasePermissions = async () => {
+    await requestUserPermission();
+  };
+
+  const getToken = async () => {
+    const token = await messaging().getToken();
+    console.log('tokenFB', token);
+  };
+
   useLayoutEffect(() => {
     !!currentUserToken && response.setToken(currentUserToken);
   }, [currentUserToken]);
 
   useLayoutEffect(() => {
     isPermissions();
+    firebasePermissions();
+    getToken();
   }, []);
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => console.log('nav ready')}>
       <Stack.Navigator
-        initialRouteName="TabScreen"
+        initialRouteName='TabScreen'
         screenOptions={{headerShown: false}}>
         <Stack.Group>
           <Stack.Screen name={SCREENS.TabScreen} component={TabScreen} />

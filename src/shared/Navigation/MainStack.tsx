@@ -18,7 +18,6 @@ import {checkStoragePermission} from '../lib/checkPermissions';
 import {navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
 
-import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
 const MainStack = () => {

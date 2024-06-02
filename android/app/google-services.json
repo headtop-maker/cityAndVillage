@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696545469937",
+    "project_id": "cityandvillage-5f7af",
+    "storage_bucket": "cityandvillage-5f7af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696545469937:android:5bbed8cab38a21d7125050",
+        "android_client_info": {
+          "package_name": "com.cityandvillage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD22JlRP4CfbfOt7prROSnDMGj7BUZr2bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

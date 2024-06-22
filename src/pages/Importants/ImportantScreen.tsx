@@ -22,7 +22,7 @@ const ImportantScreen = () => {
       {currentUserToken ? (
         <>
           <TouchableOpacity style={styles.icon}>
-            <Avatar.Icon size={50} icon="pencil-plus-outline" color="#FFFFFF" />
+            <Avatar.Icon size={50} icon='pencil-plus-outline' color='#FFFFFF' />
           </TouchableOpacity>
 
           <Important />
@@ -35,12 +35,12 @@ const ImportantScreen = () => {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          <Text variant="titleLarge" style={{margin: 20}}>
+          <Text variant='titleLarge' style={{margin: 20}}>
             Пользователь не авторизован
           </Text>
           <Button
-            icon="login"
-            mode="outlined"
+            icon='login'
+            mode='outlined'
             onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
             Войти или зарегистрироваться
           </Button>

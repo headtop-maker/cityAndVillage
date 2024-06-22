@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {FlatList, Linking, NativeModules} from 'react-native';
+import {FlatList, Linking, NativeModules, ScrollView} from 'react-native';
 
 import {Button, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
@@ -23,7 +23,7 @@ const CityServices: FC = () => {
   const ContactItem = ({item}: {item: ImportantContact}) => (
     <List.Accordion
       title={item.contactName}
-      left={props => <List.Icon {...props} icon="folder" />}
+      left={props => <List.Icon {...props} icon='folder' />}
       expanded={getExpanded(item.id)}
       onPress={() => handlePress(item.id)}>
       {item.contacts.map((contact, index) => (
@@ -33,7 +33,7 @@ const CityServices: FC = () => {
           onPress={() => {
             Linking.openURL(`tel:${contact}}`);
           }}
-          left={props => <List.Icon {...props} icon="phone" />}
+          left={props => <List.Icon {...props} icon='phone' />}
           description={contact}
         />
       ))}
@@ -41,22 +41,26 @@ const CityServices: FC = () => {
   );
 
   return (
-    <List.Section>
-      <FlatList
-        data={data}
-        renderItem={ContactItem}
-        keyExtractor={item => item.id + 'ImportantContacts'}
-        ListEmptyComponent={
-          <Button
-            mode="text"
-            onPress={() => {
-              refetch();
-            }}>
-            Обновить список служб
-          </Button>
-        }
-      />
-    </List.Section>
+    <>
+      <List.Section>
+        <FlatList
+          data={data}
+          renderItem={ContactItem}
+          keyExtractor={(item, index) =>
+            item.id + 'ImportantContacts' + String(index)
+          }
+          ListEmptyComponent={
+            <Button
+              mode='text'
+              onPress={() => {
+                refetch();
+              }}>
+              Обновить список служб
+            </Button>
+          }
+        />
+      </List.Section>
+    </>
   );
 };
 

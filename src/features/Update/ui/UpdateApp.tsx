@@ -3,11 +3,9 @@ import {View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {nativeFn} from '../../../shared/lib/nativeFn';
 import useDimensions from '../../../shared/HOC/useDimensions';
-import {useGetAdminsQuery} from '../../../shared/models/services';
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
-  const {data} = useGetAdminsQuery();
 
   const handleUpdate = () => {
     nativeFn.getFile({

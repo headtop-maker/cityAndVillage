@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
+import {useGetAdminsQuery} from '../../../shared/models/services';
+
 const SendMessage = () => {
   const [message, setMessage] = useState('');
+
+  const {data} = useGetAdminsQuery();
 
   const handleChangeMessage = (text: string) => {
     setMessage(text);
   };
 
   const handleSendMessage = () => {
+    console.log('data', data);
     if (message !== '') {
       setMessage('');
     }

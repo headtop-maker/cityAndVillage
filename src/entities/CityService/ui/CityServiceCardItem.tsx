@@ -21,13 +21,13 @@ const CityServiceCardItem = ({
   setSelected: (data: string) => void;
 }) => (
   <View style={styles.itemFlat}>
-    <Card mode="outlined">
+    <Card mode='outlined'>
       <Card.Content>
-        <Text variant="titleMedium">{item.title}</Text>
+        <Text variant='titleMedium'>{item.title}</Text>
       </Card.Content>
       <Card.Actions>
-        <Button mode="text" onPress={() => setSelected(item.id)}>
-          {item.id === selected ? 'Скрыть' : 'Подробнее'}
+        <Button mode='text' onPress={() => setSelected(item.id)}>
+          {item.id === selected ? 'Скрыть' : 'Открыть'}
         </Button>
       </Card.Actions>
       {item.id === selected && (
@@ -38,12 +38,12 @@ const CityServiceCardItem = ({
             }}
           />
           <Card.Content style={{marginTop: 15}}>
-            <Text variant="bodyLarge">{item.description}</Text>
+            <Text variant='bodyLarge'>{item.description}</Text>
           </Card.Content>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Tooltip title="Selected email">
+            <Tooltip title='Selected email'>
               <IconButton
-                icon="email"
+                icon='email'
                 selected
                 size={20}
                 onPress={() => Linking.openURL(`mailto:${item.email}`)}
@@ -51,12 +51,12 @@ const CityServiceCardItem = ({
             </Tooltip>
             <TouchableOpacity
               onPress={() => Linking.openURL(`mailto:${item.email}`)}>
-              <Text variant="titleMedium">{item.email}</Text>
+              <Text variant='titleMedium'>{item.email}</Text>
             </TouchableOpacity>
 
-            <Tooltip title="Selected phone">
+            <Tooltip title='Selected phone'>
               <IconButton
-                icon="phone"
+                icon='phone'
                 selected
                 size={20}
                 onPress={() => Linking.openURL(`tel:${item.phone}`)}
@@ -64,7 +64,7 @@ const CityServiceCardItem = ({
             </Tooltip>
             <TouchableOpacity
               onPress={() => Linking.openURL(`tel:${item.phone}`)}>
-              <Text variant="titleMedium">{item.phone}</Text>
+              <Text variant='titleMedium'>{item.phone}</Text>
             </TouchableOpacity>
           </View>
         </>

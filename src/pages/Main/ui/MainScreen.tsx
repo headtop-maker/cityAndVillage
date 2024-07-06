@@ -13,6 +13,7 @@ import Documents from '../../../features/documents/ui/Documents';
 import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
 import {TServiceItem} from '../../../shared/types';
 import SendMessage from '../../../features/SendMessage/ui/SendMessage';
+import MyBanner from '../../../shared/Components/Shake/ui/Banner';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
@@ -32,6 +33,7 @@ const MainScreen = () => {
         renderItem={null}
         ListFooterComponent={
           <View style={[styles.wrapper, {padding: rem / 2}]}>
+            <MyBanner />
             <UpdateApp />
             <View style={styles.service}>
               <ServiceItem
@@ -53,6 +55,7 @@ const MainScreen = () => {
                 id={100}
               />
             </View>
+
             <FlatList data={[]} renderItem={undefined} />
             {section === 'government' && (
               <>

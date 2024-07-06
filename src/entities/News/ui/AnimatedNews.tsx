@@ -74,7 +74,7 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
           <View style={styles.resize} />
           <Animated.View>
             <View style={styles.newsItem}>
-              <Text variant="titleLarge" style={styles.newsText}>
+              <Text variant='titleLarge' style={styles.newsText}>
                 {current?.title}
               </Text>
             </View>
@@ -82,8 +82,11 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
         </View>
       </GestureDetector>
 
-      <Animated.ScrollView style={styles.newsContainer}>
-        <Text variant="bodyLarge" style={styles.newsDescription}>
+      <Animated.ScrollView
+        style={styles.newsContainer}
+        showsVerticalScrollIndicator={true}
+        persistentScrollbar={true}>
+        <Text variant='bodyLarge' style={styles.newsDescription}>
           {current?.description}
         </Text>
       </Animated.ScrollView>

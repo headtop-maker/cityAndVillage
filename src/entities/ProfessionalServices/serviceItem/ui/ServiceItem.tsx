@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {TServiceItem} from '../../../../shared/types';
 import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
-import {callOtherFn} from '../../../../shared/api/ApiCall';
 import {Text} from 'react-native-paper';
 
 type TProp = {
@@ -23,7 +22,7 @@ const ServiceItem: FC<TServiceItem & TProp> = ({
       <View style={styles.iconBorder}>
         <Image style={styles.professionsImage} source={ImagesAssets[imgSrc]} />
       </View>
-      <Text variant="bodySmall" style={{marginBottom: 5}}>
+      <Text variant='bodySmall' style={{marginBottom: 5}}>
         {nameService}
       </Text>
     </TouchableOpacity>

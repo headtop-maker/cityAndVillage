@@ -14,6 +14,7 @@ import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/S
 import {TServiceItem} from '../../../shared/types';
 import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
+import CameraX from '../../../features/CameraX/CameraX';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
@@ -28,6 +29,7 @@ const MainScreen = () => {
 
   return (
     <View style={styles.container}>
+      <CameraX />
       <FlatList
         data={[]}
         renderItem={null}
@@ -35,6 +37,7 @@ const MainScreen = () => {
           <View style={[styles.wrapper, {padding: rem / 2}]}>
             <MyBanner />
             <UpdateApp />
+
             <View style={styles.service}>
               <ServiceItem
                 setSection={setSection}

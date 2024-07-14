@@ -1,20 +1,25 @@
 package com.cityandvillage
 
-import androidx.camera.core.impl.CameraInternal
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 
-class CustomLifecycle : LifecycleOwner {
-    private val lifecycleRegistry: LifecycleRegistry
+class CustomLifecycleOwner : LifecycleOwner {
+    private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
 
     init {
-        lifecycleRegistry = LifecycleRegistry(this);
-        lifecycleRegistry.markState(Lifecycle.State.CREATED)
+        lifecycleRegistry.currentState = Lifecycle.State.INITIALIZED
     }
-
 
     override fun getLifecycle(): Lifecycle {
         return lifecycleRegistry
+    }
+
+    fun start() {
+        lifecycleRegistry.currentState = Lifecycle.State.STARTED
+    }
+
+    fun stop() {
+        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 }

@@ -3,8 +3,10 @@ package com.cityandvillage
 import android.annotation.SuppressLint
 import android.util.AttributeSet
 import android.util.Log
+
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
+
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
@@ -13,7 +15,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
@@ -31,14 +33,15 @@ class CameraView(reactContext: ThemedReactContext, attrs: AttributeSet? = null) 
     private var imageCapture: ImageCapture?=null
     private val lifecycleOwner: CustomLifecycleOwner = CustomLifecycleOwner()
     private var analysisExecutor: Executor = Executors.newSingleThreadExecutor()
-    
+
     init {
         previewView = PreviewView(reactContext)
         this.addView(previewView)
         startCamera()
+
     }
 
-    private fun sendJsEvent(eventName: String,payload:WritableMap) {
+    private fun sendJsEvent(eventName: String,payload: WritableArray) {
         val ctx = getReactContext(previewView)
         ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java).emit(eventName,payload)
     }
@@ -74,21 +77,25 @@ class CameraView(reactContext: ThemedReactContext, attrs: AttributeSet? = null) 
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun processImageProxy(imageProxy: ImageProxy) {
-        val payload = Arguments.createMap()
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
+            val payload = Arguments.createArray()
+
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
             val result = recognizer.process(image)
                 .addOnSuccessListener { visionText ->
                     for (block in visionText.textBlocks) {
+
                         val blockText = block.text
 //                        val blockCornerPoints = block.cornerPoints
                         val blockFrame = block.boundingBox
                         Log.d("TextRecognition", "Recognized text: $blockText , ${blockFrame.toString()} ")
-                        payload.putString("block",blockText)
+
+                        payload.pushString("{blockText:$blockText,blockFrame:${blockFrame.toString()}")
                     }
                     sendJsEvent("sendJsEvent",payload)
+
                 }.addOnCompleteListener {
                     imageProxy.close()
                 }

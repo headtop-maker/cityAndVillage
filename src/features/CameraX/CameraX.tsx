@@ -1,21 +1,29 @@
 import {
+  HostComponent,
   NativeEventEmitter,
   NativeModules,
+  ViewStyle,
   requireNativeComponent,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const CameraView = requireNativeComponent('CameraView');
+interface IHostComponent {
+  style: ViewStyle;
+}
+
+const CameraView: HostComponent<IHostComponent> =
+  requireNativeComponent('CameraView');
 
 const CameraX = () => {
   useEffect(() => {
     const eventEmitter = new NativeEventEmitter(NativeModules.CameraView);
     let eventListener = eventEmitter.addListener('sendJsEvent', event => {
-      console.log('sendJsEvent', JSON.stringify(event, null, 2));
+      if (Array.isArray(event) && event.length > 0) {
+        console.log('sendJsEvent', JSON.stringify(event, null, 2));
+      }
     });
 
-    // Removes the listener once unmounted
     return () => {
       eventListener.remove();
     };

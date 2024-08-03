@@ -16,13 +16,14 @@ const SendMessage = () => {
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
 
+  const {data} = useGetAdminsQuery();
+
   const userEmail = useAppSelector(selectCurrentUserEmail);
 
   const dispatch = useAppDispatch();
 
   const hideDialog = () => setVisible(false);
 
-  const {data} = useGetAdminsQuery();
   console.log('data', data);
   const handleChangeMessage = (text: string) => {
     setMessage(text);

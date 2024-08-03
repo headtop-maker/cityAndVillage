@@ -34,7 +34,6 @@ const MainStack = () => {
 
   const getToken = async () => {
     const token = await messaging().getToken();
-    console.log('tokenFB', token);
   };
 
   useLayoutEffect(() => {

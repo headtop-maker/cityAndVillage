@@ -6,12 +6,14 @@ import {IRouteParamList} from '../../../shared/Navigation/types';
 import SCREENS from '../../../shared/Navigation/screens';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {loginUsers} from '../model/models';
-import {Button, HelperText, TextInput} from 'react-native-paper';
+import {Button, Checkbox, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
 const SetLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [secure, setSecure] = useState(true);
+  const [checked, setChecked] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -58,10 +60,22 @@ const SetLogin = () => {
         value={password}
         onChangeText={setPassword}
         mode='outlined'
+        secureTextEntry={secure}
       />
       <HelperText type='error' visible={hasPasswordErrors()}>
         Длина пароля менее 8 символов
       </HelperText>
+      <View style={styles.hidePassword}>
+        <Text variant='bodyMedium'>Показать пароль</Text>
+        <Checkbox
+          status={checked ? 'checked' : 'unchecked'}
+          onPress={() => {
+            setSecure(!secure);
+            setChecked(!checked);
+          }}
+        />
+      </View>
+
       <Button
         mode='elevated'
         style={styles.createButton}
@@ -91,6 +105,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingTop: 10,
     paddingBottom: 10,
+  },
+  hidePassword: {
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
   },
   shadow: {
     shadowColor: '#000',

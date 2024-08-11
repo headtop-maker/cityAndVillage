@@ -1,59 +1,83 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {Button, Checkbox, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
 import {createUsers} from '../models/models';
 
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 
-// interface SetRegistrationProps {}
-
 const SetRegistration = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [secure, setSecure] = useState(true);
+  const [checked, setChecked] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const isLockSend = !!email && !!password && !!name;
+  const isLockSend =
+    !!email && !!password && !!name && password === repeatPassword;
   const handleClick = () => {
     dispatch(createUsers({name, email, password}));
   };
   return (
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.titleTextStyle} variant="titleLarge">
+      <Text style={styles.titleTextStyle} variant='titleLarge'>
         Регистрация
       </Text>
       <TextInput
         style={styles.input}
-        label="Имя и Фамилия"
+        label='Имя Фамилия Отчество'
         value={name}
         onChangeText={setName}
-        mode="outlined"
+        mode='outlined'
       />
       <TextInput
         style={styles.input}
-        label="Почта"
+        label='Почта'
         value={email}
         onChangeText={setEmail}
-        mode="outlined"
+        mode='outlined'
       />
       <TextInput
         style={styles.input}
-        label="Пароль"
+        label='Пароль'
         value={password}
         onChangeText={setPassword}
-        mode="outlined"
+        mode='outlined'
+        secureTextEntry={secure}
       />
-      <Button
-        mode="elevated"
-        style={styles.createButton}
-        disabled={!isLockSend}
-        onPress={handleClick}>
-        Зарегистрировать
-      </Button>
+      <TextInput
+        style={styles.input}
+        label='Повторить пароль'
+        value={repeatPassword}
+        onChangeText={setRepeatPassword}
+        mode='outlined'
+        secureTextEntry={secure}
+      />
+      <View>
+        <View style={styles.hidePassword}>
+          <Text variant='bodyMedium'>Показать пароль</Text>
+          <Checkbox
+            status={checked ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setSecure(!secure);
+              setChecked(!checked);
+            }}
+          />
+        </View>
+
+        <Button
+          mode='elevated'
+          style={styles.createButton}
+          disabled={!isLockSend}
+          onPress={handleClick}>
+          Зарегистрировать
+        </Button>
+      </View>
     </View>
   );
 };
@@ -98,5 +122,12 @@ const styles = StyleSheet.create({
   titleTextStyle: {
     alignSelf: 'center',
     color: '#21009e',
+  },
+  hidePassword: {
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
   },
 });

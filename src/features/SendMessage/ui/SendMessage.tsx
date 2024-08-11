@@ -8,6 +8,7 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {setImportantMessage} from '../../Users/model/models';
+import {useModal} from '../../Modal/ui/ModalProvider';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);
@@ -24,7 +25,6 @@ const SendMessage = () => {
 
   const hideDialog = () => setVisible(false);
 
-  console.log('data', data);
   const handleChangeMessage = (text: string) => {
     setMessage(text);
   };

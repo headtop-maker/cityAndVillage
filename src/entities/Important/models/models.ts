@@ -14,9 +14,14 @@ export const getImportant = createAsyncThunk(
         return rejectWithValue('Нет данных отправителя');
       }
       const response = await getCurrentImportant(limit, userEmail);
+      console.log('response', response);
+
+      if ('code' in response && response.code === 'ERR_NETWORK') {
+        return rejectWithValue('Ошибка получения данных');
+      }
+
       return response.data;
     } catch (err) {
-      console.log('err', err);
       return rejectWithValue(err);
     }
   },

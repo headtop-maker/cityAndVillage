@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import * as React from 'react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {IRouteParamList} from '../../../shared/Navigation/types';
 import SCREENS from '../../../shared/Navigation/screens';
@@ -40,31 +39,31 @@ const SetLogin = () => {
 
   return (
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.titleTextStyle} variant="titleLarge">
+      <Text style={styles.titleTextStyle} variant='titleLarge'>
         Авторизация
       </Text>
       <TextInput
         style={styles.input}
-        label="Почта"
+        label='Почта'
         value={email}
         onChangeText={setEmail}
-        mode="outlined"
+        mode='outlined'
       />
-      <HelperText type="error" visible={hasErrors()}>
+      <HelperText type='error' visible={hasErrors()}>
         Адрес электронной почты недействителен!
       </HelperText>
       <TextInput
         style={styles.input}
-        label="Пароль"
+        label='Пароль'
         value={password}
         onChangeText={setPassword}
-        mode="outlined"
+        mode='outlined'
       />
-      <HelperText type="error" visible={hasPasswordErrors()}>
+      <HelperText type='error' visible={hasPasswordErrors()}>
         Длина пароля менее 8 символов
       </HelperText>
       <Button
-        mode="elevated"
+        mode='elevated'
         style={styles.createButton}
         onPress={handleClick}
         disabled={!isLockSend}>
@@ -72,7 +71,7 @@ const SetLogin = () => {
       </Button>
 
       <Button
-        mode="text"
+        mode='text'
         onPress={handleRegisterNavigate}
         style={styles.createButton}>
         Регистрация

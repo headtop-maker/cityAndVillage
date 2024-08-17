@@ -24,9 +24,8 @@ interface TCurrent {
 
 const CurrentNews = () => {
   const [currentNews, setCurrentNews] = useState<TCurrent>();
-  const {childrenShakeElement, handleShake} = useAnimatedShake();
-  const {childrenShakeElement: secondChild, handleShake: secondHandleShake} =
-    useAnimatedShake();
+  const leftShake = useAnimatedShake();
+  const rightShake = useAnimatedShake();
 
   const currentNewsId = useAppSelector(selectCurrentNewsId);
   const news = useAppSelector(selectNews);
@@ -43,12 +42,12 @@ const CurrentNews = () => {
 
     if (type === 'Next') {
       const newIndexNews = news[indexNews - 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : handleShake();
+      !!newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
     }
 
     if (type === 'Prev') {
       const newIndexNews = news[indexNews + 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : secondHandleShake();
+      !!newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
     }
   };
 
@@ -69,7 +68,7 @@ const CurrentNews = () => {
           convertDate(new Date(currentNews?.createdAt))}
       </Text>
       <View style={styles.tools}>
-        {childrenShakeElement(
+        {leftShake.childrenShakeElement(
           <IconButton
             icon='arrow-left-bold-box-outline'
             selected
@@ -87,7 +86,7 @@ const CurrentNews = () => {
             iconStyle={styles.star}
           />
         </View>
-        {secondChild(
+        {rightShake.childrenShakeElement(
           <IconButton
             icon='arrow-right-bold-box-outline'
             selected

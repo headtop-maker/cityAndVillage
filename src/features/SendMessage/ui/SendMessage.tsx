@@ -8,7 +8,6 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {setImportantMessage} from '../../Users/model/models';
-import {useModal} from '../../Modal/ui/ModalProvider';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);

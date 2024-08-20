@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button, Checkbox, TextInput} from 'react-native-paper';
+import {Button, Checkbox, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
 import {createUsers} from '../models/models';
@@ -16,13 +16,33 @@ const SetRegistration = () => {
   const [secure, setSecure] = useState(true);
   const [checked, setChecked] = useState(false);
 
+  const fullNamePattern = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)$/;
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const dispatch = useAppDispatch();
 
-  const isLockSend =
-    !!email && !!password && !!name && password === repeatPassword;
   const handleClick = () => {
     dispatch(createUsers({name, email, password}));
   };
+
+  const hasNameErrors = () => {
+    return !fullNamePattern.test(name);
+  };
+
+  const hasEmailErrors = () => {
+    return !emailPattern.test(email);
+  };
+
+  const hasPassErrors = () => {
+    return password !== repeatPassword;
+  };
+
+  const isLockSend =
+    !hasNameErrors() &&
+    !hasEmailErrors() &&
+    !hasPassErrors() &&
+    password.length > 7;
+
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant='titleLarge'>
@@ -35,6 +55,12 @@ const SetRegistration = () => {
         onChangeText={setName}
         mode='outlined'
       />
+      {hasNameErrors() && name.length > 2 && (
+        <HelperText type='error' visible={hasNameErrors()}>
+          Проверьте правильность ввода
+        </HelperText>
+      )}
+
       <TextInput
         style={styles.input}
         label='Почта'
@@ -42,6 +68,11 @@ const SetRegistration = () => {
         onChangeText={setEmail}
         mode='outlined'
       />
+      {email.length > 2 && hasEmailErrors() && (
+        <HelperText type='error' visible={hasEmailErrors()}>
+          Проверьте правильность ввода почты
+        </HelperText>
+      )}
       <TextInput
         style={styles.input}
         label='Пароль'
@@ -58,6 +89,14 @@ const SetRegistration = () => {
         mode='outlined'
         secureTextEntry={secure}
       />
+      <HelperText type='info' visible={true}>
+        Длина пароля более 8 символов
+      </HelperText>
+      {hasPassErrors() && (
+        <HelperText type='error' visible={hasPassErrors()}>
+          Пароль не совпадает
+        </HelperText>
+      )}
       <View>
         <View style={styles.hidePassword}>
           <Text variant='bodyMedium'>Показать пароль</Text>

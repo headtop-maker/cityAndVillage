@@ -15,6 +15,8 @@ const SetLogin = () => {
   const [secure, setSecure] = useState(true);
   const [checked, setChecked] = useState(false);
 
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const dispatch = useAppDispatch();
 
   const navigation =
@@ -29,7 +31,7 @@ const SetLogin = () => {
   };
 
   const hasErrors = () => {
-    return !email.includes('@');
+    return !emailPattern.test(email) && email.length > 2;
   };
 
   const hasPasswordErrors = () => {
@@ -51,9 +53,12 @@ const SetLogin = () => {
         onChangeText={setEmail}
         mode='outlined'
       />
-      <HelperText type='error' visible={hasErrors()}>
-        Адрес электронной почты недействителен!
-      </HelperText>
+      {email.length > 2 && hasErrors() && (
+        <HelperText type='error' visible={hasErrors()}>
+          Адрес электронной почты недействителен!
+        </HelperText>
+      )}
+
       <TextInput
         style={styles.input}
         label='Пароль'
@@ -62,9 +67,12 @@ const SetLogin = () => {
         mode='outlined'
         secureTextEntry={secure}
       />
-      <HelperText type='error' visible={hasPasswordErrors()}>
-        Длина пароля менее 8 символов
-      </HelperText>
+      {password.length > 2 && hasPasswordErrors() && (
+        <HelperText type='error' visible={hasPasswordErrors()}>
+          Длина пароля менее 8 символов
+        </HelperText>
+      )}
+
       <View style={styles.hidePassword}>
         <Text variant='bodyMedium'>Показать пароль</Text>
         <Checkbox

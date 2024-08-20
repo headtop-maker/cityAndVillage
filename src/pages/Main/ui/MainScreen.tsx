@@ -14,6 +14,7 @@ import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/S
 import {TServiceItem} from '../../../shared/types';
 import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
+import FlightTicket from '../../../features/CustomRender/ui/FlightTicket';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');

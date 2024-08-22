@@ -45,6 +45,11 @@ const initialState: CounterState = {
   allUsers: undefined,
   currentNewsId: '',
   currentUser: undefined,
+  banner: {
+    icon: '',
+    text: '',
+    visible: false,
+  },
 };
 
 export const counterSlice = createSlice({
@@ -65,6 +70,9 @@ export const counterSlice = createSlice({
     },
     setErrorText: (state, action: PayloadAction<string>) => {
       state.actionState.modalText = action.payload;
+    },
+    setBanner: (state, action: PayloadAction<CounterState['banner']>) => {
+      state.banner = action.payload;
     },
   },
   extraReducers: builder => {
@@ -128,7 +136,7 @@ export const counterSlice = createSlice({
       })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
-        state.actionState.modalText = 'Ошибка получения данных';
+        state.actionState.modalText = 'Ошибка запроса';
         state.actionState.error = action.error.message;
       });
   },
@@ -140,6 +148,7 @@ export const {
   setCurrentNewsId,
   resetCurrentUser,
   setErrorText,
+  setBanner,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

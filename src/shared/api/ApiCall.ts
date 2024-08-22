@@ -13,7 +13,7 @@ type THeaders = Partial<{
 }>;
 
 type TRequestData<T> = {
-  timeout: number;
+  timeout?: number;
   method: Method;
   url: string;
   data?: T;

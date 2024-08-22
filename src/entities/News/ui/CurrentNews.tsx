@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
@@ -11,35 +11,69 @@ import {convertDate} from '../../../shared/lib/convertDate';
 import Rating from '../../../features/Rating/ui/Rating';
 import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
 import AnimatedNews from './AnimatedNews';
+import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
+
+interface TCurrent {
+  id: string;
+  createdAt: Date;
+  title: string;
+  description: string;
+  image: string;
+  author: string;
+}
 
 const CurrentNews = () => {
-  const {childrenShakeElement, handleShake} = useAnimatedShake();
-  const {childrenShakeElement: secondChild, handleShake: secondHandleShake} =
-    useAnimatedShake();
+  const [currentNews, setCurrentNews] = useState<TCurrent>();
+  const leftShake = useAnimatedShake();
+  const rightShake = useAnimatedShake();
 
   const currentNewsId = useAppSelector(selectCurrentNewsId);
   const news = useAppSelector(selectNews);
-  const current = news.find(item => item.id === currentNewsId);
+
+  useLayoutEffect(() => {
+    const current = news.find(item => item.id === currentNewsId);
+    if (current) {
+      setCurrentNews(current);
+    }
+  }, []);
+
+  const getNews = (type: 'Next' | 'Prev') => {
+    const indexNews = news.findIndex(item => item.id === currentNews?.id);
+
+    if (type === 'Next') {
+      const newIndexNews = news[indexNews - 1];
+      !!newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
+    }
+
+    if (type === 'Prev') {
+      const newIndexNews = news[indexNews + 1];
+      !!newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
+    }
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.iconContainer}
+        // @ts-ignore
         onPress={() => navigate(SCREENS.TabScreen, undefined)}>
-        <Icon source="chevron-left" color="#6e26f3" size={40} />
+        <Icon source='chevron-left' color='#6e26f3' size={40} />
       </TouchableOpacity>
-      <AnimatedNews uri={current?.image} current={current} />
+      {currentNews?.image && !!currentNews && (
+        <AnimatedNews uri={currentNews?.image} current={currentNews} />
+      )}
 
       <Text style={styles.newsCreateAt}>
-        {current?.createdAt && convertDate(new Date(current?.createdAt))}
+        {currentNews?.createdAt &&
+          convertDate(new Date(currentNews?.createdAt))}
       </Text>
       <View style={styles.tools}>
-        {childrenShakeElement(
+        {leftShake.childrenShakeElement(
           <IconButton
-            icon="arrow-left-bold-box-outline"
+            icon='arrow-left-bold-box-outline'
             selected
             size={50}
-            onPress={() => handleShake()}
+            onPress={() => getNews('Next')}
           />,
         )}
 
@@ -52,12 +86,12 @@ const CurrentNews = () => {
             iconStyle={styles.star}
           />
         </View>
-        {secondChild(
+        {rightShake.childrenShakeElement(
           <IconButton
-            icon="arrow-right-bold-box-outline"
+            icon='arrow-right-bold-box-outline'
             selected
             size={50}
-            onPress={() => secondHandleShake()}
+            onPress={() => getNews('Prev')}
           />,
         )}
       </View>

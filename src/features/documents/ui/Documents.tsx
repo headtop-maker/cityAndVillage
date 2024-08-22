@@ -5,6 +5,8 @@ import {TDocuments} from '../../../shared/models/types';
 import {Button, Icon, Text} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {nativeFn} from '../../../shared/lib/nativeFn';
+import {useAppDispatch} from '../../../shared/models/storeHooks';
+import {setBanner} from '../../../shared/models/counterSlice';
 
 const getMemeType = async (url: string) => {
   const reponse = await fetch(url, {
@@ -23,10 +25,22 @@ const getMemeType = async (url: string) => {
 
 const renderItem = ({item}: {item: TDocuments[0]}) => {
   const {documentTitle, createdAt, filePath} = item;
+  // const dispatch = useAppDispatch();
   return (
-    <TouchableOpacity style={styles.item} onPress={() => getMemeType(filePath)}>
-      <Text variant="bodyLarge">{documentTitle || ''}</Text>
-      <Text variant="bodySmall" style={{alignSelf: 'flex-end'}}>
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() => {
+        // dispatch(
+        //   setBanner({
+        //     icon: 'cloud-download-outline',
+        //     text: 'Идет загрузка файла проверьте панель уведомлений вашего устройства',
+        //     visible: true,
+        //   }),
+        // );
+        getMemeType(filePath);
+      }}>
+      <Text variant='bodyLarge'>{documentTitle || ''}</Text>
+      <Text variant='bodySmall' style={{alignSelf: 'flex-end'}}>
         {createdAt ? convertDate(new Date(createdAt)) : ''}
       </Text>
     </TouchableOpacity>
@@ -40,7 +54,7 @@ const Documents = () => {
       <TouchableOpacity
         onPress={() => refetch()}
         style={{alignSelf: 'flex-end'}}>
-        {!!data && <Icon source="refresh" color="#6e26f3" size={40} />}
+        {!!data && <Icon source='refresh' color='#6e26f3' size={40} />}
       </TouchableOpacity>
       <FlatList
         data={data}
@@ -50,7 +64,7 @@ const Documents = () => {
         onRefresh={() => refetch()}
         ListEmptyComponent={
           <Button
-            mode="text"
+            mode='text'
             onPress={() => {
               refetch();
             }}>

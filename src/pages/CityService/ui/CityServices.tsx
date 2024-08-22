@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {Linking, SafeAreaView, TouchableOpacity, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
 import {servicesSelectors} from '../../../shared/models/servicesSlice';
@@ -12,12 +12,38 @@ import {selectIsLoading} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {getServices} from '../../../entities/ProfessionalServices/serviceList/model/actions';
 import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardItem';
+import {Button, IconButton, Text, Tooltip} from 'react-native-paper';
+import {useModal} from '../../../features/Modal/ui/ModalProvider';
 
 const CityServices = () => {
   const [selected, setSelected] = useState('');
   const isLoading = useAppSelector(selectIsLoading);
   const lists = useAppSelector(servicesSelectors.selectAll);
+  // @ts-ignore
+  const {showModal} = useModal();
   const dispatch = useAppDispatch();
+
+  const handleShowModal = () => {
+    showModal(
+      <View style={{padding: 10}}>
+        <Text>Напишите нам. </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Tooltip title='Selected email'>
+            <IconButton
+              icon='email'
+              selected
+              size={20}
+              onPress={() => Linking.openURL(`mailto:cityandvillage@yandex.ru`)}
+            />
+          </Tooltip>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(`mailto:cityandvillage@yandex.ru`)}>
+            <Text variant='titleMedium'>{'cityandvillage@yandex.ru'}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>,
+    );
+  };
 
   const handleSelected = (data: string) => {
     if (selected === data) {
@@ -54,6 +80,9 @@ const CityServices = () => {
           keyExtractor={item => item.id + 'list'}
         />
       </SafeAreaView>
+      <Button mode='text' onPress={handleShowModal}>
+        {'Хотите разметить свое объявление?'}
+      </Button>
     </View>
   );
 };

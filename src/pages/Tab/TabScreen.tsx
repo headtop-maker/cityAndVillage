@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SCREENS from '../../shared/Navigation/screens';
 import NewsScreen from '../News/ui/NewsScreen';
@@ -15,6 +15,12 @@ import {
 import {userRole} from '../../shared/models/types';
 
 import ImportantBtn from '../../features/getNews/ui/ImportantBtn';
+import {Button} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {IRouteParamList} from '../../shared/Navigation/types';
+import IsConnect from '../../features/IsConnect/ui/IsConnect';
+import {StyleSheet, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,20 +28,37 @@ const TabScreen = () => {
   const role = useAppSelector(selectCurrentUserRole);
   const isAdmin = role === userRole.admin;
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRouteParamList>>();
+
   return (
     <Tab.Navigator
       screenOptions={{
-        headerRight: () => !!currentUserToken && <ImportantBtn />,
-        tabBarStyle: {
-          backgroundColor: '#f9f9f9',
-          height: 55,
-        },
+        headerRight: () => (
+          <View style={styles.headerRightContainer}>
+            <IsConnect />
+            {!!currentUserToken ? (
+              <ImportantBtn />
+            ) : (
+              <View>
+                <Button
+                  icon='login'
+                  mode='text'
+                  onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
+                  Войти
+                </Button>
+              </View>
+            )}
+          </View>
+        ),
+        tabBarStyle: styles.tabBarStyle,
       }}>
       <Tab.Screen
         options={{
           title: 'Главная',
           tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="house" />;
+            return <TabItem focused={focused} imgSrc='house' />;
           },
         }}
         name={SCREENS.MainScreen}
@@ -45,7 +68,7 @@ const TabScreen = () => {
         options={{
           title: 'Новости',
           tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="newspaper" />;
+            return <TabItem focused={focused} imgSrc='newspaper' />;
           },
         }}
         name={SCREENS.NewsScreen}
@@ -56,7 +79,7 @@ const TabScreen = () => {
           options={{
             title: 'Создать',
             tabBarIcon: ({focused}) => {
-              return <TabItem focused={focused} imgSrc="add" />;
+              return <TabItem focused={focused} imgSrc='add' />;
             },
           }}
           name={SCREENS.AddContentScreen}
@@ -67,7 +90,7 @@ const TabScreen = () => {
         options={{
           title: 'Сообщения',
           tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="alert" />;
+            return <TabItem focused={focused} imgSrc='alert' />;
           },
         }}
         name={SCREENS.ImportantScreen}
@@ -77,7 +100,7 @@ const TabScreen = () => {
         options={{
           title: 'Услуги',
           tabBarIcon: ({focused}) => {
-            return <TabItem focused={focused} imgSrc="service" />;
+            return <TabItem focused={focused} imgSrc='service' />;
           },
         }}
         name={SCREENS.ServiceScreen}
@@ -86,5 +109,17 @@ const TabScreen = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headerRightContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tabBarStyle: {
+    backgroundColor: '#f9f9f9',
+    height: 55,
+  },
+});
 
 export default TabScreen;

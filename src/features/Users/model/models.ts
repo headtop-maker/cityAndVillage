@@ -6,6 +6,7 @@ import {
   setImportantMessageApi,
 } from '../../../shared/api/axiosInstance';
 import {setImportantDataType} from '../types/types';
+import {callOtherFn} from '../../../shared/api/ApiCall';
 
 export const getAllUsers = createAsyncThunk(
   `${fetchApiDomain}/getUsers`,
@@ -25,7 +26,6 @@ export const setBannedUser = createAsyncThunk(
     const {id, banned} = data;
     try {
       const response = await setBannedUserApi(id, banned);
-      // dispatch(getAllUsers);
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -36,11 +36,11 @@ export const setBannedUser = createAsyncThunk(
 export const setImportantMessage = createAsyncThunk(
   `${fetchApiDomain}/setImportantMessage`,
   async (data: setImportantDataType, {rejectWithValue}) => {
-    try {
-      await setImportantMessageApi(data);
-      return 'success';
-    } catch (err) {
-      return rejectWithValue(err);
+    const response = await setImportantMessageApi(data);
+
+    if ('data' in response) {
+      return response.data;
     }
+    return rejectWithValue('Ошибка отправки сообщения');
   },
 );

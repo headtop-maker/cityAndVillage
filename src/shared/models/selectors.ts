@@ -22,3 +22,18 @@ export const selectIsLoading = createSelector(
   selectRootCounter,
   state => state.actionState.loadind,
 );
+
+export const selectBannerIcon = createSelector(
+  selectRootCounter,
+  state => state.banner.icon,
+);
+
+export const selectBannerText = createSelector(
+  selectRootCounter,
+  state => state.banner.text,
+);
+
+export const selectBannerVisible = createSelector(
+  selectRootCounter,
+  state => state.banner.visible,
+);

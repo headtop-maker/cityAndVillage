@@ -8,6 +8,7 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
+import {Button} from 'react-native-paper';
 
 const renderItem = ({item}: {item: CounterState['important'][0]}) => {
   return (
@@ -25,8 +26,12 @@ const Important = () => {
   const isLoading = useAppSelector(selectImportantLoading);
   const dispatch = useAppDispatch();
 
-  useLayoutEffect(() => {
+  const refetch = () => {
     dispatch(getImportant(10));
+  };
+
+  useLayoutEffect(() => {
+    refetch();
   }, [dispatch]);
 
   return (
@@ -37,7 +42,11 @@ const Important = () => {
         keyExtractor={(id, index) => id + 'important' + index}
         refreshing={isLoading}
         onRefresh={() => dispatch(getImportant(10))}
-        ListEmptyComponent={<Text>Список сообщений пуст</Text>}
+        ListEmptyComponent={
+          <Button mode='text' onPress={() => refetch()}>
+            Обновить список сообщений
+          </Button>
+        }
       />
     </View>
   );

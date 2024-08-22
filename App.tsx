@@ -4,6 +4,7 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import {PersistGate} from 'redux-persist/integration/react';
 import MainStack from './src/shared/Navigation/MainStack';
 import {persistor, store} from './src/app/store';
+import {ModalProvider} from './src/features/Modal/ui/ModalProvider';
 
 const theme = {
   ...DefaultTheme,
@@ -18,7 +19,9 @@ function App(): JSX.Element {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <PaperProvider theme={theme}>
-          <MainStack />
+          <ModalProvider>
+            <MainStack />
+          </ModalProvider>
         </PaperProvider>
       </PersistGate>
     </Provider>

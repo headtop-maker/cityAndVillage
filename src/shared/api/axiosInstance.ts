@@ -25,7 +25,7 @@ export const getCurrentImportant = (
   userEmail: string,
 ): Promise<AxiosResponse<CounterState['important'], unknown>> =>
   response.apiRequest({
-    timeout: 3000,
+    timeout: 1000,
     method: 'get',
     url: `${TEMP_API}important/${userEmail}`,
   });

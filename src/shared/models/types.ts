@@ -25,6 +25,12 @@ export interface CounterState {
     modalText: string;
     showIndicator: boolean;
   };
+  banner: {
+    text: string;
+    icon: string;
+    visible: boolean;
+  };
+
   allUsers:
     | {
         id: number;

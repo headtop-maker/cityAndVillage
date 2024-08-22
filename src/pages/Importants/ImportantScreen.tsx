@@ -21,26 +21,16 @@ const ImportantScreen = () => {
     <SafeAreaView style={styles.container}>
       {currentUserToken ? (
         <>
-          <TouchableOpacity style={styles.icon}>
-            <Avatar.Icon size={50} icon="pencil-plus-outline" color="#FFFFFF" />
-          </TouchableOpacity>
-
           <Important />
         </>
       ) : (
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <Text variant="titleLarge" style={{margin: 20}}>
+        <View style={styles.auth}>
+          <Text variant='titleLarge' style={{margin: 20}}>
             Пользователь не авторизован
           </Text>
           <Button
-            icon="login"
-            mode="outlined"
+            icon='login'
+            mode='outlined'
             onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
             Войти или зарегистрироваться
           </Button>
@@ -63,6 +53,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
   },
+  auth: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
 });
 
 export default withModal(ImportantScreen);
+
+{
+  /* <TouchableOpacity style={styles.icon}>
+<Avatar.Icon size={50} icon='pencil-plus-outline' color='#FFFFFF' />
+</TouchableOpacity> */
+}

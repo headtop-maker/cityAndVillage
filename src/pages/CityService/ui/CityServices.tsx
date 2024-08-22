@@ -33,16 +33,12 @@ const CityServices = () => {
               icon='email'
               selected
               size={20}
-              onPress={() =>
-                Linking.openURL(`mailto:adminCityAndVillage@yandex.ru`)
-              }
+              onPress={() => Linking.openURL(`mailto:cityandvillage@yandex.ru`)}
             />
           </Tooltip>
           <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(`mailto:adminCityAndVillage@yandex.ru`)
-            }>
-            <Text variant='titleMedium'>{'adminCityAndVillage@yandex.ru'}</Text>
+            onPress={() => Linking.openURL(`mailto:cityandvillage@yandex.ru`)}>
+            <Text variant='titleMedium'>{'cityandvillage@yandex.ru'}</Text>
           </TouchableOpacity>
         </View>
       </View>,

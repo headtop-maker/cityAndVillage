@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SCREENS from '../../shared/Navigation/screens';
 import NewsScreen from '../News/ui/NewsScreen';
@@ -19,6 +19,8 @@ import {Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {IRouteParamList} from '../../shared/Navigation/types';
+import IsConnect from '../../features/IsConnect/ui/IsConnect';
+import {StyleSheet, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,21 +35,24 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerRight: () =>
-          !!currentUserToken ? (
-            <ImportantBtn />
-          ) : (
-            <Button
-              icon='login'
-              mode='text'
-              onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
-              Войти
-            </Button>
-          ),
-        tabBarStyle: {
-          backgroundColor: '#f9f9f9',
-          height: 55,
-        },
+        headerRight: () => (
+          <View style={styles.headerRightContainer}>
+            <IsConnect />
+            {!!currentUserToken ? (
+              <ImportantBtn />
+            ) : (
+              <View>
+                <Button
+                  icon='login'
+                  mode='text'
+                  onPress={() => navigation.navigate(SCREENS.LoginScreen)}>
+                  Войти
+                </Button>
+              </View>
+            )}
+          </View>
+        ),
+        tabBarStyle: styles.tabBarStyle,
       }}>
       <Tab.Screen
         options={{
@@ -104,5 +109,17 @@ const TabScreen = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headerRightContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tabBarStyle: {
+    backgroundColor: '#f9f9f9',
+    height: 55,
+  },
+});
 
 export default TabScreen;

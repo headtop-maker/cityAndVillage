@@ -36,12 +36,11 @@ export const setBannedUser = createAsyncThunk(
 export const setImportantMessage = createAsyncThunk(
   `${fetchApiDomain}/setImportantMessage`,
   async (data: setImportantDataType, {rejectWithValue}) => {
-    try {
-      await setImportantMessageApi(data);
-      return 'success';
-    } catch (err) {
-      callOtherFn.getOtherFn('Ошибка отправки сообщения');
-      return rejectWithValue(err);
+    const response = await setImportantMessageApi(data);
+
+    if ('data' in response) {
+      return response.data;
     }
+    return rejectWithValue('Ошибка отправки сообщения');
   },
 );

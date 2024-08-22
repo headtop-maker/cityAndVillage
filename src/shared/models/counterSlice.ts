@@ -136,7 +136,7 @@ export const counterSlice = createSlice({
       })
       .addMatcher(isRejectedAction, (state, action) => {
         state.actionState.loadind = false;
-        state.actionState.modalText = 'Ошибка получения данных';
+        state.actionState.modalText = 'Ошибка запроса';
         state.actionState.error = action.error.message;
       });
   },

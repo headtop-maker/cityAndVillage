@@ -15,6 +15,7 @@ import {
   selectCurrentUserName,
   selectCurrentUserRole,
 } from '../../../entities/News/models/selectors';
+import {dp} from '../../../shared/lib/getDP';
 
 // interface UsersProps {}
 
@@ -139,12 +140,12 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    padding: dp(20),
+    marginVertical: dp(8),
+    marginHorizontal: dp(16),
   },
   title: {
-    fontSize: 32,
+    fontSize: dp(32),
   },
   shadow: {
     shadowColor: '#000',

@@ -4,9 +4,7 @@ import {StyleSheet, View, FlatList} from 'react-native';
 
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
-
 import {Text} from 'react-native-paper';
-import useDimensions from '../../../shared/HOC/useDimensions';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
 import Documents from '../../../features/documents/ui/Documents';
@@ -14,12 +12,11 @@ import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/S
 import {TServiceItem} from '../../../shared/types';
 import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
-import FlightTicket from '../../../features/CustomRender/ui/FlightTicket';
+
+import {dp} from '../../../shared/lib/getDP';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
-
-  const {rem} = useDimensions();
 
   useLayoutEffect(() => {
     if (!!section) {
@@ -33,7 +30,7 @@ const MainScreen = () => {
         data={[]}
         renderItem={null}
         ListFooterComponent={
-          <View style={[styles.wrapper, {padding: rem / 2}]}>
+          <View style={styles.wrapper}>
             <MyBanner />
             <UpdateApp />
 
@@ -91,11 +88,12 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     justifyContent: 'space-between',
+    padding: dp(13),
   },
   service: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    marginBottom: dp(15),
   },
 });
 

@@ -8,6 +8,7 @@ import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {loginUsers} from '../model/models';
 import {Button, Checkbox, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
+import {dp} from '../../../shared/lib/getDP';
 
 const SetLogin = () => {
   const [email, setEmail] = useState('');
@@ -108,18 +109,18 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 0.3,
     borderColor: '#7cacf8',
-    margin: 10,
+    margin: dp(10),
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderRadius: dp(10),
+    paddingTop: dp(10),
+    paddingBottom: dp(10),
   },
   hidePassword: {
     alignSelf: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 10,
+    padding: dp(10),
   },
   shadow: {
     shadowColor: '#000',
@@ -132,10 +133,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   input: {
-    margin: 12,
+    margin: dp(12),
   },
   createButton: {
-    margin: 12,
+    margin: dp(12),
   },
   titleTextStyle: {
     alignSelf: 'center',

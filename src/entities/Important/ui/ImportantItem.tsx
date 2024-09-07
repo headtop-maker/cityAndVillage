@@ -3,6 +3,7 @@ import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
+import {dp} from '../../../shared/lib/getDP';
 
 const ImportantItem: FC<CounterState['important'][0]> = ({
   title,
@@ -46,10 +47,10 @@ export default ImportantItem;
 
 const styles = StyleSheet.create({
   importantContainer: {
-    borderRadius: 10,
-    margin: 5,
+    borderRadius: dp(10),
+    margin: dp(5),
     backgroundColor: '#fafbff',
-    padding: 5,
+    padding: dp(5),
   },
   importantBox: {flexDirection: 'row', justifyContent: 'space-between'},
   importantImageBox: {
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   importantImage: {
-    width: 50,
-    height: 50,
+    width: dp(50),
+    height: dp(50),
   },
 });

@@ -6,6 +6,7 @@ import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
 import {Snackbar} from 'react-native-paper';
 import {callOtherFn} from '../../../shared/api/ApiCall';
+import {dp} from '../../../shared/lib/getDP';
 
 const ModalScreen = () => {
   const [otherText, setOtherText] = useState('');
@@ -25,7 +26,7 @@ const ModalScreen = () => {
   };
   return (
     <Modal
-      animationType="fade"
+      animationType='fade'
       transparent={true}
       visible={!!modalText || !!otherText}
       style={styles.modalOpacity}
@@ -62,8 +63,8 @@ const styles = StyleSheet.create({
   modalOpacity: {backgroundColor: 'rgba(0, 0, 0, 0.5)'},
   modalView: {
     backgroundColor: 'white',
-    borderRadius: 5,
-    padding: 35,
+    borderRadius: dp(5),
+    padding: dp(35),
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: dp(15),
     textAlign: 'center',
   },
 });

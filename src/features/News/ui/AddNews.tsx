@@ -24,6 +24,7 @@ import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 
 import {setFile} from '../models/models';
 import useDimensions from '../../../shared/HOC/useDimensions';
+import {dp} from '../../../shared/lib/getDP';
 
 // interface AddContentScreeProps {}
 
@@ -101,12 +102,12 @@ const AddNews = () => {
       <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
         <Text
           style={[styles.titleTextStyle, {marginTop: rem / 2.5}]}
-          variant="titleLarge">
+          variant='titleLarge'>
           Добавить новость
         </Text>
         <View style={styles.addFileContainer}>
           <Button
-            mode="outlined"
+            mode='outlined'
             style={{margin: rem / 3}}
             onPress={handleAddImage}>
             Загрузить
@@ -118,38 +119,38 @@ const AddNews = () => {
           </TouchableOpacity>
         </View>
         <Button
-          mode="contained"
+          mode='contained'
           style={{margin: rem / 3}}
           onPress={() => setVisible(true)}>
           Выбрать изображение
         </Button>
         <TextInput
           style={styles.input}
-          label="Заголовок"
+          label='Заголовок'
           value={title}
           onChangeText={setTitle}
-          mode="outlined"
+          mode='outlined'
         />
         <TextInput
           style={styles.input}
-          label="Описание новости"
+          label='Описание новости'
           value={description}
           onChangeText={setDescription}
-          mode="outlined"
+          mode='outlined'
           multiline={true}
         />
 
         <TextInput
           style={styles.input}
-          label="Ссылка на изображение"
+          label='Ссылка на изображение'
           value={imageSrc}
           onChangeText={setImageSrc}
-          mode="outlined"
+          mode='outlined'
           disabled={true}
         />
 
         <Button
-          mode="elevated"
+          mode='elevated'
           style={{margin: rem / 3}}
           disabled={!isLockSend}
           onPress={handleClick}>
@@ -172,10 +173,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   input: {
-    margin: 5,
+    margin: dp(5),
   },
   inputContainer: {
-    borderRadius: 10,
+    borderRadius: dp(10),
     backgroundColor: '#FFFFFF',
   },
   titleTextStyle: {
@@ -194,13 +195,13 @@ const styles = StyleSheet.create({
   textContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    padding: dp(10),
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: dp(17),
   },
-  imageRef: {width: 30, height: 30},
+  imageRef: {width: dp(30), height: dp(30)},
   addFileContainer: {
     flexDirection: 'row',
     alignItems: 'center',

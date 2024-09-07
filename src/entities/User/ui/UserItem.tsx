@@ -3,6 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {userRole} from '../../../shared/models/types';
 import {FC} from 'react';
+import {dp} from '../../../shared/lib/getDP';
 
 interface UserItemProps {
   item: {
@@ -33,10 +34,10 @@ const UserItem: FC<UserItemProps> = ({
           setSelectedId(item.id);
         }}>
         <View style={styles.userInfo}>
-          <Text variant="titleMedium">{item.name}</Text>
-          <Text variant="titleSmall">{item.email}</Text>
+          <Text variant='titleMedium'>{item.name}</Text>
+          <Text variant='titleSmall'>{item.email}</Text>
           <View style={styles.role}>
-            <Text variant="bodyLarge">Роль : {item.userRole}</Text>
+            <Text variant='bodyLarge'>Роль : {item.userRole}</Text>
           </View>
         </View>
 
@@ -54,7 +55,7 @@ const UserItem: FC<UserItemProps> = ({
       {item.id === selectedId && (
         <View style={styles.btnBlock}>
           <Button
-            mode="contained-tonal"
+            mode='contained-tonal'
             onPress={() => {
               showImportant();
               setSelectedId(item.id);
@@ -62,7 +63,7 @@ const UserItem: FC<UserItemProps> = ({
             Создать обращение
           </Button>
           <Button
-            mode="outlined"
+            mode='outlined'
             onPress={() => {
               setSelectedId(undefined);
             }}>
@@ -78,9 +79,9 @@ export default UserItem;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 5,
-    borderRadius: 5,
-    padding: 10,
+    margin: dp(5),
+    borderRadius: dp(5),
+    padding: dp(10),
     backgroundColor: '#FFFFFF',
     flex: 1,
   },

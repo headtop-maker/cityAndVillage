@@ -7,6 +7,7 @@ import {convertDate} from '../../../shared/lib/convertDate';
 import {nativeFn} from '../../../shared/lib/nativeFn';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setBanner} from '../../../shared/models/counterSlice';
+import {dp} from '../../../shared/lib/getDP';
 
 const getMemeType = async (url: string) => {
   const reponse = await fetch(url, {
@@ -83,9 +84,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15,
-    padding: 10,
-    borderRadius: 5,
+    marginTop: dp(15),
+    padding: dp(10),
+    borderRadius: dp(5),
   },
 });
 export default Documents;

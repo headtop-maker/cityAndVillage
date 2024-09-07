@@ -8,6 +8,7 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {setImportantMessage} from '../../Users/model/models';
+import {dp} from '../../../shared/lib/getDP';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);
@@ -108,14 +109,14 @@ const SendMessage = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: dp(10),
     borderWidth: 1,
   },
   textInput: {
     width: '100%',
     alignSelf: 'center',
-    margin: 10,
-    borderRadius: 5,
+    margin: dp(10),
+    borderRadius: dp(5),
     backgroundColor: '#ededed',
   },
 });

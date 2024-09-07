@@ -4,6 +4,7 @@ import {Button, Text} from 'react-native-paper';
 import {nativeFn} from '../../../shared/lib/nativeFn';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
+import {dp} from '../../../shared/lib/getDP';
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
@@ -46,7 +47,7 @@ const UpdateApp = () => {
 
 const styles = StyleSheet.create({
   modalTextContainer: {
-    padding: 10,
+    padding: dp(10),
   },
 });
 

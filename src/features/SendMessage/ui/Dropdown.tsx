@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Text} from 'react-native-paper';
+import {dp} from '../../../shared/lib/getDP';
 
 type TDropdown = {
   options: string[];
@@ -51,9 +52,9 @@ const Dropdown: FC<TDropdown> = ({options, selectedOption, onSelect}) => {
               backgroundColor: '#FFFFFF',
               zIndex: 3,
               borderWidth: 0.5,
-              top: 30,
-              maxWidth: 200,
-              maxHeight: 170,
+              top: dp(30),
+              maxWidth: dp(200),
+              maxHeight: dp(170),
             }}>
             <FlatList
               data={options}

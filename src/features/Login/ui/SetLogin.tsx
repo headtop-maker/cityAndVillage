@@ -15,6 +15,7 @@ const SetLogin = () => {
   const [password, setPassword] = useState('');
   const [secure, setSecure] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [blockBtn, setBlockBtn] = useState(false);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -23,8 +24,14 @@ const SetLogin = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
 
-  const handleClick = () => {
-    dispatch(loginUsers({password, email}));
+  const handleClick = async () => {
+    try {
+      setBlockBtn(true);
+      await dispatch(loginUsers({password, email}));
+    } catch (e) {
+    } finally {
+      setBlockBtn(false);
+    }
   };
 
   const handleRegisterNavigate = () => {
@@ -89,7 +96,7 @@ const SetLogin = () => {
         mode='elevated'
         style={styles.createButton}
         onPress={handleClick}
-        disabled={!isLockSend}>
+        disabled={!isLockSend || blockBtn}>
         ВОЙТИ
       </Button>
 

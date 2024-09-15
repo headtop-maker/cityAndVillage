@@ -16,14 +16,21 @@ const SetRegistration = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [secure, setSecure] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [blockBtn, setBlockBtn] = useState(false);
 
   const fullNamePattern = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)$/;
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const dispatch = useAppDispatch();
 
-  const handleClick = () => {
-    dispatch(createUsers({name, email, password}));
+  const handleClick = async () => {
+    try {
+      setBlockBtn(true);
+      dispatch(createUsers({name, email, password}));
+    } catch (e) {
+    } finally {
+      setBlockBtn(false);
+    }
   };
 
   const hasNameErrors = () => {
@@ -113,7 +120,7 @@ const SetRegistration = () => {
         <Button
           mode='elevated'
           style={styles.createButton}
-          disabled={!isLockSend}
+          disabled={!isLockSend || blockBtn}
           onPress={handleClick}>
           Зарегистрировать
         </Button>

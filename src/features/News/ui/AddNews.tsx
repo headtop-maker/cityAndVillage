@@ -69,6 +69,11 @@ const AddNews = () => {
     dispatch(setFile());
   };
 
+  const handleShowImage = async () => {
+    await dispatch(getImageForNews());
+    await setVisible(true);
+  };
+
   const imageItems = ({
     item,
   }: {
@@ -121,7 +126,7 @@ const AddNews = () => {
         <Button
           mode='contained'
           style={{margin: rem / 3}}
-          onPress={() => setVisible(true)}>
+          onPress={handleShowImage}>
           Выбрать изображение
         </Button>
         <TextInput

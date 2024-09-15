@@ -33,7 +33,7 @@ export const store = configureStore({
     }).concat(serviceApi.middleware),
 });
 
-export let persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof reducers>;
 

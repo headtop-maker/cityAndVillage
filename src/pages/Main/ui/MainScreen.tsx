@@ -19,7 +19,7 @@ const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
 
   useLayoutEffect(() => {
-    if (!!section) {
+    if (section) {
       setSection('government');
     }
   }, []);

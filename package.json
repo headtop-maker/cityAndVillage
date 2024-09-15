@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "release": "npx react-native run-android --mode release"
+    "release": "npx react-native run-android --mode release",
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",

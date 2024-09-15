@@ -21,8 +21,8 @@ const ModalScreen = () => {
   };
 
   const getText = () => {
-    if (!!modalText) return modalText;
-    if (!!otherText) return otherText;
+    if (modalText) return modalText;
+    if (otherText) return otherText;
   };
   return (
     <Modal
@@ -43,7 +43,7 @@ const ModalScreen = () => {
               handleCloseModal();
             },
           }}>
-          {!!getText() ? getText() : ''}
+          {getText() ? getText() : ''}
         </Snackbar>
       </View>
     </Modal>

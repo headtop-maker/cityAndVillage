@@ -43,12 +43,12 @@ const CurrentNews = () => {
 
     if (type === 'Next') {
       const newIndexNews = news[indexNews - 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
+      newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
     }
 
     if (type === 'Prev') {
       const newIndexNews = news[indexNews + 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
+      newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
     }
   };
 

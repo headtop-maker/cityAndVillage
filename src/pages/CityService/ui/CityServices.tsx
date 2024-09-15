@@ -56,7 +56,7 @@ const CityServices = () => {
 
   const handleOnRefrash = () => {
     const param = callOtherFn.getRequestParams();
-    if (!!param) {
+    if (param) {
       dispatch(getServices(param));
     }
   };

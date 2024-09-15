@@ -38,7 +38,7 @@ const TabScreen = () => {
         headerRight: () => (
           <View style={styles.headerRightContainer}>
             <IsConnect />
-            {!!currentUserToken ? (
+            {currentUserToken ? (
               <ImportantBtn />
             ) : (
               <View>

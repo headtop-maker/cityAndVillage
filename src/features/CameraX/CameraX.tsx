@@ -18,7 +18,7 @@ const CameraView: HostComponent<IHostComponent> =
 const CameraX = () => {
   useEffect(() => {
     const eventEmitter = new NativeEventEmitter(NativeModules.CameraView);
-    let eventListener = eventEmitter.addListener('sendJsEvent', event => {
+    const eventListener = eventEmitter.addListener('sendJsEvent', event => {
       if (Array.isArray(event) && event.length > 0) {
         console.log('sendJsEvent', JSON.stringify(event, null, 2));
       }

@@ -116,7 +116,7 @@ export const setBannedUserApi = (
 
 export const setFileApi = (
   formData: FormData,
-): Promise<AxiosResponse<{}, unknown>> =>
+): Promise<AxiosResponse<Record<string, unknown>, unknown>> =>
   response.apiRequest({
     timeout: 3000,
     data: formData,

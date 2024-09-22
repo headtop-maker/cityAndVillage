@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {TouchableOpacity, Animated, StyleProp, ViewStyle} from 'react-native';
 import StarSVG from '../../../shared/assets/SvgComponents/StarSVG';
 

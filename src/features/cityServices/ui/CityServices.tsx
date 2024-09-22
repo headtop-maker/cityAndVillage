@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {FlatList, Linking, NativeModules, ScrollView} from 'react-native';
+import {FlatList, Linking} from 'react-native';
 
 import {Button, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';

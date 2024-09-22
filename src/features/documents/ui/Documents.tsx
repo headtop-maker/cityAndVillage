@@ -5,8 +5,6 @@ import {TDocuments} from '../../../shared/models/types';
 import {Button, Icon, Text} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {nativeFn} from '../../../shared/lib/nativeFn';
-import {useAppDispatch} from '../../../shared/models/storeHooks';
-import {setBanner} from '../../../shared/models/counterSlice';
 import {dp} from '../../../shared/lib/getDP';
 
 const getMemeType = async (url: string) => {

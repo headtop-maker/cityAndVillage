@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Important from '../../features/Important/ui/Important';
 import withModal from '../../shared/HOC/withModal';
 import {Button, Text} from 'react-native-paper';
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   icon: {position: 'absolute', right: dp(20), bottom: dp(50), zIndex: 10},
 
-  sectionTitle:{
+  sectionTitle: {
     fontSize: dp(18),
     fontWeight: '500',
   },

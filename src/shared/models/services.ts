@@ -6,7 +6,7 @@ export const serviceApi = createApi({
   reducerPath: 'serviceApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://192.168.1.101:3000/',
-    prepareHeaders: (headers, {getState}) => {
+    prepareHeaders: headers => {
       const token = (state: RootState) => state.counter.currentUser?.userToken;
 
       if (token) {

@@ -6,7 +6,6 @@ import {
   setImportantMessageApi,
 } from '../../../shared/api/axiosInstance';
 import {setImportantDataType} from '../types/types';
-import {callOtherFn} from '../../../shared/api/ApiCall';
 
 export const getAllUsers = createAsyncThunk(
   `${fetchApiDomain}/getUsers`,

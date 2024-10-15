@@ -67,7 +67,6 @@ const CityServices = () => {
         flex: 1,
         backgroundColor: '#FFFFFF',
         flexDirection: 'column',
-        marginTop: dp(10),
       }}>
       <SafeAreaView style={{flex: 1}}>
         <Animated.FlatList

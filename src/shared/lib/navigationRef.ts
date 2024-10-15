@@ -3,11 +3,12 @@ import {
   createNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {KeyScreen} from '../Navigation/types';
 
 export const navigationRef = createNavigationContainerRef();
 export const Stack = createNativeStackNavigator();
 
-export const navigate: typeof navigationRef.navigate = (name, params?) => {
+export const navigate = (name: KeyScreen, params?) => {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);
   }

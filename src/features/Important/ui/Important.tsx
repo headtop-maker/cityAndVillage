@@ -9,6 +9,7 @@ import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
 import {Button, Icon} from 'react-native-paper';
+import withModal from '../../../shared/HOC/withModal';
 
 const renderItem = ({item}: {item: CounterState['important'][0]}) => {
   return (
@@ -57,4 +58,4 @@ const Important = () => {
   );
 };
 
-export default Important;
+export default withModal(Important);

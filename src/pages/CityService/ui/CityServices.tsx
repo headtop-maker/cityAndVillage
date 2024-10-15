@@ -63,7 +63,12 @@ const CityServices = () => {
 
   return (
     <View
-      style={{flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column'}}>
+      style={{
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'column',
+        marginTop: dp(10),
+      }}>
       <SafeAreaView style={{flex: 1}}>
         <Animated.FlatList
           stickyHeaderIndices={[0]}

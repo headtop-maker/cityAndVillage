@@ -1,11 +1,12 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {ServiceTitle, ImportantContact, userRole, TDocuments} from './types';
 import {RootState} from '../../app/store';
+import {TEMP_API} from '../api/axiosInstance';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.1.101:3000/',
+    baseUrl: TEMP_API,
     prepareHeaders: headers => {
       const token = (state: RootState) => state.counter.currentUser?.userToken;
 

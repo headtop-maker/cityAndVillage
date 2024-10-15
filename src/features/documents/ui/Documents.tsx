@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {useGetDocumentsQuery} from '../../../shared/models/services';
 import {TDocuments} from '../../../shared/models/types';
@@ -48,12 +48,16 @@ const renderItem = ({item}: {item: TDocuments[0]}) => {
 
 const Documents = () => {
   const {data, refetch, isLoading} = useGetDocumentsQuery();
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <View>
       <TouchableOpacity
         onPress={() => refetch()}
         style={{alignSelf: 'flex-end'}}>
-        {!!data && <Icon source='refresh' color='#6e26f3' size={40} />}
+        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
       </TouchableOpacity>
       <FlatList
         data={data}

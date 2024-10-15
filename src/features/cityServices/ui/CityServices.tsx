@@ -1,7 +1,7 @@
-import React, {FC, useState} from 'react';
-import {FlatList, Linking} from 'react-native';
+import React, {FC, useEffect, useState} from 'react';
+import {FlatList, Linking, TouchableOpacity} from 'react-native';
 
-import {Button, List} from 'react-native-paper';
+import {Button, Icon, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
 import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 
@@ -17,8 +17,12 @@ const CityServices: FC = () => {
   };
 
   const getExpanded = (id: string) => {
-    return id === expanded ? true : false;
+    return id === expanded;
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const ContactItem = ({item}: {item: ImportantContact}) => (
     <List.Accordion
@@ -42,6 +46,11 @@ const CityServices: FC = () => {
 
   return (
     <>
+      <TouchableOpacity
+        onPress={() => refetch()}
+        style={{alignSelf: 'flex-end'}}>
+        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
+      </TouchableOpacity>
       <List.Section>
         <FlatList
           data={data}

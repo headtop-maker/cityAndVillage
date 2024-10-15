@@ -5,6 +5,7 @@ import {nativeFn} from '../../../shared/lib/nativeFn';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
+import {TEMP_API} from '../../../shared/api/axiosInstance';
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
@@ -26,7 +27,7 @@ const UpdateApp = () => {
   const handleUpdate = () => {
     handleShowModal();
     nativeFn.getFile({
-      url: 'http://192.168.1.101:3000/upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
+      url: TEMP_API + 'upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
       mimeType: 'image/jpeg',
       title: 'images.jpg',
     });

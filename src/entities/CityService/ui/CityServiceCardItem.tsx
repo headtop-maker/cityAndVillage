@@ -9,6 +9,7 @@ import {
 import {IServices} from '../../../shared/models/types';
 import {Card, Text, Button, IconButton, Tooltip} from 'react-native-paper';
 import {dp} from '../../../shared/lib/getDP';
+import {TEMP_API} from '../../../shared/api/axiosInstance';
 
 const {width} = Dimensions.get('screen');
 const itemWidth = width / 1.3;
@@ -36,7 +37,9 @@ const CityServiceCardItem = ({
         <>
           <Card.Cover
             source={{
-              uri: 'https://api.slingacademy.com/public/sample-photos/5.jpeg',
+              uri:
+                TEMP_API + 'upload/' + item.image ||
+                'https://api.slingacademy.com/public/sample-photos/5.jpeg',
             }}
           />
           <Card.Content style={{marginTop: 15}}>

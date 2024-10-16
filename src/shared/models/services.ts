@@ -47,7 +47,6 @@ export const serviceApi = createApi({
 
 export const {
   useGetAllServiceCategoryQuery,
-  useGetServiceByNameQuery,
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,
   useGetDocumentsQuery,

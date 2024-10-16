@@ -26,7 +26,7 @@ const ServiceList = () => {
       dispatch(getServices(data[0].categoryName));
       callOtherFn.setRequestParams(data[0].categoryName);
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   const renderItem = ({item}: {item: ServiceTitleItem}) => {
     return (
@@ -57,7 +57,7 @@ const ServiceList = () => {
         decelerationRate={'fast'}
         showsHorizontalScrollIndicator={false}
         ListEmptyComponent={
-          <Button mode="text" onPress={() => refetch()}>
+          <Button mode='text' onPress={() => refetch()}>
             Обновить список категорий
           </Button>
         }

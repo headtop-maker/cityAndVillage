@@ -25,7 +25,7 @@ const MainStack = () => {
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
-    !check && requestStoragePermission();
+    !check && (await requestStoragePermission());
   };
 
   const firebasePermissions = async () => {
@@ -34,7 +34,7 @@ const MainStack = () => {
 
   const getToken = async () => {
     const token = await messaging().getToken();
-    console.log(token);
+    console.log('token', token);
   };
 
   useLayoutEffect(() => {
@@ -42,9 +42,11 @@ const MainStack = () => {
   }, [currentUserToken]);
 
   useLayoutEffect(() => {
-    isPermissions();
-    firebasePermissions();
-    getToken();
+    (async function () {
+      await isPermissions();
+      await firebasePermissions();
+      await getToken();
+    })();
   }, []);
 
   return (

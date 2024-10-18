@@ -6,9 +6,7 @@ import {loginUserData} from '../../features/Login/model/types';
 import {setImportantDataType} from '../../features/Users/types/types';
 import ApiCall from './ApiCall';
 
-export const TEMP_API = 'http://192.168.1.101:3000/';
-
-export const IMAGE_URL = 'https://api.slingacademy.com/v1/';
+export const TEMP_API = 'http://193.32.188.98:3000/';
 
 export const response = new ApiCall();
 
@@ -116,7 +114,7 @@ export const setBannedUserApi = (
 
 export const setFileApi = (
   formData: FormData,
-): Promise<AxiosResponse<{}, unknown>> =>
+): Promise<AxiosResponse<Record<string, unknown>, unknown>> =>
   response.apiRequest({
     timeout: 3000,
     data: formData,

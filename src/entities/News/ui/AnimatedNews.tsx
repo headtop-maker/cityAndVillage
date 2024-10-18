@@ -12,6 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {dp} from '../../../shared/lib/getDP';
 
 type TNewsAnimatedImage = {
   uri: string | undefined;
@@ -96,35 +97,35 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
 
 const styles = StyleSheet.create({
   newsImage: {
-    margin: 10,
-    borderRadius: 5,
+    margin: dp(10),
+    borderRadius: dp(5),
   },
   newsDescription: {
-    margin: 10,
+    margin: dp(10),
   },
   newsContainer: {
     backgroundColor: '#FFFFFF',
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: dp(10),
+    paddingRight: dp(10),
   },
   resize: {
-    height: 5,
-    width: 70,
+    height: dp(5),
+    width: dp(70),
     alignSelf: 'center',
-    borderRadius: 10,
+    borderRadius: dp(10),
     backgroundColor: '#969696',
   },
   newsText: {
     alignSelf: 'flex-start',
   },
   newsItem: {
-    margin: 15,
+    margin: dp(15),
     borderColor: '#5e0788',
-    borderBottomLeftRadius: 10,
+    borderBottomLeftRadius: dp(10),
   },
   circle: {
-    height: 120,
-    width: 120,
+    height: dp(120),
+    width: dp(120),
     borderRadius: 500,
     borderWidth: 1,
   },

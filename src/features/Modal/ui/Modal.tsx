@@ -1,40 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Modal, StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Modal, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
 import {resetModalText} from '../../../shared/models/counterSlice';
 import {Snackbar} from 'react-native-paper';
-import {callOtherFn} from '../../../shared/api/ApiCall';
+import {dp} from '../../../shared/lib/getDP';
 
 const ModalScreen = () => {
-  const [otherText, setOtherText] = useState('');
   const modalText = useAppSelector(selectModalText);
   const dispatch = useDispatch();
 
-  callOtherFn.setOtherFn(setOtherText);
-
   const handleCloseModal = () => {
     dispatch(resetModalText());
-    callOtherFn.getOtherFn('');
   };
 
   const getText = () => {
-    if (!!modalText) return modalText;
-    if (!!otherText) return otherText;
+    if (modalText) return modalText;
   };
   return (
     <Modal
-      animationType="fade"
+      animationType='fade'
       transparent={true}
-      visible={!!modalText || !!otherText}
+      visible={!!modalText}
       style={styles.modalOpacity}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}>
+      onRequestClose={handleCloseModal}>
       <View style={styles.centeredView}>
         <Snackbar
-          visible={!!modalText || !!otherText}
+          visible={!!modalText}
           onDismiss={handleCloseModal}
           action={{
             label: 'Закрыть',
@@ -42,7 +35,7 @@ const ModalScreen = () => {
               handleCloseModal();
             },
           }}>
-          {!!getText() ? getText() : ''}
+          {getText() ? getText() : ''}
         </Snackbar>
       </View>
     </Modal>
@@ -62,8 +55,8 @@ const styles = StyleSheet.create({
   modalOpacity: {backgroundColor: 'rgba(0, 0, 0, 0.5)'},
   modalView: {
     backgroundColor: 'white',
-    borderRadius: 5,
-    padding: 35,
+    borderRadius: dp(5),
+    padding: dp(35),
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -81,7 +74,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: dp(15),
     textAlign: 'center',
   },
 });

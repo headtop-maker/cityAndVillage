@@ -14,6 +14,7 @@ import {getServices} from '../../../entities/ProfessionalServices/serviceList/mo
 import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardItem';
 import {Button, IconButton, Text, Tooltip} from 'react-native-paper';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {dp} from '../../../shared/lib/getDP';
 
 const CityServices = () => {
   const [selected, setSelected] = useState('');
@@ -25,7 +26,7 @@ const CityServices = () => {
 
   const handleShowModal = () => {
     showModal(
-      <View style={{padding: 10}}>
+      <View style={{padding: dp(10)}}>
         <Text>Напишите нам. </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Tooltip title='Selected email'>
@@ -55,14 +56,18 @@ const CityServices = () => {
 
   const handleOnRefrash = () => {
     const param = callOtherFn.getRequestParams();
-    if (!!param) {
+    if (param) {
       dispatch(getServices(param));
     }
   };
 
   return (
     <View
-      style={{flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column'}}>
+      style={{
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'column',
+      }}>
       <SafeAreaView style={{flex: 1}}>
         <Animated.FlatList
           stickyHeaderIndices={[0]}

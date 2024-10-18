@@ -26,7 +26,7 @@ export class AsyncFnCalls {
   async run() {
     this.status = 'lock';
 
-    for await (let item of this.allFn) {
+    for await (const item of this.allFn) {
       try {
         await item();
       } catch (e) {

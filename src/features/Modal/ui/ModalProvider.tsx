@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {Modal, View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
+import {dp} from '../../../shared/lib/getDP';
 
 type TModalContextType = {
   showModal: (content: ReactElement) => void;
@@ -61,9 +62,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
-    padding: 20,
+    padding: dp(20),
     backgroundColor: 'white',
-    borderRadius: 5,
+    borderRadius: dp(5),
     alignItems: 'center',
   },
 });

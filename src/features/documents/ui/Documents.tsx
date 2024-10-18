@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {useGetDocumentsQuery} from '../../../shared/models/services';
 import {TDocuments} from '../../../shared/models/types';
 import {Button, Icon, Text} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {nativeFn} from '../../../shared/lib/nativeFn';
-import {useAppDispatch} from '../../../shared/models/storeHooks';
-import {setBanner} from '../../../shared/models/counterSlice';
+import {dp} from '../../../shared/lib/getDP';
 
 const getMemeType = async (url: string) => {
   const reponse = await fetch(url, {
@@ -49,12 +48,16 @@ const renderItem = ({item}: {item: TDocuments[0]}) => {
 
 const Documents = () => {
   const {data, refetch, isLoading} = useGetDocumentsQuery();
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <View>
       <TouchableOpacity
         onPress={() => refetch()}
         style={{alignSelf: 'flex-end'}}>
-        {!!data && <Icon source='refresh' color='#6e26f3' size={40} />}
+        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
       </TouchableOpacity>
       <FlatList
         data={data}
@@ -83,9 +86,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15,
-    padding: 10,
-    borderRadius: 5,
+    marginTop: dp(15),
+    padding: dp(10),
+    borderRadius: dp(5),
   },
 });
 export default Documents;

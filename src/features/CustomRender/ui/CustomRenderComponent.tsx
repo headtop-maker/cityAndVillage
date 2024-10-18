@@ -1,4 +1,5 @@
-import {Button, Text, TextStyle, View} from 'react-native';
+import React from 'react';
+import {Button, Text, View} from 'react-native';
 import {layoutConfig} from './layoutConfig';
 import JsonText from './JsonText';
 

@@ -8,12 +8,14 @@ import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {loginUsers} from '../model/models';
 import {Button, Checkbox, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
+import {dp} from '../../../shared/lib/getDP';
 
 const SetLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secure, setSecure] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [blockBtn, setBlockBtn] = useState(false);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -22,8 +24,14 @@ const SetLogin = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
 
-  const handleClick = () => {
-    dispatch(loginUsers({password, email}));
+  const handleClick = async () => {
+    try {
+      setBlockBtn(true);
+      await dispatch(loginUsers({password, email}));
+    } catch (e) {
+    } finally {
+      setBlockBtn(false);
+    }
   };
 
   const handleRegisterNavigate = () => {
@@ -88,7 +96,7 @@ const SetLogin = () => {
         mode='elevated'
         style={styles.createButton}
         onPress={handleClick}
-        disabled={!isLockSend}>
+        disabled={!isLockSend || blockBtn}>
         ВОЙТИ
       </Button>
 
@@ -108,18 +116,18 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 0.3,
     borderColor: '#7cacf8',
-    margin: 10,
+    margin: dp(10),
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderRadius: dp(10),
+    paddingTop: dp(10),
+    paddingBottom: dp(10),
   },
   hidePassword: {
     alignSelf: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 10,
+    padding: dp(10),
   },
   shadow: {
     shadowColor: '#000',
@@ -132,10 +140,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   input: {
-    margin: 12,
+    margin: dp(12),
   },
   createButton: {
-    margin: 12,
+    margin: dp(12),
   },
   titleTextStyle: {
     alignSelf: 'center',

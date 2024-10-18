@@ -52,13 +52,13 @@ class OtherCall {
   }
 
   setRequestParams(data: string) {
-    if (!!data) {
+    if (data) {
       this.requestParams = data;
     }
   }
 
   getRequestParams() {
-    if (!!this.requestParams) {
+    if (this.requestParams) {
       return this.requestParams;
     }
   }

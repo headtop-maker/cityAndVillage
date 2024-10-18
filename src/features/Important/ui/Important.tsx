@@ -1,5 +1,5 @@
-import React, {useLayoutEffect} from 'react';
-import {View, FlatList, Text} from 'react-native';
+import React, {useCallback, useLayoutEffect} from 'react';
+import {View, FlatList, TouchableOpacity} from 'react-native';
 import ImportantItem from '../../../entities/Important/ui/ImportantItem';
 import {
   useAppDispatch,
@@ -8,7 +8,8 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
-import {Button} from 'react-native-paper';
+import {Button, Icon} from 'react-native-paper';
+import withModal from '../../../shared/HOC/withModal';
 
 const renderItem = ({item}: {item: CounterState['important'][0]}) => {
   return (
@@ -26,16 +27,21 @@ const Important = () => {
   const isLoading = useAppSelector(selectImportantLoading);
   const dispatch = useAppDispatch();
 
-  const refetch = () => {
+  const prefetch = useCallback(() => {
     dispatch(getImportant(10));
-  };
+  }, [dispatch]);
 
   useLayoutEffect(() => {
-    refetch();
-  }, [dispatch]);
+    prefetch();
+  }, [dispatch, prefetch]);
 
   return (
     <View>
+      <TouchableOpacity
+        onPress={() => prefetch()}
+        style={{alignSelf: 'flex-end'}}>
+        {!!important && <Icon source='refresh' color='#6e26f3' size={25} />}
+      </TouchableOpacity>
       <FlatList
         data={important}
         renderItem={renderItem}
@@ -43,7 +49,7 @@ const Important = () => {
         refreshing={isLoading}
         onRefresh={() => dispatch(getImportant(10))}
         ListEmptyComponent={
-          <Button mode='text' onPress={() => refetch()}>
+          <Button mode='text' onPress={() => prefetch()}>
             Обновить список сообщений
           </Button>
         }
@@ -52,4 +58,4 @@ const Important = () => {
   );
 };
 
-export default Important;
+export default withModal(Important);

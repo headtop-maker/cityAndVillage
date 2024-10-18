@@ -1,3 +1,5 @@
+import {dp} from '../../../shared/lib/getDP';
+
 type JSONComponent = {
   type: string;
   props?: any;
@@ -32,7 +34,7 @@ export const layoutConfig: JSONComponent = {
     {
       type: 'View',
       props: {
-        style: {width: 50, height: 50, borderWidth: 1},
+        style: {width: dp(50), height: dp(50), borderWidth: 1},
       },
     },
     {

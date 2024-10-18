@@ -11,6 +11,7 @@ import {setCurrentNewsId} from '../../../shared/models/counterSlice';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {Button, Icon} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
+import {dp} from '../../../shared/lib/getDP';
 
 const NewsItem: FC<CounterState['news'][0]> = ({
   id,
@@ -68,38 +69,38 @@ const styles = StyleSheet.create({
   },
 
   newsImage: {
-    height: 190,
-    borderRadius: 10,
+    height: dp(190),
+    borderRadius: dp(10),
   },
   defaultImage: {
-    height: 190,
-    width: 225,
-    borderRadius: 10,
+    height: dp(190),
+    width: dp(225),
+    borderRadius: dp(10),
     alignSelf: 'center',
   },
   newsContainer: {
-    borderRadius: 10,
-    marginTop: 10,
-    marginLeft: 5,
-    marginBottom: 3,
-    marginRight: 5,
+    borderRadius: dp(10),
+    marginTop: dp(10),
+    marginLeft: dp(5),
+    marginBottom: dp(3),
+    marginRight: dp(5),
     backgroundColor: '#fafbff',
   },
   newsTextBlock: {
-    margin: 10,
+    margin: dp(10),
   },
   newsTitleText: {
-    fontSize: 18,
+    fontSize: dp(18),
     fontWeight: '600',
   },
   newsText: {
-    fontSize: 15,
+    fontSize: dp(15),
     fontWeight: '500',
   },
   newsMetaText: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 5,
+    marginTop: dp(5),
     alignItems: 'center',
   },
 });

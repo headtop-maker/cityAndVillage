@@ -18,11 +18,11 @@ const RegistrationScreen = () => {
       <TouchableOpacity
         style={styles.iconContainer}
         onPress={() => navigate(SCREENS.TabScreen, undefined)}>
-        <Icon source="chevron-left" color="#6e26f3" size={40} />
+        <Icon source='chevron-left' color='#6e26f3' size={40} />
       </TouchableOpacity>
       <ImageBackground
         source={ImagesAssets.backGroundImage}
-        resizeMode="cover"
+        resizeMode='cover'
         style={styles.image}>
         <SetRegistration />
       </ImageBackground>

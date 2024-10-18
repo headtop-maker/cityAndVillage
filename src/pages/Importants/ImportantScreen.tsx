@@ -1,15 +1,16 @@
 import React from 'react';
 
-import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Important from '../../features/Important/ui/Important';
 import withModal from '../../shared/HOC/withModal';
-import {Avatar, Button, Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {useAppSelector} from '../../shared/models/storeHooks';
 import {selectCurrentUserToken} from '../../shared/models/selectors';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SCREENS from '../../shared/Navigation/screens';
 import {IRouteParamList} from '../../shared/Navigation/types';
+import {dp} from '../../shared/lib/getDP';
 
 const ImportantScreen = () => {
   const navigation =
@@ -43,14 +44,14 @@ const ImportantScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: dp(10),
     backgroundColor: '#FFFFFF',
     position: 'relative',
   },
-  icon: {position: 'absolute', right: 20, bottom: 50, zIndex: 10},
+  icon: {position: 'absolute', right: dp(20), bottom: dp(50), zIndex: 10},
 
   sectionTitle: {
-    fontSize: 18,
+    fontSize: dp(18),
     fontWeight: '500',
   },
   auth: {

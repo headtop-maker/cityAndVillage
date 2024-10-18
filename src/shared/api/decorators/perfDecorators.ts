@@ -1,9 +1,9 @@
-import {callOtherFn} from '../ApiCall';
+// import {callOtherFn} from '../ApiCall';
 
 export function log() {
   return function (
-    target: any,
-    propertyKey: string,
+    // target: any,
+    // propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
     const value = descriptor.value;

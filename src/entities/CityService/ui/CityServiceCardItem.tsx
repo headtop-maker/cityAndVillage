@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Linking,
@@ -7,6 +8,8 @@ import {
 } from 'react-native';
 import {IServices} from '../../../shared/models/types';
 import {Card, Text, Button, IconButton, Tooltip} from 'react-native-paper';
+import {dp} from '../../../shared/lib/getDP';
+import {TEMP_API} from '../../../shared/api/axiosInstance';
 
 const {width} = Dimensions.get('screen');
 const itemWidth = width / 1.3;
@@ -34,7 +37,9 @@ const CityServiceCardItem = ({
         <>
           <Card.Cover
             source={{
-              uri: 'https://api.slingacademy.com/public/sample-photos/5.jpeg',
+              uri:
+                TEMP_API + 'upload/' + item.image ||
+                'https://api.slingacademy.com/public/sample-photos/5.jpeg',
             }}
           />
           <Card.Content style={{marginTop: 15}}>
@@ -45,7 +50,7 @@ const CityServiceCardItem = ({
               <IconButton
                 icon='email'
                 selected
-                size={20}
+                size={dp(20)}
                 onPress={() => Linking.openURL(`mailto:${item.email}`)}
               />
             </Tooltip>
@@ -58,7 +63,7 @@ const CityServiceCardItem = ({
               <IconButton
                 icon='phone'
                 selected
-                size={20}
+                size={dp(20)}
                 onPress={() => Linking.openURL(`tel:${item.phone}`)}
               />
             </Tooltip>
@@ -77,19 +82,19 @@ const styles = StyleSheet.create({
   container: {},
   item: {
     width: itemWidth,
-    padding: 4,
+    padding: dp(4),
   },
   list: {
     alignItems: 'center',
     paddingHorizontal: (width - itemWidth) / 2,
   },
   itemFlat: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
+    marginLeft: dp(10),
+    marginRight: dp(10),
+    marginBottom: dp(10),
   },
   title: {
-    fontSize: 32,
+    fontSize: dp(32),
   },
 });
 

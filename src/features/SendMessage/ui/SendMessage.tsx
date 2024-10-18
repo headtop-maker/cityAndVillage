@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {Button, Dialog, Portal, Text} from 'react-native-paper';
+import {Button, Dialog, Icon, Portal, Text} from 'react-native-paper';
 import {useGetAdminsQuery} from '../../../shared/models/services';
 import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
 import {
@@ -8,6 +8,7 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {setImportantMessage} from '../../Users/model/models';
+import {dp} from '../../../shared/lib/getDP';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);
@@ -16,11 +17,15 @@ const SendMessage = () => {
   const [selectedEmail, setSelectedEmail] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
 
-  const {data} = useGetAdminsQuery();
+  const {data, refetch} = useGetAdminsQuery();
 
   const userEmail = useAppSelector(selectCurrentUserEmail);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const hideDialog = () => setVisible(false);
 
@@ -74,6 +79,11 @@ const SendMessage = () => {
 
   return (
     <View>
+      <TouchableOpacity
+        onPress={() => refetch()}
+        style={{alignSelf: 'flex-end'}}>
+        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
+      </TouchableOpacity>
       {dialog()}
       <TouchableOpacity
         style={{flexDirection: 'row'}}
@@ -108,14 +118,14 @@ const SendMessage = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: dp(10),
     borderWidth: 1,
   },
   textInput: {
     width: '100%',
     alignSelf: 'center',
-    margin: 10,
-    borderRadius: 5,
+    margin: dp(10),
+    borderRadius: dp(5),
     backgroundColor: '#ededed',
   },
 });

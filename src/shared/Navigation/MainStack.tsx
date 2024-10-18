@@ -17,6 +17,7 @@ import {requestStoragePermission} from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
 import {navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
+import BootSplash from 'react-native-bootsplash';
 
 import messaging from '@react-native-firebase/messaging';
 
@@ -25,7 +26,7 @@ const MainStack = () => {
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
-    !check && requestStoragePermission();
+    !check && (await requestStoragePermission());
   };
 
   const firebasePermissions = async () => {
@@ -34,6 +35,7 @@ const MainStack = () => {
 
   const getToken = async () => {
     const token = await messaging().getToken();
+    console.log('token', token);
   };
 
   useLayoutEffect(() => {
@@ -41,15 +43,19 @@ const MainStack = () => {
   }, [currentUserToken]);
 
   useLayoutEffect(() => {
-    isPermissions();
-    firebasePermissions();
-    getToken();
+    (async function () {
+      await isPermissions();
+      await firebasePermissions();
+      await getToken();
+    })();
   }, []);
 
   return (
     <NavigationContainer
       ref={navigationRef}
-      onReady={() => console.log('nav ready')}>
+      onReady={() => {
+        BootSplash.hide();
+      }}>
       <Stack.Navigator
         initialRouteName='TabScreen'
         screenOptions={{headerShown: false}}>

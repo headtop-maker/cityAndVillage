@@ -3,6 +3,7 @@ import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {TServiceItem} from '../../../../shared/types';
 import {ImagesAssets} from '../../../../shared/assets/picture/icons/ImageAssets';
 import {Text} from 'react-native-paper';
+import {dp} from '../../../../shared/lib/getDP';
 
 type TProp = {
   setSection: (data: TServiceItem['imgSrc']) => void;
@@ -34,7 +35,7 @@ export default ServiceItem;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: dp(10),
   },
   shadow: {
     shadowColor: '#000',
@@ -47,24 +48,24 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   mediumBox: {
-    margin: 5,
-    width: 100,
+    margin: dp(5),
+    width: dp(100),
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
     alignContent: 'center',
-    borderRadius: 10,
+    borderRadius: dp(10),
     backgroundColor: '#fbfffe',
   },
   professionsImage: {
-    width: 60,
-    height: 60,
+    width: dp(60),
+    height: dp(60),
   },
   iconBorder: {
-    margin: 5,
+    margin: dp(5),
     borderWidth: 0.5,
-    padding: 15,
-    borderRadius: 10,
+    padding: dp(15),
+    borderRadius: dp(10),
     borderColor: '#521cfd',
   },
 });

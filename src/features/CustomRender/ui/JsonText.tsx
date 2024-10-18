@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {Text, TextStyle} from 'react-native';
 
 const JsonText: FC<{title: string; style?: TextStyle}> = ({title, style}) => {

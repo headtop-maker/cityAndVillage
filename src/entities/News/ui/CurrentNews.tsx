@@ -8,10 +8,11 @@ import {Icon, IconButton, Tooltip} from 'react-native-paper';
 import SCREENS from '../../../shared/Navigation/screens';
 import {navigate} from '../../../shared/lib/navigationRef';
 import {convertDate} from '../../../shared/lib/convertDate';
-import Rating from '../../../features/Rating/ui/Rating';
+
 import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
 import AnimatedNews from './AnimatedNews';
-import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
+
+import {dp} from '../../../shared/lib/getDP';
 
 interface TCurrent {
   id: string;
@@ -42,12 +43,12 @@ const CurrentNews = () => {
 
     if (type === 'Next') {
       const newIndexNews = news[indexNews - 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
+      newIndexNews ? setCurrentNews(newIndexNews) : leftShake.handleShake();
     }
 
     if (type === 'Prev') {
       const newIndexNews = news[indexNews + 1];
-      !!newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
+      newIndexNews ? setCurrentNews(newIndexNews) : rightShake.handleShake();
     }
   };
 
@@ -77,15 +78,6 @@ const CurrentNews = () => {
           />,
         )}
 
-        <View style={{alignItems: 'center'}}>
-          <Text>Оценить новость</Text>
-          <Rating
-            count={5}
-            onChandge={(data: number) => console.log('currentRating', data)}
-            iconSize={25}
-            iconStyle={styles.star}
-          />
-        </View>
         {rightShake.childrenShakeElement(
           <IconButton
             icon='arrow-right-bold-box-outline'
@@ -110,36 +102,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   star: {
-    marginRight: 5,
+    marginRight: dp(5),
     justifyContent: 'center',
     alignItems: 'center',
   },
   surface: {
-    padding: 8,
-    height: 80,
-    width: 80,
+    padding: dp(8),
+    height: dp(80),
+    width: dp(80),
     alignItems: 'center',
     justifyContent: 'center',
   },
   iconContainer: {
     position: 'absolute',
-    zIndex: 2,
-    top: 15,
-    left: 15,
+    zIndex: dp(2),
+    top: dp(15),
+    left: dp(15),
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    borderRadius: dp(5),
   },
 
   newsImage: {
     height: '55%',
-    margin: 5,
-    borderRadius: 5,
+    margin: dp(5),
+    borderRadius: dp(5),
   },
 
   newsCreateAt: {
-    marginTop: 10,
-    marginRight: 10,
-    fontSize: 16,
+    marginTop: dp(10),
+    marginRight: dp(10),
+    fontSize: dp(16),
     fontWeight: '500',
     alignSelf: 'flex-end',
   },

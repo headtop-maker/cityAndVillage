@@ -11,3 +11,5 @@ export type IRouteParamList = {
   [SCREENS.LoginScreen]: undefined;
   [SCREENS.RegistrationScreen]: undefined;
 };
+
+export type KeyScreen = keyof IRouteParamList;

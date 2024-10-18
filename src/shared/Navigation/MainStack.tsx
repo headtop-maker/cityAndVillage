@@ -17,6 +17,7 @@ import {requestStoragePermission} from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
 import {navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
+import BootSplash from 'react-native-bootsplash';
 
 import messaging from '@react-native-firebase/messaging';
 
@@ -52,7 +53,9 @@ const MainStack = () => {
   return (
     <NavigationContainer
       ref={navigationRef}
-      onReady={() => console.log('nav ready')}>
+      onReady={() => {
+        BootSplash.hide();
+      }}>
       <Stack.Navigator
         initialRouteName='TabScreen'
         screenOptions={{headerShown: false}}>

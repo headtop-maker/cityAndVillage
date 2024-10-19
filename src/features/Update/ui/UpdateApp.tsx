@@ -9,7 +9,7 @@ import {TEMP_API} from '../../../shared/api/axiosInstance';
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   const {showModal} = useModal();
 
   const handleShowModal = () => {

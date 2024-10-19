@@ -9,7 +9,7 @@ import {TEMP_API} from '../../../shared/api/axiosInstance';
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
-  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   const {showModal} = useModal();
 
   const handleShowModal = () => {
@@ -27,9 +27,9 @@ const UpdateApp = () => {
   const handleUpdate = () => {
     handleShowModal();
     nativeFn.getFile({
-      url: TEMP_API + 'upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
-      mimeType: 'image/jpeg',
-      title: 'images.jpg',
+      url: TEMP_API + 'upload/app-release.apk',
+      mimeType: 'application/vnd.android.package-archive',
+      title: 'app-release.apk',
     });
   };
   return (

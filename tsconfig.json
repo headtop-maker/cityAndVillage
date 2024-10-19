@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-      "experimentalDecorators": true
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
-  "extends": "@tsconfig/react-native/tsconfig.json"
 }

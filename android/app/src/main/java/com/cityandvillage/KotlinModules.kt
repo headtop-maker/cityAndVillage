@@ -8,19 +8,23 @@ import android.content.Intent
 import android.provider.DocumentsContract
 import android.os.Environment
 import java.util.HashMap
-
+import android.net.Uri
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
+import android.content.IntentFilter
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import java.io.File
 
 
 
@@ -33,6 +37,7 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
     override fun getName(): String {
         return "KotlinModules"
     }
+
 
     override fun getConstants(): kotlin.collections.Map<String, Any> {
         val constants = HashMap<String,Any>()
@@ -76,9 +81,54 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         Toast.makeText(reactApplicationContext,message,duration).show()
     }
 
+    @ReactMethod
+    fun downloadAndUpdate(url: String, fileName: String, successCallback: Callback) {
+        try {
+            val downloadManager = reactApplicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val downloadUri = Uri.parse(url)
 
+            val request = DownloadManager.Request(downloadUri).apply {
+                setTitle("Downloading update")
+                setDescription("Downloading the update for the app.")
+                setDestinationInExternalFilesDir(reactApplicationContext, Environment.DIRECTORY_DOWNLOADS, fileName)
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            }
 
+            downloadManager.enqueue(request)
+            successCallback.invoke("Download started")
 
+        } catch (e: Exception) {
+            println(e.message)
+        }
+    }
+
+    @ReactMethod
+    fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
+        try {
+            val file = File(reactApplicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+            if (!file.exists()) {
+                errorCallback.invoke("File not found")
+                return
+            }
+
+            val uri: Uri = FileProvider.getUriForFile(
+                reactApplicationContext,
+                "${reactApplicationContext.packageName}.provider",
+                file
+            )
+
+            val installIntent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/vnd.android.package-archive")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+
+            reactApplicationContext.startActivity(installIntent)
+            successCallback.invoke("Installation started")
+
+        } catch (e: Exception) {
+            errorCallback.invoke(e.message)
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod
@@ -91,8 +141,6 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         }
         reactApplicationContext.startActivityForResult(intent, 1, null);
     }
-
-
 
     private val activityEventListener =
         object : BaseActivityEventListener() {

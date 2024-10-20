@@ -19,10 +19,21 @@ const UpdateApp = () => {
           Процесс загрузки проверьте в статусном окне вашего устройства.{' '}
         </Text>
         <Text>1. После успешной загрузки закройте текущее приложение. </Text>
-        <Text>2. Откройте apk файл из паки загрузки. </Text>
       </View>,
     );
   };
+
+  // установщик пакетов
+
+  // const installUpdate = async () => {
+  //   const apkFileName = 'app-release.apk';
+
+  //   await KotlinModules.installUpdate(
+  //     apkFileName,
+  //     installSuccess => console.log(installSuccess),
+  //     installError => console.error(installError),
+  //   );
+  // };
 
   const handleUpdate = () => {
     handleShowModal();
@@ -32,6 +43,7 @@ const UpdateApp = () => {
       title: 'app-release.apk',
     });
   };
+
   return (
     <View>
       <Text variant='titleLarge'>Получить приложение</Text>
@@ -42,6 +54,13 @@ const UpdateApp = () => {
         onPress={handleUpdate}>
         Последняя версия
       </Button>
+      {/* <Button
+        icon='download'
+        mode='outlined'
+        style={{margin: rem / 3}}
+        onPress={installUpdate}>
+        Установить
+      </Button> */}
     </View>
   );
 };

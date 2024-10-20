@@ -4,8 +4,15 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-
+import android.database.Cursor
+import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import com.facebook.react.bridge.Callback
+import java.io.File
+
 
 class DownloadCompletedReceiver:BroadcastReceiver() {
 
@@ -15,7 +22,33 @@ class DownloadCompletedReceiver:BroadcastReceiver() {
             if(id != -1L){
                 Toast.makeText(context, " Файл получен ", Toast.LENGTH_LONG).show();
                 println("Download id $id finish")
+                if (context != null) {
+                    checkDownload(context, id)
+                }
             }
         }
     }
+
+    private fun checkDownload(context: Context, downloadId: Long) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        val cursor: Cursor = downloadManager.query(query)
+
+        if (cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+            val status = cursor.getInt(columnIndex)
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                val uriString = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                val uri = Uri.parse(cursor.getString(uriString))
+                val fileName = uri.lastPathSegment
+                Log.d("CURSOR fileName",uri.toString())
+                if (fileName != null) {
+                    Log.d("CURSOR fileName",fileName)
+                    Log.d("CURSOR fileName split",fileName.split("-")[0]+fileName.split("-")[1])
+                }
+            }
+        }
+        cursor.close()
+    }
+
 }

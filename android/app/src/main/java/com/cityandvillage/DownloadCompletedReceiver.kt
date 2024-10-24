@@ -9,12 +9,11 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.FileProvider
-import com.facebook.react.bridge.Callback
-import java.io.File
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.modules.core.DeviceEventManagerModule
 
 
-class DownloadCompletedReceiver:BroadcastReceiver() {
+class DownloadCompletedReceiver(private val reactContext: ReactApplicationContext) :BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if(intent?.action=="android.intent.action.DOWNLOAD_COMPLETE"){
@@ -45,10 +44,17 @@ class DownloadCompletedReceiver:BroadcastReceiver() {
                 if (fileName != null) {
                     Log.d("CURSOR fileName",fileName)
                     Log.d("CURSOR fileName split",fileName.split("-")[0]+fileName.split("-")[1])
+                    sendEvent(reactContext,"Download",fileName)
                 }
             }
         }
         cursor.close()
+    }
+
+
+    private fun sendEvent(reactContext: ReactApplicationContext, eventName: String, params: Any?) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(eventName, params)
     }
 
 }

@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactMethod
 import android.content.Intent
 import android.provider.DocumentsContract
 import android.os.Environment
+import android.provider.Settings
 import java.util.HashMap
 import android.net.Uri
 import android.app.Activity
@@ -29,6 +30,8 @@ import java.io.File
 
 
 class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
+    private val receiver = DownloadCompletedReceiver(reactContext)
+
     var activity: Activity? = null
     private val DURATION_SHORT_KEY = "SHORT"
     private val DURATION_LONG_KEY = "LONG"
@@ -38,6 +41,18 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         return "KotlinModules"
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @ReactMethod
+    fun registerReceiver() {
+        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        reactApplicationContext.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    @ReactMethod
+    fun unregisterReceiver() {
+        reactApplicationContext.unregisterReceiver(receiver)
+    }
 
     override fun getConstants(): kotlin.collections.Map<String, Any> {
         val constants = HashMap<String,Any>()
@@ -102,10 +117,14 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         }
     }
 
+
+
     @ReactMethod
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
         try {
+
             val file = File(reactApplicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+
             if (!file.exists()) {
                 errorCallback.invoke("File not found")
                 return
@@ -129,6 +148,58 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
             errorCallback.invoke(e.message)
         }
     }
+
+    @ReactMethod
+    fun installApk(apkUriString: String, promise: Promise) {
+        val context: Context = reactApplicationContext
+
+        try {
+            val apkUri: Uri = Uri.parse(apkUriString)
+            val apkFile = File(apkUri.path ?: "")
+
+            if (!apkFile.exists()) {
+                promise.reject("FileNotFound", "APK file not found.")
+                return
+            }
+
+            val uriForInstall: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                // Для Android 7.0 (Nougat) и выше, используем FileProvider
+                FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.provider",
+                    apkFile
+                )
+            } else {
+                // Для версий ниже Android 7.0
+                apkUri
+            }
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uriForInstall, "application/vnd.android.package-archive")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+            }
+
+            // Проверяем, есть ли разрешение на установку приложений из неизвестных источников
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !context.packageManager.canRequestPackageInstalls()) {
+                val installIntent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
+                    data = Uri.parse("package:${context.packageName}")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(installIntent)
+                promise.reject("PermissionRequired", "Permission to install unknown apps required.")
+            } else {
+                context.startActivity(intent)
+                promise.resolve("Installation started.")
+            }
+
+        } catch (e: Exception) {
+            promise.reject("InstallError", e.message)
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod

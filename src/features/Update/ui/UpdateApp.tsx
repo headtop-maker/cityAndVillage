@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import {nativeFn} from '../../../shared/lib/nativeFn';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
@@ -37,8 +36,11 @@ const UpdateApp = () => {
     registerReceiver();
 
     const unsubscribe = subscribeToDownloadComplete((data: string) => {
-      console.log('Download completed!', data);
-      installUpdate('app-release.apk');
+      KotlinModules.installUpdate(
+        data,
+        installSuccess => console.log(installSuccess),
+        installSuccess => console.log(installSuccess),
+      );
     });
 
     return () => {
@@ -58,21 +60,13 @@ const UpdateApp = () => {
     );
   };
 
-  const installUpdate = async (apkFileName: string) => {
-    await KotlinModules.installUpdate(
-      apkFileName,
-      installSuccess => console.log(installSuccess),
-      installError => console.error(installError),
-    );
-  };
-
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     handleShowModal();
-    nativeFn.getFile({
-      url: TEMP_API + 'upload/app-release.apk',
-      mimeType: 'application/vnd.android.package-archive',
-      title: 'app-release.apk',
-    });
+    await KotlinModules.downloadAndUpdate(
+      TEMP_API + 'upload/app-release.apk',
+      'app-release.apk',
+      installSuccess => console.log(installSuccess),
+    );
   };
 
   return (
@@ -84,23 +78,6 @@ const UpdateApp = () => {
         style={{margin: rem / 3}}
         onPress={handleUpdate}>
         Последняя версия
-      </Button>
-      <Button
-        icon='download'
-        mode='outlined'
-        style={{margin: rem / 3}}
-        onPress={() => {
-          KotlinModules.installApk(
-            'file:///storage/emulated/0/Download/app-release.apk',
-          )
-            .then(result => {
-              console.log('Installation result:', result);
-            })
-            .catch(error => {
-              console.error('Installation error:', error);
-            });
-        }}>
-        Установить
       </Button>
     </View>
   );

@@ -12,6 +12,7 @@ import java.util.HashMap
 import android.net.Uri
 import android.app.Activity
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
@@ -104,7 +105,7 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
 
             val request = DownloadManager.Request(downloadUri).apply {
                 setTitle("Downloading update")
-                setDescription("Downloading the update for the app.")
+                setDescription("Загружается ${fileName}")
                 setDestinationInExternalFilesDir(reactApplicationContext, Environment.DIRECTORY_DOWNLOADS, fileName)
                 setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             }
@@ -123,10 +124,11 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
         try {
 
-            val file = File(reactApplicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+            val file = File(reactApplicationContext.getExternalFilesDir(null)?.path + "/Download", fileName)
 
+            Log.d("CURSOR fileName",fileName)
             if (!file.exists()) {
-                errorCallback.invoke("File not found")
+                errorCallback.invoke("File not found 1")
                 return
             }
 
@@ -146,57 +148,6 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
 
         } catch (e: Exception) {
             errorCallback.invoke(e.message)
-        }
-    }
-
-    @ReactMethod
-    fun installApk(apkUriString: String, promise: Promise) {
-        val context: Context = reactApplicationContext
-
-        try {
-            val apkUri: Uri = Uri.parse(apkUriString)
-            val apkFile = File(apkUri.path ?: "")
-
-            if (!apkFile.exists()) {
-                promise.reject("FileNotFound", "APK file not found.")
-                return
-            }
-
-            val uriForInstall: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // Для Android 7.0 (Nougat) и выше, используем FileProvider
-                FileProvider.getUriForFile(
-                    context,
-                    "${context.packageName}.provider",
-                    apkFile
-                )
-            } else {
-                // Для версий ниже Android 7.0
-                apkUri
-            }
-
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uriForInstall, "application/vnd.android.package-archive")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            }
-
-            // Проверяем, есть ли разрешение на установку приложений из неизвестных источников
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !context.packageManager.canRequestPackageInstalls()) {
-                val installIntent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
-                    data = Uri.parse("package:${context.packageName}")
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(installIntent)
-                promise.reject("PermissionRequired", "Permission to install unknown apps required.")
-            } else {
-                context.startActivity(intent)
-                promise.resolve("Installation started.")
-            }
-
-        } catch (e: Exception) {
-            promise.reject("InstallError", e.message)
         }
     }
 

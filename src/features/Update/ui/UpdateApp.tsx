@@ -1,33 +1,21 @@
-import React, {useEffect} from 'react';
-import {
-  NativeEventEmitter,
-  NativeModules,
-  StyleSheet,
-  View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
+import {
+  registerReceiver,
+  subscribeToDownloadComplete,
+  unregisterReceiver,
+} from '../model/receiver';
 
 const {KotlinModules} = NativeModules;
-const eventEmitter = new NativeEventEmitter(KotlinModules);
-
-export const registerReceiver = () => {
-  KotlinModules.registerReceiver();
-};
-
-export const unregisterReceiver = () => {
-  KotlinModules.unregisterReceiver();
-};
-
-export const subscribeToDownloadComplete = callback => {
-  const subscription = eventEmitter.addListener('Download', callback);
-  return () => subscription.remove(); // Возвращаем функцию для отмены подписки
-};
 
 const UpdateApp = () => {
+  const [version, setVersion] = useState<string>('');
+
   const {rem} = useDimensions();
 
   const {showModal} = useModal();
@@ -36,11 +24,7 @@ const UpdateApp = () => {
     registerReceiver();
 
     const unsubscribe = subscribeToDownloadComplete((data: string) => {
-      KotlinModules.installUpdate(
-        data,
-        installSuccess => console.log(installSuccess),
-        installSuccess => console.log(installSuccess),
-      );
+      setVersion(data);
     });
 
     return () => {
@@ -62,10 +46,20 @@ const UpdateApp = () => {
 
   const handleUpdate = async () => {
     handleShowModal();
+    setVersion('');
     await KotlinModules.downloadAndUpdate(
       TEMP_API + 'upload/app-release.apk',
       'app-release.apk',
-      installSuccess => console.log(installSuccess),
+      (installSuccess: string) => console.log(installSuccess),
+    );
+  };
+
+  const handleInstall = async () => {
+    KotlinModules.show(version, 500);
+    KotlinModules.installUpdate(
+      version,
+      (installSuccess: string) => console.log(installSuccess),
+      (error: string) => console.log(error),
     );
   };
 
@@ -79,6 +73,15 @@ const UpdateApp = () => {
         onPress={handleUpdate}>
         Последняя версия
       </Button>
+      {!!version && (
+        <Button
+          icon='update'
+          mode='outlined'
+          style={{margin: rem / 3}}
+          onPress={handleInstall}>
+          Установить {version}
+        </Button>
+      )}
     </View>
   );
 };

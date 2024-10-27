@@ -13,7 +13,10 @@ import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
-import {requestStoragePermission} from '../lib/permissions';
+import {
+  requestReadStoragePermission,
+  requestStoragePermission,
+} from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
 import {navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
@@ -27,6 +30,7 @@ const MainStack = () => {
   const isPermissions = async () => {
     const check = await checkStoragePermission();
     !check && (await requestStoragePermission());
+    !check && (await requestReadStoragePermission());
   };
 
   const firebasePermissions = async () => {

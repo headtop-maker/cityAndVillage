@@ -1,58 +1,72 @@
 package com.cityandvillage
 
-import android.widget.Toast
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import android.content.Intent
-import android.provider.DocumentsContract
-import android.os.Environment
-import android.provider.Settings
-import java.util.HashMap
-import android.net.Uri
 import android.app.Activity
 import android.app.DownloadManager
-import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.res.Resources
-import android.os.Build
-import android.util.DisplayMetrics
-import android.util.Log
+import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Resources
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.DocumentsContract
+import android.util.DisplayMetrics
+import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
+import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import androidx.core.app.ActivityCompat
 import java.io.File
 
 
-
-class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
-    private val receiver = DownloadCompletedReceiver(reactContext)
-
-    var activity: Activity? = null
+public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
     private val DURATION_SHORT_KEY = "SHORT"
     private val DURATION_LONG_KEY = "LONG"
     var promise: Promise? = null
+
+
 
     override fun getName(): String {
         return "KotlinModules"
     }
 
+     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if(intent.action =="android.intent.action.DOWNLOAD_COMPLETE"){
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,-1L)
+                if(id != -1L){
+                    Toast.makeText(context, " Файл получен mReceiver ", Toast.LENGTH_LONG).show();
+                    println("Download mReceiver $id finish")
+                    checkDownload(context, id)
+                }
+            }
+        }
+    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @ReactMethod
     fun registerReceiver() {
         val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        reactApplicationContext.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        reactApplicationContext.registerReceiver(mReceiver, filter, null, null)// помогло с 13 андроид
     }
 
     @ReactMethod
     fun unregisterReceiver() {
-        reactApplicationContext.unregisterReceiver(receiver)
+        reactApplicationContext.unregisterReceiver(mReceiver)
     }
 
     override fun getConstants(): kotlin.collections.Map<String, Any> {
@@ -92,6 +106,35 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         downloader.downloadFile(url,mimeType,title)
     }
 
+
+
+    private fun checkDownload(context: Context, downloadId: Long) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        val cursor: Cursor = downloadManager.query(query)
+        if (cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+            val status = cursor.getInt(columnIndex)
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                val uriString = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                val uri = Uri.parse(cursor.getString(uriString))
+                val fileName = uri.lastPathSegment
+                Log.d("CURSOR fileName",uri.toString())
+                if (fileName != null) {
+                    Log.d("CURSOR fileName",fileName)
+                    Log.d("CURSOR fileName split",fileName.split("-")[0]+fileName.split("-")[1])
+                    sendEvent(reactApplicationContext,"Download",fileName)
+                }
+            }
+        }
+        cursor.close()
+    }
+
+    private fun sendEvent(reactContext: ReactApplicationContext, eventName: String, params: Any?) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(eventName, params)
+    }
+
     @ReactMethod
     fun show(message:String,duration: Int){
         Toast.makeText(reactApplicationContext,message,duration).show()
@@ -122,12 +165,13 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
 
     @ReactMethod
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
-        try {
 
+        try {
             val file = File(reactApplicationContext.getExternalFilesDir(null)?.path + "/Download", fileName)
 
             Log.d("CURSOR fileName",fileName)
             if (!file.exists()) {
+                Toast.makeText(reactApplicationContext, " File not found 1 ", Toast.LENGTH_LONG).show();
                 errorCallback.invoke("File not found 1")
                 return
             }
@@ -147,9 +191,11 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
             successCallback.invoke("Installation started")
 
         } catch (e: Exception) {
+            Toast.makeText(reactApplicationContext, e.message.toString(), Toast.LENGTH_LONG).show();
             errorCallback.invoke(e.message)
         }
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)

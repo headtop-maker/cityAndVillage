@@ -105,7 +105,7 @@ export const counterSlice = createSlice({
 
       .addCase(setImportantMessage.fulfilled, state => {
         state.actionState.loadind = false;
-        state.actionState.modalText = '';
+        state.actionState.modalText = 'Сообщение успешно отправлено';
       })
 
       .addCase(setBannedUser.fulfilled, (state, action) => {

@@ -28,7 +28,6 @@ const SetRegistration = () => {
     try {
       setBlockBtn(true);
       dispatch(createUsers({name, email: email.toLowerCase(), password}));
-    } catch (e) {
     } finally {
       setBlockBtn(false);
     }

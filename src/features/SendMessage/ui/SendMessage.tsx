@@ -9,6 +9,9 @@ import {
 } from '../../../shared/models/storeHooks';
 import {setImportantMessage} from '../../Users/model/models';
 import {dp} from '../../../shared/lib/getDP';
+import {selectCurrentUserToken} from '../../../shared/models/selectors';
+import withModal from '../../../shared/HOC/withModal';
+import {useModal} from '../../Modal/ui/ModalProvider';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);
@@ -20,7 +23,9 @@ const SendMessage = () => {
   const {data, refetch} = useGetAdminsQuery();
 
   const userEmail = useAppSelector(selectCurrentUserEmail);
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
 
+  const {showModal} = useModal();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -39,10 +44,27 @@ const SendMessage = () => {
     hideDialog();
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!userEmail) return;
 
+    const result = await dispatch(
+      setImportantMessage({
+        author: userEmail,
+        recipient: selectedEmail,
+        title: 'Обращение от пользователя',
+        description: message,
+        isImportant: false,
+      }),
+    );
+
     if (message !== '') {
+      if (setImportantMessage.fulfilled.match(result)) {
+        showModal(
+          <View style={{padding: dp(10)}}>
+            <Text>Сообщение успешно отправлено. </Text>
+          </View>,
+        );
+      }
       dispatch(
         setImportantMessage({
           author: userEmail,
@@ -84,7 +106,7 @@ const SendMessage = () => {
         style={{alignSelf: 'flex-end'}}>
         {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
       </TouchableOpacity>
-      {dialog()}
+      {!!currentUserToken && dialog()}
       <TouchableOpacity
         style={{flexDirection: 'row'}}
         onPress={() => setVisible(true)}>
@@ -103,13 +125,14 @@ const SendMessage = () => {
           enablesReturnKeyAutomatically
           multiline={true}
           maxLength={100}
+          editable={!!currentUserToken}
         />
       </View>
       <Button
         icon='email-send-outline'
         mode='outlined'
         onPress={handleSendMessage}
-        disabled={!message || !selectedUser}>
+        disabled={!message || !selectedUser || !currentUserToken}>
         Отправить
       </Button>
     </View>
@@ -130,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SendMessage;
+export default withModal(SendMessage);

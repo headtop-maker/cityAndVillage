@@ -11,7 +11,7 @@ import {dp} from '../../../shared/lib/getDP';
 
 const SetRegistration = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [secure, setSecure] = useState(true);
@@ -19,14 +19,15 @@ const SetRegistration = () => {
   const [blockBtn, setBlockBtn] = useState(false);
 
   const fullNamePattern = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)$/;
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailPattern =
+    /^[A-Za-z0-9][A-Za-z0-9.]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   const dispatch = useAppDispatch();
 
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      dispatch(createUsers({name, email, password}));
+      dispatch(createUsers({name, email: email.toLowerCase(), password}));
     } catch (e) {
     } finally {
       setBlockBtn(false);
@@ -58,7 +59,7 @@ const SetRegistration = () => {
       </Text>
       <TextInput
         style={styles.input}
-        label='Имя Фамилия Отчество'
+        label='Ф.И.О.'
         value={name}
         onChangeText={setName}
         mode='outlined'

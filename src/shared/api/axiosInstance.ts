@@ -21,7 +21,9 @@ Promise<AxiosResponse<CounterState['news'], unknown>> =>
 export const getCurrentImportant = (
   limit: number,
   userEmail: string,
-): Promise<AxiosResponse<CounterState['important'], unknown>> =>
+): Promise<
+  AxiosResponse<CounterState['important'] | {code: string}, unknown>
+> =>
   response.apiRequest({
     timeout: 1000,
     method: 'get',

@@ -28,7 +28,7 @@ const SetLogin = () => {
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      await dispatch(loginUsers({password, email}));
+      await dispatch(loginUsers({password, email: email.toLowerCase()}));
     } finally {
       setBlockBtn(false);
     }

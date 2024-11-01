@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {Button, Dialog, Icon, Portal, Text} from 'react-native-paper';
 import {useGetAdminsQuery} from '../../../shared/models/services';
-import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
+import {
+  selectCurrentUserEmail,
+  selectCurrentUserName,
+} from '../../../entities/News/models/selectors';
 import {
   useAppDispatch,
   useAppSelector,
@@ -23,6 +26,7 @@ const SendMessage = () => {
   const {data, refetch} = useGetAdminsQuery();
 
   const userEmail = useAppSelector(selectCurrentUserEmail);
+  const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
 
   const {showModal} = useModal();
@@ -50,8 +54,9 @@ const SendMessage = () => {
     const result = await dispatch(
       setImportantMessage({
         author: userEmail,
+        authorName: username,
         recipient: selectedEmail,
-        title: 'Обращение от пользователя',
+        title: 'От: ' + username,
         description: message,
         isImportant: false,
       }),
@@ -65,15 +70,6 @@ const SendMessage = () => {
           </View>,
         );
       }
-      dispatch(
-        setImportantMessage({
-          author: userEmail,
-          recipient: selectedEmail,
-          title: 'Обращение от пользователя',
-          description: message,
-          isImportant: false,
-        }),
-      );
       setMessage('');
     }
   };

@@ -1,5 +1,11 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {ServiceTitle, ImportantContact, userRole, TDocuments} from './types';
+import {
+  ServiceTitle,
+  ImportantContact,
+  userRole,
+  TDocuments,
+  IAppVersion,
+} from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
 
@@ -30,6 +36,9 @@ export const serviceApi = createApi({
     getAllImportantContacts: builder.query<ImportantContact[], void>({
       query: () => '/important-contacts',
     }),
+    getAppVersion: builder.query<IAppVersion, void>({
+      query: () => '/version',
+    }),
     getAdmins: builder.query<
       {
         id: number;
@@ -50,4 +59,5 @@ export const {
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,
   useGetDocumentsQuery,
+  useGetAppVersionQuery,
 } = serviceApi;

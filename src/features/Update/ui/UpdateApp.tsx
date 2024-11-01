@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
-import {version as appVersion} from '../../../../package.json';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
@@ -11,8 +10,6 @@ import {
   subscribeToDownloadComplete,
   unregisterReceiver,
 } from '../model/receiver';
-import {useGetAppVersionQuery} from '../../../shared/models/services';
-import {isNewerVersion} from '../../../shared/lib/isNewerVersion';
 
 const {KotlinModules} = NativeModules;
 
@@ -20,8 +17,6 @@ const UpdateApp = () => {
   const [version, setVersion] = useState<string>('');
   const {rem} = useDimensions();
   const {showModal} = useModal();
-
-  const {data} = useGetAppVersionQuery();
 
   useEffect(() => {
     registerReceiver();
@@ -68,19 +63,15 @@ const UpdateApp = () => {
 
   return (
     <View>
-      {data.currentVersion &&
-        isNewerVersion(appVersion, data.currentVersion) && (
-          <>
-            <Text variant='titleLarge'>Доступна новая версия</Text>
-            <Button
-              icon='download'
-              mode='outlined'
-              style={{margin: rem / 3}}
-              onPress={handleUpdate}>
-              Последняя версия
-            </Button>
-          </>
-        )}
+      <Text variant='titleLarge'>Доступна новая версия</Text>
+      <Button
+        icon='download'
+        mode='outlined'
+        style={{margin: rem / 3}}
+        onPress={handleUpdate}>
+        Последняя версия
+      </Button>
+
       {!!version && (
         <Button
           icon='update'

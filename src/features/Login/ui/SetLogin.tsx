@@ -49,6 +49,11 @@ const SetLogin = () => {
   const isLockSend =
     !!email && !!password && !hasErrors() && !hasPasswordErrors();
 
+  const handleEmailChange = (text: string) => {
+    const filteredText = text.replace(/\s/g, ''); // Удаляем пробелы
+    setEmail(filteredText);
+  };
+
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant='titleLarge'>
@@ -58,7 +63,7 @@ const SetLogin = () => {
         style={styles.input}
         label='Почта'
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
         mode='outlined'
       />
       {email.length > 2 && hasErrors() && (

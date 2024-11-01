@@ -111,17 +111,15 @@ const SendMessage = () => {
         </Text>
       </TouchableOpacity>
 
-      <View style={styles.textInput}>
+      <View style={styles.textInputBlock}>
         <TextInput
           placeholder='Введите сообщение здесь...'
           value={message}
           onChangeText={handleChangeMessage}
-          autoCapitalize='none'
-          returnKeyType='send'
-          enablesReturnKeyAutomatically
           multiline={true}
           maxLength={100}
           editable={!!currentUserToken}
+          style={styles.textInput}
         />
       </View>
       <Button
@@ -140,12 +138,15 @@ const styles = StyleSheet.create({
     marginTop: dp(10),
     borderWidth: 1,
   },
-  textInput: {
+  textInputBlock: {
     width: '100%',
     alignSelf: 'center',
     margin: dp(10),
     borderRadius: dp(5),
     backgroundColor: '#ededed',
+  },
+  textInput: {
+    color: '#131413',
   },
 });
 

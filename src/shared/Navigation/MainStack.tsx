@@ -23,6 +23,7 @@ import {requestUserPermission} from '../lib/requestUserPermission';
 import BootSplash from 'react-native-bootsplash';
 
 import messaging from '@react-native-firebase/messaging';
+import {Alert} from 'react-native/Libraries/Alert/Alert';
 
 const MainStack = () => {
   const currentUserToken = useAppSelector(selectCurrentUserToken);
@@ -52,6 +53,9 @@ const MainStack = () => {
       await firebasePermissions();
       await getToken();
     })();
+    return messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
   }, []);
 
   return (

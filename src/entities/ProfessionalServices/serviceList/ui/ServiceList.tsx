@@ -1,15 +1,16 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet} from 'react-native';
 import {Button, Chip} from 'react-native-paper';
-import {useGetAllServiceCategoryQuery} from '../../../../shared/models/services';
+
 import {ServiceTitleItem} from '../../../../shared/models/types';
 import {useAppDispatch} from '../../../../shared/models/storeHooks';
 import {setErrorText} from '../../../../shared/models/counterSlice';
 import {getServices} from '../model/actions';
 import {callOtherFn} from '../../../../shared/api/ApiCall';
+import {useGetServiceCategoryQuery} from '../../../../shared/models/services';
 
 const ServiceList = () => {
-  const {data, error, refetch} = useGetAllServiceCategoryQuery();
+  const {data, error, refetch} = useGetServiceCategoryQuery();
 
   const [checked, setChecked] = useState<string>('');
   const dispatch = useAppDispatch();

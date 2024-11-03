@@ -24,7 +24,7 @@ export const serviceApi = createApi({
     },
   }),
   endpoints: builder => ({
-    getAllServiceCategory: builder.query<ServiceTitle, void>({
+    getServiceCategory: builder.query<ServiceTitle, void>({
       query: () => '/category',
     }),
     getDocuments: builder.query<TDocuments, void>({
@@ -33,6 +33,7 @@ export const serviceApi = createApi({
     getServiceByName: builder.query<ServiceTitle, string>({
       query: name => `/category/${name}`,
     }),
+
     getAllImportantContacts: builder.query<ImportantContact[], void>({
       query: () => '/important-contacts',
     }),
@@ -55,7 +56,7 @@ export const serviceApi = createApi({
 });
 
 export const {
-  useGetAllServiceCategoryQuery,
+  useGetServiceCategoryQuery,
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,
   useGetDocumentsQuery,

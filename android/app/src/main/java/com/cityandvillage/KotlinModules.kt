@@ -48,7 +48,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             if(intent.action =="android.intent.action.DOWNLOAD_COMPLETE"){
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,-1L)
                 if(id != -1L){
-                    Toast.makeText(context, " Файл получен mReceiver ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, " Файл получен ", Toast.LENGTH_LONG).show();
                     println("Download mReceiver $id finish")
                     checkDownload(context, id)
                 }
@@ -120,7 +120,8 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                 val uri = Uri.parse(cursor.getString(uriString))
                 val fileName = uri.lastPathSegment
                 Log.d("CURSOR fileName",uri.toString())
-                if (fileName != null) {
+                if (fileName != null && fileName.substringAfterLast('.', "")=="apk") {
+
                     Log.d("CURSOR fileName",fileName)
                     Log.d("CURSOR fileName split",fileName.split("-")[0]+fileName.split("-")[1])
                     sendEvent(reactApplicationContext,"Download",fileName)
@@ -135,6 +136,16 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             .emit(eventName, params)
     }
 
+
+    @ReactMethod
+    fun getVersionName(promise: Promise) {
+        try {
+            val packageInfo = reactApplicationContext.packageManager.getPackageInfo(reactApplicationContext.packageName, 0)
+            promise.resolve(packageInfo.versionName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            promise.reject("ERROR", "Version name not found")
+        }
+    }
     @ReactMethod
     fun show(message:String,duration: Int){
         Toast.makeText(reactApplicationContext,message,duration).show()

@@ -2,7 +2,7 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 
 const {KotlinModules} = NativeModules;
 
-const eventEmitter = new NativeEventEmitter(KotlinModules);
+const eventEmitter = new NativeEventEmitter();
 
 export const registerReceiver = () => {
   KotlinModules.registerReceiver();

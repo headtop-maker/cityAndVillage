@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
@@ -10,17 +10,27 @@ import {
   subscribeToDownloadComplete,
   unregisterReceiver,
 } from '../model/receiver';
+import {useGetAppVersionQuery} from '../../../shared/models/services';
+import {isNewerVersion} from '../../../shared/lib/isNewerVersion';
 
 const {KotlinModules} = NativeModules;
 
 const UpdateApp = () => {
+  const [isUpdate, setIsUpdate] = useState(false);
   const [version, setVersion] = useState<string>('');
   const {rem} = useDimensions();
   const {showModal} = useModal();
+  const {data, refetch} = useGetAppVersionQuery();
+
+  useEffect(() => {
+    (async function () {
+      refetch();
+      getAppVersion();
+    })();
+  }, []);
 
   useEffect(() => {
     registerReceiver();
-
     const unsubscribe = subscribeToDownloadComplete((dVersion: string) => {
       setVersion(dVersion);
     });
@@ -30,6 +40,17 @@ const UpdateApp = () => {
       unregisterReceiver();
     };
   }, []);
+
+  const getAppVersion = async () => {
+    try {
+      const versionName = await KotlinModules.getVersionName();
+      if (data.currentVersion) {
+        !!isNewerVersion(versionName, data.currentVersion) && setIsUpdate(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleShowModal = () => {
     showModal(
@@ -63,14 +84,18 @@ const UpdateApp = () => {
 
   return (
     <View>
-      <Text variant='titleLarge'>Доступна новая версия</Text>
-      <Button
-        icon='download'
-        mode='outlined'
-        style={{margin: rem / 3}}
-        onPress={handleUpdate}>
-        Последняя версия
-      </Button>
+      {isUpdate && (
+        <>
+          <Text variant='titleLarge'>Доступна новая версия</Text>
+          <Button
+            icon='download'
+            mode='outlined'
+            style={{margin: rem / 3}}
+            onPress={handleUpdate}>
+            Последняя версия
+          </Button>
+        </>
+      )}
 
       {!!version && (
         <Button

@@ -21,9 +21,7 @@ Promise<AxiosResponse<CounterState['news'], unknown>> =>
 export const getCurrentImportant = (
   limit: number,
   userEmail: string,
-): Promise<
-  AxiosResponse<CounterState['important'] | {code: string}, unknown>
-> =>
+): Promise<AxiosResponse<CounterState['important'], unknown>> =>
   response.apiRequest({
     timeout: 1000,
     method: 'get',
@@ -135,4 +133,13 @@ export const getServicesByCategory = (
     timeout: 3000,
     method: 'get',
     url: `${TEMP_API}adsboard/${serviceCategory}`,
+  });
+
+export const getAppVersionFromServer = (): Promise<
+  AxiosResponse<{currentVersion: string; description: string}, unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}version`,
   });

@@ -37,3 +37,8 @@ export const selectBannerVisible = createSelector(
   selectRootCounter,
   state => state.banner.visible,
 );
+
+export const selectIsNewVersion = createSelector(
+  selectRootCounter,
+  state => state.isNewVersion,
+);

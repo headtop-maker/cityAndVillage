@@ -14,6 +14,7 @@ import {
   setBannedUser,
   setImportantMessage,
 } from '../../features/Users/model/models';
+import {getAppVersion} from '../../features/Update/model/model';
 
 interface RejectedAction extends Action {
   error: Error;
@@ -45,6 +46,7 @@ const initialState: CounterState = {
   allUsers: undefined,
   currentNewsId: '',
   currentUser: undefined,
+  isNewVersion: false,
   banner: {
     icon: '',
     text: '',
@@ -101,6 +103,10 @@ export const counterSlice = createSlice({
 
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.allUsers = action.payload;
+      })
+
+      .addCase(getAppVersion.fulfilled, (state, action) => {
+        state.isNewVersion = action.payload;
       })
 
       .addCase(setImportantMessage.fulfilled, state => {

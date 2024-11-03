@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
@@ -10,26 +10,29 @@ import {
   subscribeToDownloadComplete,
   unregisterReceiver,
 } from '../model/receiver';
-import {useGetAppVersionQuery} from '../../../shared/models/services';
-import {isNewerVersion} from '../../../shared/lib/isNewerVersion';
+
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../shared/models/storeHooks';
+import {getAppVersion} from '../model/model';
+import {selectIsNewVersion} from '../../../shared/models/selectors';
 
 const {KotlinModules} = NativeModules;
 
 const UpdateApp = () => {
-  const [isUpdate, setIsUpdate] = useState(false);
   const [version, setVersion] = useState<string>('');
   const {rem} = useDimensions();
   const {showModal} = useModal();
-  const {data, refetch} = useGetAppVersionQuery();
+  const dispatch = useAppDispatch();
+  const isUpdate = useAppSelector(selectIsNewVersion);
 
   useEffect(() => {
     (async function () {
-      refetch();
-      getAppVersion();
+      const versionName = await KotlinModules.getVersionName();
+      await dispatch(getAppVersion(versionName));
     })();
-  }, []);
 
-  useEffect(() => {
     registerReceiver();
     const unsubscribe = subscribeToDownloadComplete((dVersion: string) => {
       setVersion(dVersion);
@@ -40,17 +43,6 @@ const UpdateApp = () => {
       unregisterReceiver();
     };
   }, []);
-
-  const getAppVersion = async () => {
-    try {
-      const versionName = await KotlinModules.getVersionName();
-      if (data.currentVersion) {
-        !!isNewerVersion(versionName, data.currentVersion) && setIsUpdate(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleShowModal = () => {
     showModal(

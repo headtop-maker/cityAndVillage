@@ -10,6 +10,7 @@ export interface CounterState {
     image: string;
     author: string;
   }[];
+  isNewVersion: boolean;
   currentNewsId: string;
   important: {
     id: string;

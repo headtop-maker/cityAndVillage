@@ -9,7 +9,7 @@ import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
-import {Button, Icon} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
 

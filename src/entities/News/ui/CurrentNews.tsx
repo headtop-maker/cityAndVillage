@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
 import {selectNews} from '../../../features/News/models/selectors';
-import {Icon, IconButton, Tooltip} from 'react-native-paper';
+import {Icon, IconButton} from 'react-native-paper';
 
 import SCREENS from '../../../shared/Navigation/screens';
 import {navigate} from '../../../shared/lib/navigationRef';
@@ -56,7 +56,6 @@ const CurrentNews = () => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.iconContainer}
-        // @ts-ignore
         onPress={() => navigate(SCREENS.TabScreen, undefined)}>
         <Icon source='chevron-left' color='#6e26f3' size={40} />
       </TouchableOpacity>

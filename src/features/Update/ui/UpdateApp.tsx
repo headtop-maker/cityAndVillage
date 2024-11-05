@@ -83,6 +83,15 @@ const UpdateApp = () => {
     }
   }
 
+  async function getApkInfo(filePath) {
+    try {
+      const info = await KotlinModules.getApkInfo(filePath);
+      console.log('APK Info:', info);
+    } catch (error) {
+      console.error('Error retrieving APK info:', error);
+    }
+  }
+
   return (
     <View>
       {isUpdate && (
@@ -113,7 +122,16 @@ const UpdateApp = () => {
         mode='outlined'
         style={{margin: rem / 3}}
         onPress={getDownloadFiles}>
-        Получить файлы
+        Список файлов
+      </Button>
+      <Button
+        icon='download'
+        mode='outlined'
+        style={{margin: rem / 3}}
+        onPress={() =>
+          getApkInfo('/storage/emulated/0/Download/app-release-1.apk')
+        }>
+        Проверить версию
       </Button>
     </View>
   );

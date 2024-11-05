@@ -28,7 +28,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import androidx.core.app.ActivityCompat
+import com.facebook.react.bridge.WritableNativeArray
 import java.io.File
 
 
@@ -160,7 +160,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             val request = DownloadManager.Request(downloadUri).apply {
                 setTitle("Downloading update")
                 setDescription("Загружается ${fileName}")
-                setDestinationInExternalFilesDir(reactApplicationContext, Environment.DIRECTORY_DOWNLOADS, fileName)
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
                 setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             }
 
@@ -173,6 +173,22 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
     }
 
 
+    @ReactMethod
+    fun getDownloadFiles(promise: Promise) {
+        try {
+            val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val files = downloadDir?.listFiles()
+            val result = WritableNativeArray()
+
+            files?.forEach { file ->
+                result.pushString(file.absolutePath)
+            }
+
+            promise.resolve(result)
+        } catch (e: Exception) {
+            promise.reject("ERROR", e)
+        }
+    }
 
     @ReactMethod
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {

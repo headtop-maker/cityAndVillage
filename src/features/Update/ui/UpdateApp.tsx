@@ -74,6 +74,15 @@ const UpdateApp = () => {
     );
   };
 
+  async function getDownloadFiles() {
+    try {
+      const files = await KotlinModules.getDownloadFiles();
+      console.log('Download files:', files);
+    } catch (error) {
+      console.error('Error fetching download files:', error);
+    }
+  }
+
   return (
     <View>
       {isUpdate && (
@@ -98,6 +107,14 @@ const UpdateApp = () => {
           Установить {version}
         </Button>
       )}
+
+      <Button
+        icon='download'
+        mode='outlined'
+        style={{margin: rem / 3}}
+        onPress={getDownloadFiles}>
+        Получить файлы
+      </Button>
     </View>
   );
 };

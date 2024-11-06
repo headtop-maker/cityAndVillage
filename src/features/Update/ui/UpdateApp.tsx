@@ -17,6 +17,7 @@ import {
 } from '../../../shared/models/storeHooks';
 import {getAppVersion} from '../model/model';
 import {selectIsNewVersion} from '../../../shared/models/selectors';
+import {parseAppData} from '../../../shared/lib/parseAppData';
 
 const {KotlinModules} = NativeModules;
 
@@ -77,7 +78,7 @@ const UpdateApp = () => {
   async function getDownloadFiles() {
     try {
       const files = await KotlinModules.getDownloadFiles();
-      console.log('Download files:', files);
+      console.log('Download files:', parseAppData(files));
     } catch (error) {
       console.error('Error fetching download files:', error);
     }

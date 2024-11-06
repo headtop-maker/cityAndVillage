@@ -181,23 +181,24 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             val files = downloadDir?.listFiles()
             val pm: PackageManager = reactApplicationContext.packageManager
             val result = WritableNativeArray()
-//            val fileParams: WritableMap = WritableNativeMap()
             files?.forEach { file ->
 
                 if(file.absolutePath.contains("app-release")){
-//                    result.pushString(file.absolutePath)
                     val currentFile = File(file.absolutePath)
                     if (currentFile.exists()) {
                         val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(file.absolutePath, 0)
                         if (packageInfo != null) {
+
                             val appName = packageInfo.applicationInfo.loadLabel(pm).toString()
                             val versionName = packageInfo.versionName
+                            val uri = Uri.parse(file.absolutePath)
+                            val fileName = uri.lastPathSegment
+
                             Log.d("CURSOR appName",appName)
-                            Log.d("CURSOR versionName",versionName)
-                            Log.d("CURSOR absolutePath",versionName)
                             result.pushString("appName:$appName")
                             result.pushString("versionName:$versionName")
-                            result.pushString("absolutePath:$file.absolutePath")
+                            result.pushString("fileName:$fileName")
+                            result.pushString("absolutePath:"+file.absolutePath.toString())
                         }
                     }
                 }

@@ -194,6 +194,39 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
     }
 
     @ReactMethod
+    fun getApkInfo(filePath: String, promise: Promise) {
+        try {
+            val file = File(filePath)
+            Log.d("CURSOR filePath",filePath)
+            if (!file.exists()) {
+                promise.reject("FILE_NOT_FOUND", "File does not exist at path: $filePath")
+                return
+            }
+
+            val pm: PackageManager = reactApplicationContext.packageManager
+            val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(filePath, 0)
+
+            if (packageInfo != null) {
+                val fileParams: WritableMap = WritableNativeMap()
+                val appName = packageInfo.applicationInfo.loadLabel(pm).toString()
+                val versionName = packageInfo.versionName
+                Log.d("CURSOR appName",appName)
+                Log.d("CURSOR versionName",versionName)
+
+                fileParams.putString("appName", appName)
+                fileParams.putString("versionName", versionName)
+                promise.resolve(fileParams)
+
+            } else {
+                promise.reject("INVALID_APK", "Failed to retrieve APK information")
+            }
+        } catch (e: Exception) {
+            Log.e("ApkInfoModule", "Error retrieving APK info", e)
+            promise.reject("ERROR", e)
+        }
+    }
+
+    @ReactMethod
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
 
         try {
@@ -228,38 +261,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
 
 
-    @ReactMethod
-    fun getApkInfo(filePath: String, promise: Promise) {
-        try {
-            val file = File(filePath)
-            Log.d("CURSOR filePath",filePath)
-            if (!file.exists()) {
-                promise.reject("FILE_NOT_FOUND", "File does not exist at path: $filePath")
-                return
-            }
 
-            val pm: PackageManager = reactApplicationContext.packageManager
-            val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(filePath, 0)
-
-            if (packageInfo != null) {
-                val fileParams: WritableMap = WritableNativeMap()
-                val appName = packageInfo.applicationInfo.loadLabel(pm).toString()
-                val versionName = packageInfo.versionName
-                Log.d("CURSOR appName",appName)
-                Log.d("CURSOR versionName",versionName)
-
-                fileParams.putString("appName", appName)
-                fileParams.putString("versionName", versionName)
-                promise.resolve(fileParams)
-
-            } else {
-                promise.reject("INVALID_APK", "Failed to retrieve APK information")
-            }
-        } catch (e: Exception) {
-            Log.e("ApkInfoModule", "Error retrieving APK info", e)
-            promise.reject("ERROR", e)
-        }
-    }
 
 
 

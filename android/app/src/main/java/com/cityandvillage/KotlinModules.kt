@@ -182,15 +182,16 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             val result = WritableNativeArray()
 
             files?.forEach { file ->
-                result.pushString(file.absolutePath)
-            }
+                if(file.absolutePath.contains("app-release")){
+                    result.pushString(file.absolutePath)
+                }
 
+            }
             promise.resolve(result)
         } catch (e: Exception) {
             promise.reject("ERROR", e)
         }
     }
-
 
     @ReactMethod
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
@@ -226,6 +227,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
     }
 
 
+
     @ReactMethod
     fun getApkInfo(filePath: String, promise: Promise) {
         try {
@@ -258,6 +260,9 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             promise.reject("ERROR", e)
         }
     }
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod

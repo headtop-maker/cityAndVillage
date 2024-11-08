@@ -52,6 +52,7 @@ const initialState: CounterState = {
     text: '',
     visible: false,
   },
+  appInFiles: '',
 };
 
 export const counterSlice = createSlice({
@@ -75,6 +76,12 @@ export const counterSlice = createSlice({
     },
     setBanner: (state, action: PayloadAction<CounterState['banner']>) => {
       state.banner = action.payload;
+    },
+    setAppInFiles: (
+      state,
+      action: PayloadAction<CounterState['appInFiles']>,
+    ) => {
+      state.appInFiles = action.payload;
     },
   },
   extraReducers: builder => {
@@ -155,6 +162,7 @@ export const {
   resetCurrentUser,
   setErrorText,
   setBanner,
+  setAppInFiles,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

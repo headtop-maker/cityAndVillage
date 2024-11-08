@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
@@ -16,34 +16,38 @@ import {
   useAppSelector,
 } from '../../../shared/models/storeHooks';
 import {getAppVersion} from '../model/model';
-import {selectIsNewVersion} from '../../../shared/models/selectors';
-import {parseAppData} from '../../../shared/lib/parseAppData';
+import {
+  selectAppInFiles,
+  selectIsNewVersion,
+} from '../../../shared/models/selectors';
 
 const {KotlinModules} = NativeModules;
 
 const UpdateApp = () => {
-  const [version, setVersion] = useState<string>('');
   const {rem} = useDimensions();
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
   const isUpdate = useAppSelector(selectIsNewVersion);
+  const appInFiles = useAppSelector(selectAppInFiles);
+
+  const fetchVersionName = async () => {
+    const versionName = await KotlinModules.getVersionName();
+    await dispatch(getAppVersion(versionName));
+  };
 
   useEffect(() => {
-    (async function () {
-      const versionName = await KotlinModules.getVersionName();
-      await dispatch(getAppVersion(versionName));
-    })();
-
+    fetchVersionName().then(() => console.log('check version'));
     registerReceiver();
-    const unsubscribe = subscribeToDownloadComplete((dVersion: string) => {
-      setVersion(dVersion);
+
+    const unsubscribe = subscribeToDownloadComplete(() => {
+      fetchVersionName().then(() => console.log('check version'));
     });
 
     return () => {
       unsubscribe();
       unregisterReceiver();
     };
-  }, []);
+  }, [fetchVersionName]);
 
   const handleShowModal = () => {
     showModal(
@@ -58,7 +62,6 @@ const UpdateApp = () => {
 
   const handleUpdate = async () => {
     handleShowModal();
-    setVersion('');
     await KotlinModules.downloadAndUpdate(
       TEMP_API + 'upload/app-release.apk',
       'app-release.apk',
@@ -67,22 +70,13 @@ const UpdateApp = () => {
   };
 
   const handleInstall = async () => {
-    KotlinModules.show(version, 500);
+    KotlinModules.show(appInFiles, 500);
     KotlinModules.installUpdate(
-      version,
+      appInFiles,
       (installSuccess: string) => console.log(installSuccess),
       (error: string) => console.log(error),
     );
   };
-
-  async function getDownloadFiles() {
-    try {
-      const files = await KotlinModules.getDownloadFiles();
-      console.log('Download files:', parseAppData(files));
-    } catch (error) {
-      console.error('Error fetching download files:', error);
-    }
-  }
 
   return (
     <View>
@@ -99,23 +93,15 @@ const UpdateApp = () => {
         </>
       )}
 
-      {!!version && (
+      {!!appInFiles && (
         <Button
           icon='update'
           mode='outlined'
           style={{margin: rem / 3}}
           onPress={handleInstall}>
-          Установить {version}
+          Установить {appInFiles}
         </Button>
       )}
-
-      <Button
-        icon='download'
-        mode='outlined'
-        style={{margin: rem / 3}}
-        onPress={getDownloadFiles}>
-        Список файлов
-      </Button>
     </View>
   );
 };

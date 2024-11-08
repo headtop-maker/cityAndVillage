@@ -42,3 +42,8 @@ export const selectIsNewVersion = createSelector(
   selectRootCounter,
   state => state.isNewVersion,
 );
+
+export const selectAppInFiles = createSelector(
+  selectRootCounter,
+  state => state.appInFiles,
+);

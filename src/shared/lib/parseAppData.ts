@@ -1,4 +1,11 @@
-export const parseAppData = (data: string[]) => {
+export const parseAppData = (
+  data: string[],
+): {
+  appName: string;
+  versionName: string;
+  fileName: string;
+  absolutePath: string;
+}[] => {
   const result = [];
 
   for (let i = 0; i < data.length; i += 4) {

@@ -9,13 +9,14 @@ import AddContentScreen from '../AddContent/ui/AddContentScreen';
 import ServiceScreen from '../CityService/ui/CityServices';
 import {useAppSelector} from '../../shared/models/storeHooks';
 import {
+  selectCurrentAppVersion,
   selectCurrentUserRole,
   selectCurrentUserToken,
 } from '../../shared/models/selectors';
 import {userRole} from '../../shared/models/types';
 
 import ImportantBtn from '../../features/getNews/ui/ImportantBtn';
-import {Button} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {IRouteParamList} from '../../shared/Navigation/types';
@@ -28,6 +29,7 @@ const TabScreen = () => {
   const role = useAppSelector(selectCurrentUserRole);
   const isAdmin = role === userRole.admin;
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+  const currentAppVersion = useAppSelector(selectCurrentAppVersion);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
@@ -38,10 +40,13 @@ const TabScreen = () => {
         headerRight: () => (
           <View style={styles.headerRightContainer}>
             <IsConnect />
+            <View>
+              <Text variant='labelSmall'>{currentAppVersion || ''}</Text>
+            </View>
             {currentUserToken ? (
               <ImportantBtn />
             ) : (
-              <View>
+              <View style={{alignItems: 'center'}}>
                 <Button
                   icon='login'
                   mode='text'

@@ -11,6 +11,7 @@ export interface CounterState {
     author: string;
   }[];
   appInFiles: string;
+  currentAppVersion: string;
   isNewVersion: boolean;
   currentNewsId: string;
   important: {

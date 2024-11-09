@@ -53,6 +53,7 @@ const initialState: CounterState = {
     visible: false,
   },
   appInFiles: '',
+  currentAppVersion: '',
 };
 
 export const counterSlice = createSlice({
@@ -70,6 +71,9 @@ export const counterSlice = createSlice({
     },
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
+    },
+    setCurrentAppVersion: (state, action: PayloadAction<string>) => {
+      state.currentAppVersion = action.payload;
     },
     setErrorText: (state, action: PayloadAction<string>) => {
       state.actionState.modalText = action.payload;
@@ -163,6 +167,7 @@ export const {
   setErrorText,
   setBanner,
   setAppInFiles,
+  setCurrentAppVersion,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

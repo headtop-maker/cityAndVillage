@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {memo, useEffect} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
@@ -20,6 +20,7 @@ import {
   selectAppInFiles,
   selectIsNewVersion,
 } from '../../../shared/models/selectors';
+import {setCurrentAppVersion} from '../../../shared/models/counterSlice';
 
 const {KotlinModules} = NativeModules;
 
@@ -32,6 +33,7 @@ const UpdateApp = () => {
 
   const fetchVersionName = async () => {
     const versionName = await KotlinModules.getVersionName();
+    !!versionName && dispatch(setCurrentAppVersion(versionName));
     await dispatch(getAppVersion(versionName));
   };
 
@@ -112,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateApp;
+export default memo(UpdateApp);

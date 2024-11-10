@@ -17,8 +17,6 @@ import {
 } from '../../../entities/News/models/selectors';
 import {dp} from '../../../shared/lib/getDP';
 
-// interface UsersProps {}
-
 const Users = () => {
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const [importantText, setImportantText] = useState('');
@@ -85,8 +83,9 @@ const Users = () => {
       dispatch(
         setImportantMessage({
           author: userEmail,
+          authorName: userName,
           recipient: recipient,
-          title: 'Сообщение пользователю',
+          title: 'От: ' + userName,
           description: importantText,
           isImportant: checked,
         }),

@@ -134,3 +134,12 @@ export const getServicesByCategory = (
     method: 'get',
     url: `${TEMP_API}adsboard/${serviceCategory}`,
   });
+
+export const getAppVersionFromServer = (): Promise<
+  AxiosResponse<{currentVersion: string; description: string}, unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}version`,
+  });

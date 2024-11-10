@@ -17,7 +17,8 @@ const SetLogin = () => {
   const [checked, setChecked] = useState(false);
   const [blockBtn, setBlockBtn] = useState(false);
 
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailPattern =
+    /^[A-Za-z0-9][A-Za-z0-9.]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   const dispatch = useAppDispatch();
 
@@ -27,8 +28,7 @@ const SetLogin = () => {
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      await dispatch(loginUsers({password, email}));
-    } catch (e) {
+      await dispatch(loginUsers({password, email: email.toLowerCase()}));
     } finally {
       setBlockBtn(false);
     }
@@ -49,6 +49,11 @@ const SetLogin = () => {
   const isLockSend =
     !!email && !!password && !hasErrors() && !hasPasswordErrors();
 
+  const handleEmailChange = (text: string) => {
+    const filteredText = text.replace(/\s/g, ''); // Удаляем пробелы
+    setEmail(filteredText);
+  };
+
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant='titleLarge'>
@@ -58,7 +63,7 @@ const SetLogin = () => {
         style={styles.input}
         label='Почта'
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
         mode='outlined'
       />
       {email.length > 2 && hasErrors() && (

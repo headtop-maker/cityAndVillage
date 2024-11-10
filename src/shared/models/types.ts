@@ -10,6 +10,9 @@ export interface CounterState {
     image: string;
     author: string;
   }[];
+  appInFiles: string;
+  currentAppVersion: string;
+  isNewVersion: boolean;
   currentNewsId: string;
   important: {
     id: string;
@@ -87,3 +90,9 @@ export type TDocuments = {
   filePath: string;
   createdAt: Date;
 }[];
+
+export type IAppVersion = {
+  id: string;
+  currentVersion: string;
+  description: string[];
+};

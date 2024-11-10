@@ -15,9 +15,6 @@ const ModalScreen = () => {
     dispatch(resetModalText());
   };
 
-  const getText = () => {
-    if (modalText) return modalText;
-  };
   return (
     <Modal
       animationType='fade'
@@ -35,7 +32,7 @@ const ModalScreen = () => {
               handleCloseModal();
             },
           }}>
-          {getText() ? getText() : ''}
+          {modalText || ''}
         </Snackbar>
       </View>
     </Modal>

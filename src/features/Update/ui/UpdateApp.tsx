@@ -1,16 +1,55 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {memo, useEffect} from 'react';
+import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import {nativeFn} from '../../../shared/lib/nativeFn';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
+import {
+  registerReceiver,
+  subscribeToDownloadComplete,
+  unregisterReceiver,
+} from '../model/receiver';
+
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../shared/models/storeHooks';
+import {getAppVersion} from '../model/model';
+import {
+  selectAppInFiles,
+  selectIsNewVersion,
+} from '../../../shared/models/selectors';
+import {setCurrentAppVersion} from '../../../shared/models/counterSlice';
+
+const {KotlinModules} = NativeModules;
 
 const UpdateApp = () => {
   const {rem} = useDimensions();
-  // @ts-ignore
   const {showModal} = useModal();
+  const dispatch = useAppDispatch();
+  const isUpdate = useAppSelector(selectIsNewVersion);
+  const appInFiles = useAppSelector(selectAppInFiles);
+
+  const fetchVersionName = async () => {
+    const versionName = await KotlinModules.getVersionName();
+    !!versionName && dispatch(setCurrentAppVersion(versionName));
+    await dispatch(getAppVersion(versionName));
+  };
+
+  useEffect(() => {
+    fetchVersionName().then(() => console.log('check version'));
+    registerReceiver();
+
+    const unsubscribe = subscribeToDownloadComplete(() => {
+      fetchVersionName().then(() => console.log('check version'));
+    });
+
+    return () => {
+      unsubscribe();
+      unregisterReceiver();
+    };
+  }, [fetchVersionName]);
 
   const handleShowModal = () => {
     showModal(
@@ -19,29 +58,52 @@ const UpdateApp = () => {
           Процесс загрузки проверьте в статусном окне вашего устройства.{' '}
         </Text>
         <Text>1. После успешной загрузки закройте текущее приложение. </Text>
-        <Text>2. Откройте apk файл из паки загрузки. </Text>
       </View>,
     );
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     handleShowModal();
-    nativeFn.getFile({
-      url: TEMP_API + 'upload/IMG-1801ea83a075fa3991b29ea41927ea7f-V.jpg',
-      mimeType: 'image/jpeg',
-      title: 'images.jpg',
-    });
+    await KotlinModules.downloadAndUpdate(
+      TEMP_API + 'upload/app-release.apk',
+      'app-release.apk',
+      (installSuccess: string) => console.log(installSuccess),
+    );
   };
+
+  const handleInstall = async () => {
+    KotlinModules.show(appInFiles, 500);
+    KotlinModules.installUpdate(
+      appInFiles,
+      (installSuccess: string) => console.log(installSuccess),
+      (error: string) => console.log(error),
+    );
+  };
+
   return (
     <View>
-      <Text variant='titleLarge'>Получить приложение</Text>
-      <Button
-        icon='download'
-        mode='outlined'
-        style={{margin: rem / 3}}
-        onPress={handleUpdate}>
-        Последняя версия
-      </Button>
+      {isUpdate && (
+        <>
+          <Text variant='titleLarge'>Доступна новая версия</Text>
+          <Button
+            icon='download'
+            mode='outlined'
+            style={{margin: rem / 3}}
+            onPress={handleUpdate}>
+            Последняя версия
+          </Button>
+        </>
+      )}
+
+      {!!appInFiles && (
+        <Button
+          icon='update'
+          mode='outlined'
+          style={{margin: rem / 3}}
+          onPress={handleInstall}>
+          Установить {appInFiles}
+        </Button>
+      )}
     </View>
   );
 };
@@ -52,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateApp;
+export default memo(UpdateApp);

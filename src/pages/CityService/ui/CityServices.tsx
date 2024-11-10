@@ -20,7 +20,7 @@ const CityServices = () => {
   const [selected, setSelected] = useState('');
   const isLoading = useAppSelector(selectIsLoading);
   const lists = useAppSelector(servicesSelectors.selectAll);
-  // @ts-ignore
+
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
 

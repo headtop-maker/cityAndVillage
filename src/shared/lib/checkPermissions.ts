@@ -9,7 +9,7 @@ export const checkStoragePermission = async () => {
       console.log('Доступ предоставлен');
       return true;
     } else {
-      console.log('Доступ запрещен');
+      console.log('Доступ запрещен WRITE_EXTERNAL_STORAGE');
       return false;
     }
   } catch (err) {

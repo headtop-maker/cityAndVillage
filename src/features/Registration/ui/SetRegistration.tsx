@@ -11,7 +11,7 @@ import {dp} from '../../../shared/lib/getDP';
 
 const SetRegistration = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [secure, setSecure] = useState(true);
@@ -19,15 +19,15 @@ const SetRegistration = () => {
   const [blockBtn, setBlockBtn] = useState(false);
 
   const fullNamePattern = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)$/;
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailPattern =
+    /^[A-Za-z0-9][A-Za-z0-9.]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   const dispatch = useAppDispatch();
 
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      dispatch(createUsers({name, email, password}));
-    } catch (e) {
+      dispatch(createUsers({name, email: email.toLowerCase(), password}));
     } finally {
       setBlockBtn(false);
     }
@@ -51,6 +51,11 @@ const SetRegistration = () => {
     !hasPassErrors() &&
     password.length > 7;
 
+  const handleEmailChange = (text: string) => {
+    const filteredText = text.replace(/\s/g, ''); // Удаляем пробелы
+    setEmail(filteredText);
+  };
+
   return (
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.titleTextStyle} variant='titleLarge'>
@@ -58,7 +63,7 @@ const SetRegistration = () => {
       </Text>
       <TextInput
         style={styles.input}
-        label='Имя Фамилия Отчество'
+        label='Ф.И.О.'
         value={name}
         onChangeText={setName}
         mode='outlined'
@@ -73,7 +78,7 @@ const SetRegistration = () => {
         style={styles.input}
         label='Почта'
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
         mode='outlined'
       />
       {email.length > 2 && hasEmailErrors() && (

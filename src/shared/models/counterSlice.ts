@@ -14,6 +14,7 @@ import {
   setBannedUser,
   setImportantMessage,
 } from '../../features/Users/model/models';
+import {getAppVersion} from '../../features/Update/model/model';
 
 interface RejectedAction extends Action {
   error: Error;
@@ -45,11 +46,14 @@ const initialState: CounterState = {
   allUsers: undefined,
   currentNewsId: '',
   currentUser: undefined,
+  isNewVersion: false,
   banner: {
     icon: '',
     text: '',
     visible: false,
   },
+  appInFiles: '',
+  currentAppVersion: '',
 };
 
 export const counterSlice = createSlice({
@@ -68,11 +72,20 @@ export const counterSlice = createSlice({
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
     },
+    setCurrentAppVersion: (state, action: PayloadAction<string>) => {
+      state.currentAppVersion = action.payload;
+    },
     setErrorText: (state, action: PayloadAction<string>) => {
       state.actionState.modalText = action.payload;
     },
     setBanner: (state, action: PayloadAction<CounterState['banner']>) => {
       state.banner = action.payload;
+    },
+    setAppInFiles: (
+      state,
+      action: PayloadAction<CounterState['appInFiles']>,
+    ) => {
+      state.appInFiles = action.payload;
     },
   },
   extraReducers: builder => {
@@ -103,9 +116,13 @@ export const counterSlice = createSlice({
         state.allUsers = action.payload;
       })
 
+      .addCase(getAppVersion.fulfilled, (state, action) => {
+        state.isNewVersion = action.payload;
+      })
+
       .addCase(setImportantMessage.fulfilled, state => {
         state.actionState.loadind = false;
-        state.actionState.modalText = '';
+        state.actionState.modalText = 'Сообщение успешно отправлено';
       })
 
       .addCase(setBannedUser.fulfilled, (state, action) => {
@@ -149,6 +166,8 @@ export const {
   resetCurrentUser,
   setErrorText,
   setBanner,
+  setAppInFiles,
+  setCurrentAppVersion,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

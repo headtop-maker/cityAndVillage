@@ -1,37 +1,73 @@
 package com.cityandvillage
 
-import android.widget.Toast
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import android.content.Intent
-import android.provider.DocumentsContract
-import android.os.Environment
-import java.util.HashMap
-
 import android.app.Activity
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageInfo
 import android.content.res.Resources
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.DocumentsContract
 import android.util.DisplayMetrics
+import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
+import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.facebook.react.bridge.WritableNativeArray
+import java.io.File
 
 
-
-class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
-    var activity: Activity? = null
+public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
     private val DURATION_SHORT_KEY = "SHORT"
     private val DURATION_LONG_KEY = "LONG"
     var promise: Promise? = null
 
+
+
     override fun getName(): String {
         return "KotlinModules"
+    }
+
+     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if(intent.action =="android.intent.action.DOWNLOAD_COMPLETE"){
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,-1L)
+                if(id != -1L){
+                    Toast.makeText(context, " Файл получен ", Toast.LENGTH_LONG).show();
+                    println("Download mReceiver $id finish")
+                    checkDownload(context, id)
+                }
+            }
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @ReactMethod
+    fun registerReceiver() {
+        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        reactApplicationContext.registerReceiver(mReceiver, filter, null, null)// помогло с 13 андроид
+    }
+
+    @ReactMethod
+    fun unregisterReceiver() {
+        reactApplicationContext.unregisterReceiver(mReceiver)
     }
 
     override fun getConstants(): kotlin.collections.Map<String, Any> {
@@ -71,12 +107,141 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         downloader.downloadFile(url,mimeType,title)
     }
 
+
+
+    private fun checkDownload(context: Context, downloadId: Long) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        val cursor: Cursor = downloadManager.query(query)
+        if (cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+            val status = cursor.getInt(columnIndex)
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                val uriString = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                val uri = Uri.parse(cursor.getString(uriString))
+                val fileName = uri.lastPathSegment
+                Log.d("CURSOR fileName",uri.toString())
+                if (fileName != null && fileName.substringAfterLast('.', "")=="apk") {
+
+                    Log.d("CURSOR fileName",fileName)
+                    Log.d("CURSOR fileName split",fileName.split("-")[0]+fileName.split("-")[1])
+                    sendEvent(reactApplicationContext,"Download",fileName)
+                }
+            }
+        }
+        cursor.close()
+    }
+
+    private fun sendEvent(reactContext: ReactApplicationContext, eventName: String, params: Any?) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(eventName, params)
+    }
+
+
+    @ReactMethod
+    fun getVersionName(promise: Promise) {
+        try {
+            val packageInfo = reactApplicationContext.packageManager.getPackageInfo(reactApplicationContext.packageName, 0)
+            promise.resolve(packageInfo.versionName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            promise.reject("ERROR", "Version name not found")
+        }
+    }
     @ReactMethod
     fun show(message:String,duration: Int){
         Toast.makeText(reactApplicationContext,message,duration).show()
     }
 
+    @ReactMethod
+    fun downloadAndUpdate(url: String, fileName: String, successCallback: Callback) {
+        try {
+            val downloadManager = reactApplicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val downloadUri = Uri.parse(url)
 
+            val request = DownloadManager.Request(downloadUri).apply {
+                setTitle("Downloading update")
+                setDescription("Загружается ${fileName}")
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            }
+
+            downloadManager.enqueue(request)
+            successCallback.invoke("Download started")
+
+        } catch (e: Exception) {
+            println(e.message)
+        }
+    }
+
+
+    @ReactMethod
+    fun getDownloadFiles(promise: Promise) {
+        try {
+            val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val files = downloadDir?.listFiles()
+            val pm: PackageManager = reactApplicationContext.packageManager
+            val result = WritableNativeArray()
+            files?.forEach { file ->
+
+                if(file.absolutePath.contains("app-release")){
+                    val currentFile = File(file.absolutePath)
+                    if (currentFile.exists()) {
+                        val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(file.absolutePath, 0)
+                        if (packageInfo != null) {
+
+                            val appName = packageInfo.applicationInfo.loadLabel(pm).toString()
+                            val versionName = packageInfo.versionName
+                            val uri = Uri.parse(file.absolutePath)
+                            val fileName = uri.lastPathSegment
+
+                            Log.d("CURSOR appName",appName)
+                            result.pushString("appName:$appName")
+                            result.pushString("versionName:$versionName")
+                            result.pushString("fileName:$fileName")
+                            result.pushString("absolutePath:"+file.absolutePath.toString())
+                        }
+                    }
+                }
+            }
+            promise.resolve(result)
+        } catch (e: Exception) {
+            promise.reject("ERROR", e)
+        }
+    }
+
+
+    @ReactMethod
+    fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
+
+        try {
+            val file = File(reactApplicationContext.getExternalFilesDir(null)?.path + "/Download", fileName)
+
+            Log.d("CURSOR fileName",fileName)
+            if (!file.exists()) {
+                Toast.makeText(reactApplicationContext, " File not found 1 ", Toast.LENGTH_LONG).show();
+                errorCallback.invoke("File not found 1")
+                return
+            }
+
+            val uri: Uri = FileProvider.getUriForFile(
+                reactApplicationContext,
+                "${reactApplicationContext.packageName}.provider",
+                file
+            )
+
+            val installIntent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/vnd.android.package-archive")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+
+            reactApplicationContext.startActivity(installIntent)
+            successCallback.invoke("Installation started")
+
+        } catch (e: Exception) {
+            Toast.makeText(reactApplicationContext, e.message.toString(), Toast.LENGTH_LONG).show();
+            errorCallback.invoke(e.message)
+        }
+    }
 
 
 
@@ -91,8 +256,6 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
         }
         reactApplicationContext.startActivityForResult(intent, 1, null);
     }
-
-
 
     private val activityEventListener =
         object : BaseActivityEventListener() {
@@ -133,3 +296,38 @@ class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaMo
     }
 
 }
+
+
+// рабочий код как пример
+//@ReactMethod
+//fun getApkInfo(filePath: String, promise: Promise) {
+//    try {
+//        val file = File(filePath)
+//        Log.d("CURSOR filePath",filePath)
+//        if (!file.exists()) {
+//            promise.reject("FILE_NOT_FOUND", "File does not exist at path: $filePath")
+//            return
+//        }
+//
+//        val pm: PackageManager = reactApplicationContext.packageManager
+//        val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(filePath, 0)
+//
+//        if (packageInfo != null) {
+//            val fileParams: WritableMap = WritableNativeMap()
+//            val appName = packageInfo.applicationInfo.loadLabel(pm).toString()
+//            val versionName = packageInfo.versionName
+//            Log.d("CURSOR appName",appName)
+//            Log.d("CURSOR versionName",versionName)
+//
+//            fileParams.putString("appName", appName)
+//            fileParams.putString("versionName", versionName)
+//            promise.resolve(fileParams)
+//
+//        } else {
+//            promise.reject("INVALID_APK", "Failed to retrieve APK information")
+//        }
+//    } catch (e: Exception) {
+//        Log.e("ApkInfoModule", "Error retrieving APK info", e)
+//        promise.reject("ERROR", e)
+//    }
+//}

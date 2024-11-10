@@ -1,11 +1,7 @@
 import React, {FC} from 'react';
 import {Banner} from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../../../models/storeHooks';
-import {
-  selectBannerIcon,
-  selectBannerText,
-  selectBannerVisible,
-} from '../../../models/selectors';
+import {selectBannerText, selectBannerVisible} from '../../../models/selectors';
 import {setBanner} from '../../../models/counterSlice';
 
 const MyBanner: FC = () => {

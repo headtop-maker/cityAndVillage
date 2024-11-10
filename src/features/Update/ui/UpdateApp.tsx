@@ -84,7 +84,7 @@ const UpdateApp = () => {
     <View>
       {isUpdate && (
         <>
-          <Text variant='titleLarge'>Доступна новая версия</Text>
+          <Text variant='titleLarge'>Доступно обновление</Text>
           <Button
             icon='download'
             mode='outlined'

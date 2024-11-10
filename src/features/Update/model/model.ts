@@ -21,7 +21,6 @@ export const getAppVersion = createAsyncThunk(
           parseAppData(files).find(item =>
             isNewerVersion(versionName, item.versionName),
           )?.fileName;
-
         if (filesInApp) {
           dispatch(setAppInFiles(filesInApp));
           return;

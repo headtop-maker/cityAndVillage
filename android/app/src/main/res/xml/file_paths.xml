@@ -3,5 +3,6 @@
 <!--</paths>-->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
 <!--    <external-files-path name="download" path="Download/" />-->
-    <external-files-path name="download" path="." />
+    <root-path name="root" path="." />
+<!--    <external-files-path name="download" path="." />-->
 </paths>

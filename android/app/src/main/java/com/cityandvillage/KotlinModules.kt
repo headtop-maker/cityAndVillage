@@ -216,7 +216,8 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
     fun installUpdate(fileName: String, successCallback: Callback, errorCallback: Callback) {
 
         try {
-            val file = File(reactApplicationContext.getExternalFilesDir(null)?.path + "/Download", fileName)
+            val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(downloadDir, fileName)
 
             Log.d("CURSOR fileName",fileName)
             if (!file.exists()) {

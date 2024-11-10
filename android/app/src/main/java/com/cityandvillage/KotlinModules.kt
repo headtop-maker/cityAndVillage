@@ -195,6 +195,8 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                             val fileName = uri.lastPathSegment
 
                             Log.d("CURSOR appName",appName)
+                            Log.d("CURSOR absolutePath",file.absolutePath.toString())
+
                             result.pushString("appName:$appName")
                             result.pushString("versionName:$versionName")
                             result.pushString("fileName:$fileName")

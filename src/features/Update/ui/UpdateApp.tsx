@@ -49,7 +49,7 @@ const UpdateApp = () => {
       unsubscribe();
       unregisterReceiver();
     };
-  }, [fetchVersionName]);
+  }, []);
 
   const handleShowModal = () => {
     showModal(

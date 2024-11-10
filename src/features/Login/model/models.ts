@@ -4,6 +4,7 @@ import {fetchApiDomain} from '../../../shared/constants';
 import {loginUserData} from './types';
 import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';
+import {Alert} from 'react-native';
 
 export const loginUsers = createAsyncThunk(
   `${fetchApiDomain}/loginUsers`,
@@ -19,6 +20,10 @@ export const loginUsers = createAsyncThunk(
         role: role,
       };
     } catch (err) {
+      Alert.alert(
+        'Ошибка',
+        'Пользователь не найден или не активирован администратором',
+      );
       return rejectWithValue(err);
     }
   },

@@ -183,7 +183,8 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             val result = WritableNativeArray()
             files?.forEach { file ->
 
-                if(file.absolutePath.contains("app-release")){
+                if(file.absolutePath.contains(".apk")){
+
                     val currentFile = File(file.absolutePath)
                     if (currentFile.exists()) {
                         val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(file.absolutePath, 0)
@@ -203,6 +204,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                             result.pushString("absolutePath:"+file.absolutePath.toString())
                         }
                     }
+
                 }
             }
             promise.resolve(result)

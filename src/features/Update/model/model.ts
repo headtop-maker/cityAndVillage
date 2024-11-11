@@ -16,6 +16,7 @@ export const getAppVersion = createAsyncThunk(
 
       try {
         const files = await KotlinModules.getDownloadFiles();
+        console.log('files', files);
         const filesInApp =
           files.length > 0 &&
           parseAppData(files).find(item =>

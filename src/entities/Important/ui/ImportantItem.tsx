@@ -33,7 +33,9 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
         </View>
         <View style={styles.importantTextBox}>
           <Text style={styles.importantTitle}>{title}</Text>
-          <Text>{description ? description : ''}</Text>
+          <Text style={styles.importantText}>
+            {description ? description : ''}
+          </Text>
           <Text style={styles.importantDate}>
             {convertDate(new Date(createdAt))}
           </Text>
@@ -58,18 +60,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  importantTitle: {fontWeight: 'bold'},
-  importantDate: {fontWeight: 'bold', textAlign: 'right'},
+  importantTitle: {fontWeight: 'bold', color: '#0e0e0e'},
+  importantText: {color: '#0e0e0e'},
+  importantDate: {fontWeight: 'bold', textAlign: 'right', color: '#0e0e0e'},
   importantTextBox: {width: '80%'},
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#7d7d7d',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 6,
   },
   importantImage: {
     width: dp(50),

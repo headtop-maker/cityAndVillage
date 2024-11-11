@@ -17,8 +17,7 @@ const SetLogin = () => {
   const [checked, setChecked] = useState(false);
   const [blockBtn, setBlockBtn] = useState(false);
 
-  const emailPattern =
-    /^[A-Za-z0-9][A-Za-z0-9.]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const emailPattern = /^[^\s@]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const dispatch = useAppDispatch();
 

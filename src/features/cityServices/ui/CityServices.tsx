@@ -35,7 +35,7 @@ const CityServices: FC = () => {
           key={'contact' + index}
           title={`Контакт ${index + 1}`}
           onPress={() => {
-            Linking.openURL(`tel:${contact}}`);
+            Linking.openURL(`tel:${contact}`);
           }}
           left={props => <List.Icon {...props} icon='phone' />}
           description={contact}

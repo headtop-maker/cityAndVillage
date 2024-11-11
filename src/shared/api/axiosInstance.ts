@@ -44,7 +44,7 @@ export const getImageFromServer = (): Promise<
   response.apiRequest({
     timeout: 3000,
     method: 'get',
-    url: `${TEMP_API}upload`,
+    url: `${TEMP_API}upload/`,
   });
 
 export const createUser = (
@@ -119,7 +119,7 @@ export const setFileApi = (
     timeout: 3000,
     data: formData,
     method: 'post',
-    url: `${TEMP_API}upload`,
+    url: `${TEMP_API}upload/file`,
     headers: {
       Accept: 'application/json',
       'Content-type': 'multipart/form-data',

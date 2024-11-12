@@ -5,12 +5,14 @@ import {
   userRole,
   TDocuments,
   IAppVersion,
+  ServiceTitleItem,
 } from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
+  tagTypes: ['Category'],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
     prepareHeaders: headers => {
@@ -26,6 +28,20 @@ export const serviceApi = createApi({
   endpoints: builder => ({
     getServiceCategory: builder.query<ServiceTitle, void>({
       query: () => '/category',
+    }),
+    addNewCategory: builder.mutation<
+      ServiceTitleItem,
+      {
+        categoryName: string;
+        description: string;
+      }
+    >({
+      query: data => ({
+        url: '/posts',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category'],
     }),
     getDocuments: builder.query<TDocuments, void>({
       query: () => '/documents',
@@ -56,6 +72,7 @@ export const serviceApi = createApi({
 });
 
 export const {
+  useAddNewCategoryMutation,
   useGetServiceCategoryQuery,
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,

@@ -15,8 +15,8 @@ export const serviceApi = createApi({
   tagTypes: ['Category'],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
-    prepareHeaders: headers => {
-      const token = (state: RootState) => state.counter.currentUser?.userToken;
+    prepareHeaders: (headers, {getState}) => {
+      const token = (getState() as RootState).counter.currentUser?.userToken;
 
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
@@ -28,6 +28,7 @@ export const serviceApi = createApi({
   endpoints: builder => ({
     getServiceCategory: builder.query<ServiceTitle, void>({
       query: () => '/category',
+      providesTags: ['Category'],
     }),
     addNewCategory: builder.mutation<
       ServiceTitleItem,
@@ -37,9 +38,16 @@ export const serviceApi = createApi({
       }
     >({
       query: data => ({
-        url: '/posts',
+        url: '/category',
         method: 'POST',
         body: data,
+      }),
+      invalidatesTags: ['Category'],
+    }),
+    deleteCategory: builder.mutation<{data: string}, string>({
+      query: id => ({
+        url: `/category/${id}`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['Category'],
     }),
@@ -72,6 +80,7 @@ export const serviceApi = createApi({
 });
 
 export const {
+  useDeleteCategoryMutation,
   useAddNewCategoryMutation,
   useGetServiceCategoryQuery,
   useGetAllImportantContactsQuery,

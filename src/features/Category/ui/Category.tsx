@@ -1,7 +1,10 @@
 import React, {FC} from 'react';
-import {Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, FlatList, StyleSheet, Button, View, Alert} from 'react-native';
 
-import {useGetServiceCategoryQuery} from '../../../shared/models/services';
+import {
+  useDeleteCategoryMutation,
+  useGetServiceCategoryQuery,
+} from '../../../shared/models/services';
 import AddNewCategory from './AddNewCategory';
 import {dp} from '../../../shared/lib/getDP';
 
@@ -13,22 +16,44 @@ type Category = {
 
 const CategoryList: FC = () => {
   const {data, refetch, isLoading} = useGetServiceCategoryQuery();
+  const [deleleCategory] = useDeleteCategoryMutation();
+
+  const showAlert = (id: string, description: string) => {
+    Alert.alert('Удалить категорию', description, [
+      {
+        text: 'OK',
+        onPress: async () => {
+          await deleleCategory(id), await refetch();
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ]);
+  };
 
   const renderItem = ({item}: {item: Category}) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => console.log(item.id)}>
-      <Text style={styles.categoryName}>{item.categoryName}</Text>
-      <Text style={styles.description}>{item.description}</Text>
-    </TouchableOpacity>
+    <View style={styles.itemContainer}>
+      <View>
+        <Text style={styles.categoryName}>{item.categoryName}</Text>
+        <Text style={styles.description}>{item.description}</Text>
+      </View>
+      <Button
+        onPress={() => showAlert(item.id, item.description)}
+        title='Удалить'
+      />
+    </View>
   );
 
   return (
     <>
-      <AddNewCategory />
       <FlatList
         data={data}
-        keyExtractor={item => item.id}
+        ListHeaderComponent={<AddNewCategory />}
+        stickyHeaderIndices={[0]}
+        keyExtractor={item => item.id + 'categoty'}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
         onRefresh={refetch}
@@ -49,6 +74,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   categoryName: {
     fontSize: 16,

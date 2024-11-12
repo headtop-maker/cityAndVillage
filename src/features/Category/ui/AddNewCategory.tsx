@@ -7,7 +7,7 @@ const AddNewCategory: FC = () => {
   const [categoryName, setCategoryName] = useState('');
   const [description, setDescription] = useState('');
 
-  const [addCategory, {error}] = useAddNewCategoryMutation();
+  const [addCategory] = useAddNewCategoryMutation();
 
   const handleSubmit = async () => {
     if (categoryName && description) {

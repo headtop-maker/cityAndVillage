@@ -1,6 +1,5 @@
 import {AxiosHeaderValue, AxiosInstance, Method} from 'axios';
 import axios from 'axios';
-import {log} from './decorators/perfDecorators';
 import {Dispatch, SetStateAction} from 'react';
 
 type THeaders = Partial<{
@@ -75,7 +74,7 @@ export default class ApiCall {
     this.token = '';
   }
 
-  @log()
+  // @log() // рабочий поправить ts config
   apiRequest<T>(reqData: TRequestData<T>) {
     const call = this.axiosInstance({
       ...reqData,

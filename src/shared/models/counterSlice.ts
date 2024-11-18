@@ -47,6 +47,7 @@ const initialState: CounterState = {
   currentNewsId: '',
   currentUser: undefined,
   isNewVersion: false,
+  fireBaseTokenAdded: false,
   banner: {
     icon: '',
     text: '',
@@ -71,6 +72,9 @@ export const counterSlice = createSlice({
     },
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
+    },
+    setFireBaseTokenAdded: (state, action: PayloadAction<boolean>) => {
+      state.fireBaseTokenAdded = action.payload;
     },
     setCurrentAppVersion: (state, action: PayloadAction<string>) => {
       state.currentAppVersion = action.payload;
@@ -168,6 +172,7 @@ export const {
   setBanner,
   setAppInFiles,
   setCurrentAppVersion,
+  setFireBaseTokenAdded,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

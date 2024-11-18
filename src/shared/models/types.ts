@@ -28,6 +28,7 @@ export interface CounterState {
     modalText: string;
     showIndicator: boolean;
   };
+  fireBaseTokenAdded: boolean;
   banner: {
     text: string;
     icon: string;

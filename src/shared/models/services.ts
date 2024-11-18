@@ -9,10 +9,11 @@ import {
 } from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
+import {setFireBaseTokenAdded} from './counterSlice';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
-  tagTypes: ['Category'],
+  tagTypes: ['Category', 'FireBaseTokens'],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
     prepareHeaders: (headers, {getState}) => {
@@ -43,6 +44,28 @@ export const serviceApi = createApi({
         body: data,
       }),
       invalidatesTags: ['Category'],
+    }),
+
+    addFireBaseToken: builder.mutation<
+      {id: string; tokens: string},
+      {
+        tokens: string;
+      }
+    >({
+      query: data => ({
+        url: '/firebase-tokens',
+        method: 'POST',
+        body: data,
+      }),
+      async onQueryStarted(_, {dispatch, queryFulfilled}) {
+        try {
+          const {data} = await queryFulfilled; // Ожидаем успешного ответа
+          !!data.tokens && dispatch(setFireBaseTokenAdded(true));
+        } catch (error) {
+          console.log('Ошибка при выполнении мутации:', error);
+        }
+      },
+      invalidatesTags: ['FireBaseTokens'],
     }),
     deleteCategory: builder.mutation<{data: string}, string>({
       query: id => ({
@@ -86,5 +109,5 @@ export const {
   useGetAllImportantContactsQuery,
   useGetAdminsQuery,
   useGetDocumentsQuery,
-  useGetAppVersionQuery,
+  useAddFireBaseTokenMutation,
 } = serviceApi;

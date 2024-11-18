@@ -9,7 +9,10 @@ import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
 import ServiceScreen from '../../pages/CityService/ui/CityServices';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
 import {useAppSelector} from '../models/storeHooks';
-import {selectCurrentUserToken} from '../models/selectors';
+import {
+  selectCurrentUserToken,
+  selectFireBaseTokenAdded,
+} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
@@ -24,13 +27,17 @@ import BootSplash from 'react-native-bootsplash';
 import {Alert} from 'react-native';
 
 import messaging from '@react-native-firebase/messaging';
+import {useAddFireBaseTokenMutation} from '../models/services';
 
 const MainStack = () => {
+  const [addToken] = useAddFireBaseTokenMutation();
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+  const fireBaseTokenAdded = useAppSelector(selectFireBaseTokenAdded);
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
     !check && (await requestStoragePermission());
+
     !check && (await requestReadStoragePermission());
   };
 
@@ -40,7 +47,9 @@ const MainStack = () => {
 
   const getToken = async () => {
     const token = await messaging().getToken();
-    console.log('token', token);
+    if (!fireBaseTokenAdded) {
+      addToken({tokens: token});
+    }
   };
 
   useLayoutEffect(() => {

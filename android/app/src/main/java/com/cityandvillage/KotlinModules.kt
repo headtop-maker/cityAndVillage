@@ -15,6 +15,9 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.DisplayMetrics
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,7 +33,9 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.bridge.WritableNativeArray
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 
 public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -173,6 +178,25 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
         }
     }
 
+    @ReactMethod
+    fun getBase64Image(path:String,promise: Promise) {
+        try {
+            Log.d("CURSOR",path)
+            val bm = BitmapFactory.decodeFile(path)
+            if(bm == null){
+                promise.reject("ERROR", "Ошибка выбора файла")
+            }
+            val baos = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.JPEG,10,baos)
+                val b = baos.toByteArray()
+                val encodeImage = Base64.encodeToString(b,Base64.DEFAULT)
+                promise.resolve(encodeImage)
+
+        } catch (e: Exception) {
+            promise.reject("ERROR", e)
+        }
+
+    }
 
     @ReactMethod
     fun getDownloadFiles(promise: Promise) {
@@ -272,8 +296,9 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             ) {
                 val fileParams: WritableMap = WritableNativeMap()
                 super.onActivityResult(requestCode, resultCode, intent)
-                intent?.data?.also { uri ->
+                intent?.data?.also { uri:Uri ->
                     Log.d("URINative", uri.toString())
+
                     val cursor = uri.let { it ->
                         reactApplicationContext.contentResolver.query(
                             it,
@@ -284,11 +309,11 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                         )
                     }
                     cursor?.moveToFirst()
-                    println(cursor?.getString(2))
                     fileParams.putString("fileName", cursor?.getString(2)?.split(".")!![0])
                     fileParams.putString("fileType", cursor.getString(2)?.split(".")!![1])
                     fileParams.putInt("fileByteSize", cursor.getString(5).toInt())
                     fileParams.putString("fileUri", uri.toString())
+                    fileParams.putString("filePath", cursor.getString(6).toString())
                     promise?.resolve(fileParams)
 
                 }
@@ -334,5 +359,14 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 //    } catch (e: Exception) {
 //        Log.e("ApkInfoModule", "Error retrieving APK info", e)
 //        promise.reject("ERROR", e)
+//    }
+//}
+
+// посмотреть URI
+//val cursor2 = reactContext.contentResolver.query(uri, null, null, null, null)
+//cursor2?.use {
+//    val columnNames = it.columnNames
+//    columnNames.forEach { columnName ->
+//        Log.d("columnNames ", columnName)
 //    }
 //}

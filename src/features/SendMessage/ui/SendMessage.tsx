@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Button, Dialog, Icon, Portal, Text} from 'react-native-paper';
 import {useGetAdminsQuery} from '../../../shared/models/services';
 import {
@@ -15,8 +22,11 @@ import {dp} from '../../../shared/lib/getDP';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {useModal} from '../../Modal/ui/ModalProvider';
+import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const SendMessage = () => {
+  const [image, setImage] = useState('');
+  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -59,6 +69,7 @@ const SendMessage = () => {
         title: 'От: ' + username,
         description: message,
         isImportant: false,
+        imageBase64: `data:image/png;base64,${image}`,
       }),
     );
 
@@ -72,6 +83,31 @@ const SendMessage = () => {
       }
       setMessage('');
     }
+  };
+
+  const handleImage = async () => {
+    try {
+      const file = await nativeFn.openFile();
+      const result = await nativeFn.base64Image(file.filePath);
+      Image.getSize(
+        `data:image/png;base64,${result}`,
+        (widthImage, heightImage) => {
+          setImageSize({
+            width: Math.floor(widthImage / 5),
+            height: Math.floor(heightImage / 5),
+          });
+        },
+      );
+      if (result) {
+        setImage(result);
+      }
+    } catch (error) {
+      Alert.alert('Ошибка сжатия изображения', error.toString());
+    }
+  };
+
+  const removeImage = () => {
+    setImage('');
   };
 
   const dialog = () => {
@@ -110,7 +146,27 @@ const SendMessage = () => {
           Кому: {!selectedUser ? 'выбрать' : selectedUser}{' '}
         </Text>
       </TouchableOpacity>
-
+      {!image && (
+        <Button mode='outlined' onPress={handleImage}>
+          Добавить изображение
+        </Button>
+      )}
+      {image && (
+        <View>
+          <Button mode='outlined' onPress={removeImage}>
+            Удалить
+          </Button>
+          <Image
+            style={[
+              styles.image,
+              {width: imageSize.width, height: imageSize.height},
+            ]}
+            source={{
+              uri: 'data:image/jpeg;base64,' + image,
+            }}
+          />
+        </View>
+      )}
       <View style={styles.textInputBlock}>
         <TextInput
           placeholder='Введите сообщение здесь...'
@@ -147,6 +203,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: '#131413',
+  },
+  image: {
+    marginTop: dp(10),
+    marginBottom: dp(10),
+    borderRadius: 5,
+    resizeMode: 'center',
+    alignSelf: 'center',
   },
 });
 

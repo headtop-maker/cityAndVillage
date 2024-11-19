@@ -5,4 +5,5 @@ export type setImportantDataType = {
   title: string;
   description: string;
   isImportant: boolean;
+  imageBase64?: string;
 };

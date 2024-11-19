@@ -40,6 +40,7 @@ export const setImportantMessage = createAsyncThunk(
     if ('data' in response) {
       return response.data;
     }
+    console.log('response', response);
     return rejectWithValue('Ошибка отправки сообщения');
   },
 );

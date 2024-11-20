@@ -378,6 +378,21 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                         .contentResolver.openInputStream(uri))
 
                     if(bitmap!= null) {
+                        val maxSize = 400;
+
+                        var outWidth :Int
+                        var outHeight:Int
+                        val inWidth = bitmap.width
+                        val inHeight = bitmap.height
+
+                        if(inWidth > inHeight){
+                            outWidth = maxSize;
+                            outHeight = (inHeight * maxSize) / inWidth;
+                        } else {
+                            outHeight = maxSize;
+                            outWidth = (inWidth * maxSize) / inHeight;
+                        }
+
                         val baos = ByteArrayOutputStream()
 
                         val maxSize = 400

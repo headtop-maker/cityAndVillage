@@ -135,5 +135,6 @@ const styles = StyleSheet.create({
     marginBottom: dp(10),
     borderRadius: 5,
     alignSelf: 'center',
+    alignItems: 'center',
   },
 });

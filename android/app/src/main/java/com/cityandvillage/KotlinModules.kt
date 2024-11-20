@@ -351,11 +351,13 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
                     if(bitmap!= null) {
                         val baos = ByteArrayOutputStream()
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
+                        val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, bitmap.width/10,bitmap.height/10,true)
+                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
                         val b = baos.toByteArray()
                         val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)
                         fileParams.putString("base64Image", encodeImage.replaceFirst("\"", ""))
                         promise?.resolve(fileParams)
+                        bitmap.recycle()
                     }
                 }
 

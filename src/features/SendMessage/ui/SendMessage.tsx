@@ -87,10 +87,9 @@ const SendMessage = () => {
 
   const handleImage = async () => {
     try {
-      const file = await nativeFn.openFile();
-      const result = await nativeFn.base64Image(file.filePath);
+      const result = await nativeFn.base64Image();
       Image.getSize(
-        `data:image/png;base64,${result}`,
+        `data:image/jpeg;base64,${result.base64Image}`,
         (widthImage, heightImage) => {
           setImageSize({
             width: Math.floor(widthImage / 5),
@@ -98,8 +97,8 @@ const SendMessage = () => {
           });
         },
       );
-      if (result) {
-        setImage(result);
+      if (result.base64Image) {
+        setImage(result.base64Image);
       }
     } catch (error) {
       Alert.alert('Ошибка сжатия изображения', error.toString());

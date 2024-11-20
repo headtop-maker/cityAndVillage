@@ -22,7 +22,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
@@ -283,7 +282,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             type = "*/*"
             putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS)
         }
-        reactApplicationContext.startActivityForResult(intent, 1, null);
+        reactApplicationContext.startActivityForResult(intent, 100, null);
     }
 
     private val activityEventListener =
@@ -293,10 +292,10 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                 requestCode: Int,
                 resultCode: Int,
                 intent: Intent?
-            ) {
+            ) {if (requestCode == 100) {
                 val fileParams: WritableMap = WritableNativeMap()
                 super.onActivityResult(requestCode, resultCode, intent)
-                intent?.data?.also { uri:Uri ->
+                intent?.data?.also { uri: Uri ->
                     Log.d("URINative", uri.toString())
 
                     val cursor = uri.let { it ->
@@ -313,16 +312,60 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                     fileParams.putString("fileType", cursor.getString(2)?.split(".")!![1])
                     fileParams.putInt("fileByteSize", cursor.getString(5).toInt())
                     fileParams.putString("fileUri", uri.toString())
-                    fileParams.putString("filePath", cursor.getString(6).toString())
                     promise?.resolve(fileParams)
 
                 }
 
+            } }
+        }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @ReactMethod
+    fun base64Image(promise: Promise) {
+        this.promise = promise;
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/jpeg"
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS)
+        }
+        reactApplicationContext.startActivityForResult(intent, 200, null);
+    }
+
+    private val activityEventListenerBase64 =
+        object : BaseActivityEventListener() {
+            override fun onActivityResult(
+                activity: Activity?,
+                requestCode: Int,
+                resultCode: Int,
+                intent: Intent?
+            ) {
+                if (requestCode == 200) {
+                val fileParams: WritableMap = WritableNativeMap()
+                super.onActivityResult(requestCode, resultCode, intent)
+                intent?.data?.also { uri:Uri ->
+
+
+
+                    val bitmap = BitmapFactory.decodeStream(reactApplicationContext
+                        .contentResolver.openInputStream(uri))
+
+                    if(bitmap!= null) {
+                        val baos = ByteArrayOutputStream()
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
+                        val b = baos.toByteArray()
+                        val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)
+                        fileParams.putString("base64Image", encodeImage.replaceFirst("\"", ""))
+                        promise?.resolve(fileParams)
+                    }
+                }
+
+             }
             }
         }
 
     init {
         reactContext.addActivityEventListener(activityEventListener)
+        reactContext.addActivityEventListener(activityEventListenerBase64)
     }
 
 }

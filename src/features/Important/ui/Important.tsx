@@ -19,6 +19,7 @@ const renderItem = ({item}: {item: CounterState['important'][0]}) => {
       createdAt={item.createdAt}
       isImportant={item.isImportant}
       id={item.id}
+      imageBase64={item.imageBase64}
     />
   );
 };
@@ -34,7 +35,6 @@ const Important = () => {
   useLayoutEffect(() => {
     prefetch();
   }, [dispatch, prefetch]);
-
   return (
     <View>
       <TouchableOpacity

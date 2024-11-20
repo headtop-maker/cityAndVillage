@@ -93,8 +93,8 @@ const SendMessage = () => {
         `data:image/jpeg;base64,${result.base64Image}`,
         (widthImage, heightImage) => {
           setImageSize({
-            width: Math.floor(widthImage / 2),
-            height: Math.floor(heightImage / 2),
+            width: Math.floor(widthImage / 2.5),
+            height: Math.floor(heightImage / 2.5),
           });
         },
       );
@@ -153,9 +153,6 @@ const SendMessage = () => {
       )}
       {image && (
         <View>
-          <Button mode='outlined' onPress={removeImage}>
-            Удалить
-          </Button>
           <Image
             style={[
               styles.image,
@@ -165,6 +162,9 @@ const SendMessage = () => {
               uri: 'data:image/jpeg;base64,' + image,
             }}
           />
+          <Button mode='outlined' onPress={removeImage}>
+            Удалить
+          </Button>
         </View>
       )}
       <View style={styles.textInputBlock}>
@@ -208,7 +208,6 @@ const styles = StyleSheet.create({
     marginTop: dp(10),
     marginBottom: dp(10),
     borderRadius: 5,
-    resizeMode: 'center',
     alignSelf: 'center',
   },
 });

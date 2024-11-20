@@ -1,21 +1,54 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
+import {useModal} from '../../../features/Modal/ui/ModalProvider';
 
 const ImportantItem: FC<CounterState['important'][0]> = ({
   title,
   description,
   createdAt,
   isImportant,
+  imageBase64,
 }) => {
+  const [imageSize, setImageSize] = useState({width: 0, height: 0});
+  const {showModal} = useModal();
+
+  const handleImage = () => {
+    showModal(
+      <View style={{padding: dp(10)}}>
+        <Image
+          style={[
+            styles.image,
+            {
+              width: imageSize.width,
+              height: imageSize.height,
+              maxWidth: dp(300),
+              resizeMode: 'stretch',
+            },
+          ]}
+          source={{
+            uri: imageBase64,
+          }}
+        />
+      </View>,
+    );
+  };
+
+  useEffect(() => {
+    imageBase64 &&
+      Image.getSize(imageBase64, (widthImage, heightImage) => {
+        setImageSize({
+          width: Math.floor(widthImage),
+          height: Math.floor(heightImage),
+        });
+      });
+  }, [imageBase64]);
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
-      <TouchableOpacity
-        style={styles.importantBox}
-        onPress={() => console.log('kkk')}>
+      <TouchableOpacity style={styles.importantBox} onPress={handleImage}>
         <View style={styles.importantImageBox}>
           {isImportant === true && (
             <Image
@@ -36,6 +69,23 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
           <Text style={styles.importantText}>
             {description ? description : ''}
           </Text>
+          {imageBase64 && (
+            <View>
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageSize.width / 2,
+                    height: imageSize.height / 2,
+                    maxWidth: dp(250),
+                  },
+                ]}
+                source={{
+                  uri: imageBase64,
+                }}
+              />
+            </View>
+          )}
           <Text style={styles.importantDate}>
             {convertDate(new Date(createdAt))}
           </Text>
@@ -57,7 +107,6 @@ const styles = StyleSheet.create({
   importantBox: {flexDirection: 'row', justifyContent: 'space-between'},
   importantImageBox: {
     width: '20%',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   importantTitle: {fontWeight: 'bold', color: '#0e0e0e'},
@@ -75,7 +124,13 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   importantImage: {
-    width: dp(50),
-    height: dp(50),
+    width: dp(40),
+    height: dp(40),
+  },
+  image: {
+    marginTop: dp(10),
+    marginBottom: dp(10),
+    borderRadius: 5,
+    alignSelf: 'center',
   },
 });

@@ -69,7 +69,7 @@ const SendMessage = () => {
         title: 'От: ' + username,
         description: message,
         isImportant: false,
-        imageBase64: `data:image/png;base64,${image}`,
+        imageBase64: image ? `data:image/jpeg;base64,${image}` : '',
       }),
     );
 

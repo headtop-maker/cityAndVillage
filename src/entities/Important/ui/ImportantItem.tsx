@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, memo, useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
@@ -37,15 +37,14 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
     );
   };
 
-  useEffect(() => {
-    imageBase64 &&
-      Image.getSize(imageBase64, (widthImage, heightImage) => {
-        setImageSize({
-          width: Math.floor(widthImage),
-          height: Math.floor(heightImage),
-        });
+  imageBase64.length > 0 &&
+    Image.getSize(imageBase64, (widthImage, heightImage) => {
+      setImageSize({
+        width: Math.floor(widthImage),
+        height: Math.floor(heightImage),
       });
-  }, [imageBase64]);
+    });
+
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
       <TouchableOpacity style={styles.importantBox} onPress={handleImage}>
@@ -69,7 +68,7 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
           <Text style={styles.importantText}>
             {description ? description : ''}
           </Text>
-          {imageBase64 && (
+          {imageBase64.length > 0 && (
             <View>
               <Image
                 style={[
@@ -95,7 +94,7 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
   );
 };
 
-export default ImportantItem;
+export default memo(ImportantItem);
 
 const styles = StyleSheet.create({
   importantContainer: {

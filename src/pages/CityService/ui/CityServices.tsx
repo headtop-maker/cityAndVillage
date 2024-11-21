@@ -15,6 +15,7 @@ import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardIte
 import {Button, IconButton, Text, Tooltip} from 'react-native-paper';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
+import PrepareForm from '../../../features/cityServices/ui/PrepareForm';
 
 const CityServices = () => {
   const [selected, setSelected] = useState('');
@@ -27,7 +28,8 @@ const CityServices = () => {
   const handleShowModal = () => {
     showModal(
       <View style={{padding: dp(10)}}>
-        <Text>Напишите нам. </Text>
+        <Text>Заполните для согласования </Text>
+        <PrepareForm />
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Tooltip title='Selected email'>
             <IconButton

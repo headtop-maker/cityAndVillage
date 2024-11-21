@@ -4,10 +4,12 @@ import {FlatList, Linking, TouchableOpacity} from 'react-native';
 import {Button, Icon, List} from 'react-native-paper';
 import {ImportantContact} from '../../../shared/models/types';
 import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
+import {useAppDispatch} from '../../../shared/models/storeHooks';
 
 const CityServices: FC = () => {
   const [expanded, setExpanded] = useState<string>('');
   const {data, refetch} = useGetAllImportantContactsQuery();
+  const dispatch = useAppDispatch();
   const handlePress = (id: string) => {
     if (id === expanded) {
       setExpanded('');
@@ -22,7 +24,7 @@ const CityServices: FC = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [dispatch, refetch]);
 
   const ContactItem = ({item}: {item: ImportantContact}) => (
     <List.Accordion

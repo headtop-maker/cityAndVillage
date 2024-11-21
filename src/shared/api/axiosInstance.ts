@@ -30,12 +30,35 @@ export const getCurrentImportant = (
 
 export const createNews = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
-): Promise<AxiosResponse<any, unknown>> =>
+): Promise<AxiosResponse<CounterState['news'][0], unknown>> =>
   response.apiRequest({
     data,
     timeout: 3000,
     method: 'post',
     url: `${TEMP_API}news`,
+  });
+
+export const getTokens = (): Promise<
+  AxiosResponse<{id: string; tokens: string}[], unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}firebase-tokens/`,
+  });
+
+export const sendPushApi = (data: {
+  tokens: string[];
+  notification: {
+    title: string;
+    body: string;
+  };
+}): Promise<AxiosResponse<{message: string}, unknown>> =>
+  response.apiRequest({
+    data,
+    timeout: 3000,
+    method: 'post',
+    url: `${TEMP_API}firebase-tokens/send/`,
   });
 
 export const getImageFromServer = (): Promise<

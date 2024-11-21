@@ -93,8 +93,8 @@ const SendMessage = () => {
         `data:image/jpeg;base64,${result.base64Image}`,
         (widthImage, heightImage) => {
           setImageSize({
-            width: Math.floor(widthImage / 2.5),
-            height: Math.floor(heightImage / 2.5),
+            width: Math.floor(widthImage / 1.5),
+            height: Math.floor(heightImage / 1.5),
           });
         },
       );
@@ -156,7 +156,11 @@ const SendMessage = () => {
           <Image
             style={[
               styles.image,
-              {width: imageSize.width, height: imageSize.height},
+              {
+                width: imageSize.width,
+                height: imageSize.height,
+                maxWidth: dp(300),
+              },
             ]}
             source={{
               uri: 'data:image/jpeg;base64,' + image,

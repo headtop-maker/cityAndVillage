@@ -7,17 +7,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.util.DisplayMetrics
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,12 +29,11 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.facebook.react.bridge.WritableNativeArray
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 
 
 public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -351,7 +350,22 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
                     if(bitmap!= null) {
                         val baos = ByteArrayOutputStream()
-                        val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, bitmap.width/10,bitmap.height/10,true)
+
+                        val maxSize = 400
+                        val outWidth: Int
+                        val outHeight: Int
+                        val inWidth: Int = bitmap.width
+                        val inHeight: Int = bitmap.height
+                        if (inWidth > inHeight) {
+                            outWidth = maxSize
+                            outHeight = inHeight * maxSize / inWidth
+                        } else {
+                            outHeight = maxSize
+                            outWidth = inWidth * maxSize / inHeight
+                        }
+
+
+                        val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, outWidth,outHeight,true)
                         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos)
                         val b = baos.toByteArray()
                         val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)

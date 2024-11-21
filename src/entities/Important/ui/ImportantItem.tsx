@@ -25,7 +25,8 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
             {
               width: imageSize.width,
               height: imageSize.height,
-              maxWidth: dp(300),
+              maxWidth: dp(400),
+              maxHeight: dp(800),
               resizeMode: 'stretch',
             },
           ]}
@@ -74,9 +75,9 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
                 style={[
                   styles.image,
                   {
-                    width: imageSize.width / 2,
-                    height: imageSize.height / 2,
-                    maxWidth: dp(250),
+                    width: imageSize.width / 1.5,
+                    height: imageSize.height / 1.5,
+                    maxWidth: dp(300),
                   },
                 ]}
                 source={{

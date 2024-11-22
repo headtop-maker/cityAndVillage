@@ -6,7 +6,7 @@ const openSettings = async () => {
 };
 
 export const requestNotificationLegacy = async () => {
-  if (Platform.OS === 'android' && Platform.Version >= 33) {
+  if (Platform.OS === 'android' && Platform.Version < 33) {
     nativeFn.areNotificationsEnabled().then(data => {
       if (data === false) {
         Alert.alert(

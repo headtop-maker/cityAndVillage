@@ -10,7 +10,13 @@ const reducers = combineReducers({
     {
       key: 'root',
       storage: AsyncStorage,
-      blacklist: ['actionState', 'allUsers', 'news', 'important'],
+      blacklist: [
+        'actionState',
+        'allUsers',
+        'news',
+        'important',
+        'checkLegacy',
+      ],
     },
     counterReducer,
   ),

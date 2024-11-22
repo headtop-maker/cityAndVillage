@@ -57,7 +57,6 @@ export const requestMediaPermission = async () => {
         message:
           'Для загрузки и получения файлов' +
           'требуется предоставить разрешение ',
-        buttonNeutral: 'Спросить позднее',
         buttonNegative: 'Отмена',
         buttonPositive: 'OK',
       },

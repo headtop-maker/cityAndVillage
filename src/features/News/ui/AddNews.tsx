@@ -155,8 +155,8 @@ const AddNews = () => {
         />
 
         <Button
-          mode='elevated'
-          style={{margin: rem / 3}}
+          mode='outlined'
+          style={{margin: dp(10)}}
           disabled={!isLockSend}
           onPress={handleClick}>
           Добавить

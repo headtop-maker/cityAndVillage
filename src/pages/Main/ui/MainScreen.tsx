@@ -14,6 +14,7 @@ import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
 
 import {dp} from '../../../shared/lib/getDP';
+import OpenSettingsButton from '../../../features/OpenSettings/ui/OpenSettingsButton';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
@@ -33,7 +34,7 @@ const MainScreen = () => {
           <View style={styles.wrapper}>
             <MyBanner />
             <UpdateApp />
-
+            <OpenSettingsButton />
             <View style={styles.service}>
               <ServiceItem
                 setSection={setSection}

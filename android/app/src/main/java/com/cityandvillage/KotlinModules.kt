@@ -2,6 +2,7 @@ package com.cityandvillage
 
 import android.app.Activity
 import android.app.DownloadManager
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,7 @@ import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import java.io.ByteArrayOutputStream
 import java.io.File
+import android.provider.Settings
 
 
 public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -270,7 +272,34 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
         }
     }
 
+    @ReactMethod
+    fun openAppPermissionSettings() {
+        val context: Context = reactApplicationContext
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", context.packageName, null)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
+    }
 
+    @ReactMethod
+    fun areNotificationsEnabled(promise: Promise) {
+        try {
+            val notificationManager =
+                reactApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val notificationsEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationManager.areNotificationsEnabled()
+            } else {
+                // На Android ниже 8.0 считаем, что уведомления включены
+                true
+            }
+
+            promise.resolve(notificationsEnabled)
+        } catch (e: Exception) {
+            promise.reject("ERROR", "Не удалось проверить статус уведомлений: ${e.message}")
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod

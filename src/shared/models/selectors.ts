@@ -57,3 +57,8 @@ export const selectCurrentAppVersion = createSelector(
   selectRootCounter,
   state => state.currentAppVersion,
 );
+
+export const selectCheckLegacy = createSelector(
+  selectRootCounter,
+  state => state.checkLegacy,
+);

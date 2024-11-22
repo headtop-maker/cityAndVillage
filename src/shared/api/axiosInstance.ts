@@ -28,7 +28,7 @@ export const getCurrentImportant = (
     url: `${TEMP_API}important/${userEmail}`,
   });
 
-export const createNews = (
+export const createNewsApi = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
 ): Promise<AxiosResponse<CounterState['news'][0], unknown>> =>
   response.apiRequest({

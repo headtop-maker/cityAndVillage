@@ -17,6 +17,7 @@ import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
 import {
+  requestMediaPermission,
   requestReadStoragePermission,
   requestStoragePermission,
 } from '../lib/permissions';
@@ -28,6 +29,7 @@ import {Alert} from 'react-native';
 
 import messaging from '@react-native-firebase/messaging';
 import {useAddFireBaseTokenMutation} from '../models/services';
+import {requestNotificationPermission} from '../lib/requestNotificationPermission';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
@@ -58,6 +60,8 @@ const MainStack = () => {
 
   useLayoutEffect(() => {
     (async function () {
+      await requestNotificationPermission();
+      await requestMediaPermission();
       await isPermissions();
       await firebasePermissions();
       await getToken();

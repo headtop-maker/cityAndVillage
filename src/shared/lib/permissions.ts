@@ -47,3 +47,27 @@ export const requestReadStoragePermission = async () => {
     console.warn(err);
   }
 };
+
+export const requestMediaPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+      {
+        title: 'Предоставьте разрешение на чтиние из хранилища',
+        message:
+          'Для загрузки и получения файлов' +
+          'требуется предоставить разрешение ',
+        buttonNeutral: 'Спросить позднее',
+        buttonNegative: 'Отмена',
+        buttonPositive: 'OK',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Вы предоставили доступ');
+    } else {
+      console.log('Доступ запрещен WRITE_EXTERNAL_STORAGE');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};

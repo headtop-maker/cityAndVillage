@@ -17,6 +17,7 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
   const {showModal} = useModal();
 
   const handleImage = () => {
+    if (!imageBase64 || imageBase64.length < 0) return;
     showModal(
       <View style={{padding: dp(10)}}>
         <Image
@@ -48,7 +49,9 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
 
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
-      <TouchableOpacity style={styles.importantBox} onPress={handleImage}>
+      <TouchableOpacity
+        style={styles.importantBox}
+        onPress={() => imageBase64.length > 0 && handleImage()}>
         <View style={styles.importantImageBox}>
           {isImportant === true && (
             <Image

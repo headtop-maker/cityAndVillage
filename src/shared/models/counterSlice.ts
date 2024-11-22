@@ -1,10 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {Action, AnyAction, PayloadAction} from '@reduxjs/toolkit';
-import {
-  crateNews,
-  getImageForNews,
-  getNews,
-} from '../../entities/News/models/models';
+import {getImageForNews, getNews} from '../../entities/News/models/models';
 import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
 import {createUsers} from '../../features/Registration/models/models';
@@ -101,9 +97,6 @@ export const counterSlice = createSlice({
       .addCase(getImportant.fulfilled, (state, action) => {
         state.important = action.payload;
       })
-      .addCase(crateNews.fulfilled, (state, action) => {
-        state.important = action.payload;
-      })
       .addCase(getImageForNews.fulfilled, (state, action) => {
         state.imageForNewsFromServer = action.payload;
       })
@@ -165,7 +158,6 @@ export const counterSlice = createSlice({
 
 export const {
   resetModalText,
-  incrementByAmount,
   setCurrentNewsId,
   resetCurrentUser,
   setErrorText,

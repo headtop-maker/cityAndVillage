@@ -2,7 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {fetchApiDomain} from '../../../shared/constants';
 import {
   TEMP_API,
-  createNews,
+  createNewsApi,
   getCurrentNews,
   getImageFromServer,
   getTokens,
@@ -36,7 +36,7 @@ export const crateNews = createAsyncThunk(
     {dispatch, rejectWithValue},
   ) => {
     try {
-      const response = await createNews(data);
+      const response = await createNewsApi(data);
       if ('data' in response) {
         const title = response.data.title;
         title && dispatch(sendPush(title));

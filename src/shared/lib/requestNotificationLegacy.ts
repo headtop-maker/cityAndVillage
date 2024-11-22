@@ -1,10 +1,6 @@
 import {Alert, Platform} from 'react-native';
 import {nativeFn} from './nativeFn';
 
-const openSettings = async () => {
-  await nativeFn.openAppPermissionSettings();
-};
-
 export const requestNotificationLegacy = async () => {
   if (Platform.OS === 'android' && Platform.Version < 33) {
     nativeFn.areNotificationsEnabled().then(data => {
@@ -16,7 +12,7 @@ export const requestNotificationLegacy = async () => {
             {
               text: 'Перейти',
               onPress: async () => {
-                openSettings();
+                await nativeFn.openAppPermissionSettings();
               },
             },
             {

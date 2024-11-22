@@ -7,7 +7,7 @@ export const requestStoragePermission = async () => {
       {
         title: 'Предоставьте разрешение на запись хранилища',
         message:
-          'Для загрузки и получения файлов' +
+          'Для загрузки и получения файлов ' +
           'требуется предоставить разрешение ',
         buttonNeutral: 'Спросить позднее',
         buttonNegative: 'Отмена',
@@ -31,7 +31,7 @@ export const requestReadStoragePermission = async () => {
       {
         title: 'Предоставьте разрешение на чтение хранилища',
         message:
-          'Для загрузки и получения файлов' +
+          'Для загрузки и получения файлов ' +
           'требуется предоставить разрешение ',
         buttonNeutral: 'Спросить позднее',
         buttonNegative: 'Отмена',
@@ -55,7 +55,7 @@ export const requestMediaPermission = async () => {
       {
         title: 'Предоставьте разрешение на чтиние из хранилища',
         message:
-          'Для загрузки и получения файлов' +
+          'Для загрузки и получения файлов ' +
           'требуется предоставить разрешение ',
         buttonNegative: 'Отмена',
         buttonPositive: 'OK',

@@ -30,6 +30,7 @@ import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {useAddFireBaseTokenMutation} from '../models/services';
 import {requestNotificationPermission} from '../lib/requestNotificationPermission';
+import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
@@ -61,6 +62,7 @@ const MainStack = () => {
   useLayoutEffect(() => {
     (async function () {
       await requestNotificationPermission();
+      await requestNotificationLegacy();
       await requestMediaPermission();
       await isPermissions();
       await firebasePermissions();

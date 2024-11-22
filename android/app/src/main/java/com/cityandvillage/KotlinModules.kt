@@ -378,21 +378,6 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                         .contentResolver.openInputStream(uri))
 
                     if(bitmap!= null) {
-                        val maxSize = 400;
-
-                        var outWidth :Int
-                        var outHeight:Int
-                        val inWidth = bitmap.width
-                        val inHeight = bitmap.height
-
-                        if(inWidth > inHeight){
-                            outWidth = maxSize;
-                            outHeight = (inHeight * maxSize) / inWidth;
-                        } else {
-                            outHeight = maxSize;
-                            outWidth = (inWidth * maxSize) / inHeight;
-                        }
-
                         val baos = ByteArrayOutputStream()
 
                         val maxSize = 400
@@ -410,7 +395,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
 
                         val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, outWidth,outHeight,true)
-                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos)
+                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                         val b = baos.toByteArray()
                         val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)
                         fileParams.putString("base64Image", encodeImage.replaceFirst("\"", ""))

@@ -39,7 +39,7 @@ export const createNewsApi = (
   });
 
 export const getTokens = (): Promise<
-  AxiosResponse<{id: string; tokens: string}[], unknown>
+  AxiosResponse<{id: string; tokens: string; owner: string}[], unknown>
 > =>
   response.apiRequest({
     timeout: 3000,
@@ -156,6 +156,17 @@ export const getServicesByCategory = (
     timeout: 3000,
     method: 'get',
     url: `${TEMP_API}adsboard/${serviceCategory}`,
+  });
+
+export const getFirebaseUserTokenAPI = (
+  owner: string,
+): Promise<
+  AxiosResponse<{id: string; tokens: string; owner: string}[], unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}firebase-tokens/${owner}`,
   });
 
 export const getAppVersionFromServer = (): Promise<

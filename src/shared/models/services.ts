@@ -50,6 +50,7 @@ export const serviceApi = createApi({
       {id: string; tokens: string},
       {
         tokens: string;
+        owner: string;
       }
     >({
       query: data => ({

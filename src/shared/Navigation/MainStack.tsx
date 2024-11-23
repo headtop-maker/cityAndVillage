@@ -31,11 +31,13 @@ import messaging from '@react-native-firebase/messaging';
 import {useAddFireBaseTokenMutation} from '../models/services';
 import {requestNotificationPermission} from '../lib/requestNotificationPermission';
 import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
+import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
   const currentUserToken = useAppSelector(selectCurrentUserToken);
   const fireBaseTokenAdded = useAppSelector(selectFireBaseTokenAdded);
+  const userEmail = useAppSelector(selectCurrentUserEmail);
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
@@ -49,9 +51,10 @@ const MainStack = () => {
   };
 
   const getToken = async () => {
+    if (!currentUserToken) return;
     const token = await messaging().getToken();
     if (!fireBaseTokenAdded) {
-      addToken({tokens: token});
+      addToken({tokens: token, owner: userEmail});
     }
   };
 

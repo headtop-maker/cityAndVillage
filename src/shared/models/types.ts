@@ -2,7 +2,6 @@ import {TImageResponse} from '../../entities/News/models/types';
 
 export interface CounterState {
   value: number;
-  checkLegacy: boolean;
   news: {
     id: string;
     createdAt: Date;

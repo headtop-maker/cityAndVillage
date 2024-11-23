@@ -32,7 +32,6 @@ const initialState: CounterState = {
   value: 0,
   news: [],
   important: [],
-  checkLegacy: false,
   imageForNewsFromServer: [],
   actionState: {
     loadind: false,
@@ -72,9 +71,6 @@ export const counterSlice = createSlice({
     },
     setFireBaseTokenAdded: (state, action: PayloadAction<boolean>) => {
       state.fireBaseTokenAdded = action.payload;
-    },
-    setCheckLegacy: (state, action: PayloadAction<boolean>) => {
-      state.checkLegacy = action.payload;
     },
     setCurrentAppVersion: (state, action: PayloadAction<string>) => {
       state.currentAppVersion = action.payload;
@@ -169,7 +165,6 @@ export const {
   setAppInFiles,
   setCurrentAppVersion,
   setFireBaseTokenAdded,
-  setCheckLegacy,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

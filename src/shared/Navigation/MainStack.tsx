@@ -9,10 +9,7 @@ import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
 import ServiceScreen from '../../pages/CityService/ui/CityServices';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
 import {useAppSelector} from '../models/storeHooks';
-import {
-  selectCurrentUserToken,
-  selectFireBaseTokenAdded,
-} from '../models/selectors';
+import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
@@ -36,7 +33,6 @@ import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
   const currentUserToken = useAppSelector(selectCurrentUserToken);
-  const fireBaseTokenAdded = useAppSelector(selectFireBaseTokenAdded);
   const userEmail = useAppSelector(selectCurrentUserEmail);
 
   const isPermissions = async () => {
@@ -50,12 +46,10 @@ const MainStack = () => {
     await requestUserPermission();
   };
 
-  const getToken = async () => {
-    if (!currentUserToken) return;
-    const token = await messaging().getToken();
-    if (!fireBaseTokenAdded) {
-      addToken({tokens: token, owner: userEmail});
-    }
+  const getFirebaseToken = async () => {
+    if (!currentUserToken || !userEmail) return;
+    const newFirebasetoken = await messaging().getToken();
+    newFirebasetoken && addToken({tokens: newFirebasetoken, owner: userEmail});
   };
 
   useLayoutEffect(() => {
@@ -69,7 +63,7 @@ const MainStack = () => {
       await requestMediaPermission();
       await isPermissions();
       await firebasePermissions();
-      await getToken();
+      await getFirebaseToken();
     })();
     return messaging().onMessage(async remoteMessage => {
       Alert.alert(

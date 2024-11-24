@@ -12,6 +12,7 @@ export const loginUsers = createAsyncThunk(
     try {
       const response = await loginUser(data);
       const {token, role, name} = response.data;
+
       navigate(SCREENS.TabScreen, undefined);
       return {
         userName: name,
@@ -28,3 +29,15 @@ export const loginUsers = createAsyncThunk(
     }
   },
 );
+
+// вызов мутации
+// const newFirebasetoken = await messaging().getToken();
+// console.log('newFirebasetoken', newFirebasetoken);
+// if (newFirebasetoken) {
+//   await dispatch(
+//     serviceApi.endpoints.addFireBaseToken.initiate({
+//       owner: data.email,
+//       tokens: newFirebasetoken,
+//     }),
+//   );
+// }

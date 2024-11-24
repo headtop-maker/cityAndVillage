@@ -9,8 +9,11 @@ import {loginUsers} from '../model/models';
 import {Button, Checkbox, HelperText, TextInput} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 import {dp} from '../../../shared/lib/getDP';
+import {useAddFireBaseTokenMutation} from '../../../shared/models/services';
+import messaging from '@react-native-firebase/messaging';
 
 const SetLogin = () => {
+  const [addToken] = useAddFireBaseTokenMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secure, setSecure] = useState(true);
@@ -27,7 +30,18 @@ const SetLogin = () => {
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      await dispatch(loginUsers({password, email: email.toLowerCase()}));
+      const result = await dispatch(
+        loginUsers({password, email: email.toLowerCase()}),
+      );
+
+      if (loginUsers.fulfilled.match(result)) {
+        /// проверить
+        const {userEmail, userToken} = result.payload;
+        if (!userToken || !userEmail) return;
+        const newFirebasetoken = await messaging().getToken();
+        newFirebasetoken &&
+          addToken({tokens: newFirebasetoken, owner: userEmail});
+      }
     } finally {
       setBlockBtn(false);
     }

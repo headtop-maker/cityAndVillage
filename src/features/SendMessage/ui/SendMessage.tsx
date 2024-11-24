@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Alert,
   Image,
@@ -41,10 +41,6 @@ const SendMessage = () => {
 
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   const hideDialog = () => setVisible(false);
 
@@ -133,11 +129,13 @@ const SendMessage = () => {
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => refetch()}
-        style={{alignSelf: 'flex-end'}}>
-        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
-      </TouchableOpacity>
+      {!!currentUserToken && (
+        <TouchableOpacity
+          onPress={() => refetch()}
+          style={{alignSelf: 'flex-end'}}>
+          {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
+        </TouchableOpacity>
+      )}
       {!!currentUserToken && dialog()}
       <TouchableOpacity
         style={{flexDirection: 'row'}}
@@ -147,7 +145,10 @@ const SendMessage = () => {
         </Text>
       </TouchableOpacity>
       {!image && (
-        <Button mode='outlined' onPress={handleImage}>
+        <Button
+          mode='outlined'
+          onPress={handleImage}
+          disabled={!currentUserToken}>
           Добавить изображение
         </Button>
       )}

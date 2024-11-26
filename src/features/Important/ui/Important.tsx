@@ -11,18 +11,6 @@ import {CounterState} from '../../../shared/models/types';
 import {Button, Icon} from 'react-native-paper';
 import withModal from '../../../shared/HOC/withModal';
 
-const renderItem = ({item}: {item: CounterState['important'][0]}) => {
-  return (
-    <ImportantItem
-      title={item.title}
-      description={item.description}
-      createdAt={item.createdAt}
-      isImportant={item.isImportant}
-      id={item.id}
-      imageBase64={item.imageBase64}
-    />
-  );
-};
 const Important = () => {
   const important = useAppSelector(selectImportant);
   const isLoading = useAppSelector(selectImportantLoading);
@@ -31,6 +19,22 @@ const Important = () => {
   const prefetch = useCallback(() => {
     dispatch(getImportant(10));
   }, [dispatch]);
+
+  const renderItem = ({item}: {item: CounterState['important'][0]}) => {
+    return (
+      <ImportantItem
+        title={item.title}
+        description={item.description}
+        createdAt={item.createdAt}
+        isImportant={item.isImportant}
+        id={item.id}
+        imageBase64={item.imageBase64}
+        author={item.author}
+      />
+    );
+  };
+
+  console.log('important', important);
 
   useLayoutEffect(() => {
     prefetch();

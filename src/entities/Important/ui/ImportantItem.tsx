@@ -5,6 +5,7 @@ import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {Button} from 'react-native-paper';
 
 const ImportantItem: FC<CounterState['important'][0]> = ({
   title,
@@ -12,6 +13,7 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
   createdAt,
   isImportant,
   imageBase64,
+  author,
 }) => {
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const {showModal} = useModal();
@@ -39,6 +41,14 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
     );
   };
 
+  const handleMessage = () => {
+    showModal(
+      <View style={{padding: dp(10)}}>
+        <Text>{author}</Text>
+      </View>,
+    );
+  };
+
   imageBase64.length > 0 &&
     Image.getSize(imageBase64, (widthImage, heightImage) => {
       setImageSize({
@@ -49,9 +59,7 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
 
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
-      <TouchableOpacity
-        style={styles.importantBox}
-        onPress={() => imageBase64.length > 0 && handleImage()}>
+      <View style={styles.importantBox}>
         <View style={styles.importantImageBox}>
           {isImportant === true && (
             <Image
@@ -73,7 +81,8 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
             {description ? description : ''}
           </Text>
           {imageBase64.length > 0 && (
-            <View>
+            <TouchableOpacity
+              onPress={() => imageBase64.length > 0 && handleImage()}>
               <Image
                 style={[
                   styles.image,
@@ -87,13 +96,18 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
                   uri: imageBase64,
                 }}
               />
-            </View>
+            </TouchableOpacity>
           )}
-          <Text style={styles.importantDate}>
-            {convertDate(new Date(createdAt))}
-          </Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Button icon='message-draw' mode='text' onPress={handleMessage}>
+              Ответить
+            </Button>
+            <Text style={styles.importantDate}>
+              {convertDate(new Date(createdAt))}
+            </Text>
+          </View>
         </View>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };

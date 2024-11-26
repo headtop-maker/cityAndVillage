@@ -21,6 +21,7 @@ export interface CounterState {
     description: string;
     isImportant: boolean;
     imageBase64?: string;
+    author: string;
   }[];
   imageForNewsFromServer: TImageResponse['photos'];
   actionState: {

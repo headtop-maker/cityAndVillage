@@ -9,7 +9,8 @@ import {
 } from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
-import {setFireBaseTokenAdded} from './counterSlice';
+import {resetCurrentUser, setFireBaseTokenAdded} from './counterSlice';
+import {Alert} from 'react-native';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
@@ -63,7 +64,15 @@ export const serviceApi = createApi({
           const {data} = await queryFulfilled; // Ожидаем успешного ответа
           !!data.tokens && dispatch(setFireBaseTokenAdded(true));
         } catch (error) {
-          console.log('Ошибка при выполнении мутации:', error);
+          if (error?.error?.status === 401) {
+            dispatch(resetCurrentUser());
+            Alert.alert(
+              'Не авторизован',
+              'Требуется ввести логин/пароль в приложении',
+            );
+          } else {
+            console.log('Ошибка при выполнении мутации:', error);
+          }
         }
       },
       invalidatesTags: ['FireBaseTokens'],

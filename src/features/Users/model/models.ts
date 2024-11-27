@@ -61,7 +61,7 @@ export const setImportantMessage = createAsyncThunk(
       tokens: tokenChunks[0],
       notification: {
         title: 'Новое обращение от',
-        body: data.author,
+        body: `${data.authorName} \n ${data.author}  `,
       },
     });
 

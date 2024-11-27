@@ -8,13 +8,27 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
-import {Button, Icon} from 'react-native-paper';
+import {Button, Icon, Text} from 'react-native-paper';
 import withModal from '../../../shared/HOC/withModal';
+import {setImportantMessage} from '../../Users/model/models';
+import {dp} from '../../../shared/lib/getDP';
+import {
+  selectCurrentUserEmail,
+  selectCurrentUserName,
+} from '../../../entities/News/models/selectors';
+import {selectCurrentUserToken} from '../../../shared/models/selectors';
+import {useModal} from '../../Modal/ui/ModalProvider';
 
 const Important = () => {
   const important = useAppSelector(selectImportant);
   const isLoading = useAppSelector(selectImportantLoading);
   const dispatch = useAppDispatch();
+
+  const userEmail = useAppSelector(selectCurrentUserEmail);
+  const username = useAppSelector(selectCurrentUserName);
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
+
+  const {showModal} = useModal();
 
   const prefetch = useCallback(() => {
     dispatch(getImportant(10));
@@ -30,11 +44,36 @@ const Important = () => {
         id={item.id}
         imageBase64={item.imageBase64}
         author={item.author}
+        handleSendMessage={handleSendMessage}
       />
     );
   };
 
-  console.log('important', important);
+  const handleSendMessage = async (message: string, recipient: string) => {
+    if (!currentUserToken) return;
+
+    const result = await dispatch(
+      setImportantMessage({
+        author: userEmail,
+        authorName: username,
+        recipient: recipient,
+        title: 'От: ' + username,
+        description: message,
+        isImportant: false,
+        imageBase64: '',
+      }),
+    );
+
+    if (message !== '') {
+      if (setImportantMessage.fulfilled.match(result)) {
+        showModal(
+          <View style={{padding: dp(10)}}>
+            <Text>Сообщение успешно отправлено. </Text>
+          </View>,
+        );
+      }
+    }
+  };
 
   useLayoutEffect(() => {
     prefetch();

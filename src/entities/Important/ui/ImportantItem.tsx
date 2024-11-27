@@ -5,16 +5,23 @@ import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
-import {Button} from 'react-native-paper';
+import {Button, TextInput} from 'react-native-paper';
 
-const ImportantItem: FC<CounterState['important'][0]> = ({
+type TImportantItem = {
+  handleSendMessage: (message: string, recipient: string) => void;
+};
+
+const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
   title,
   description,
   createdAt,
   isImportant,
   imageBase64,
   author,
+  handleSendMessage,
 }) => {
+  const [message, setMessage] = useState('');
+  const [showForm, setShowForm] = useState(false);
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const {showModal} = useModal();
 
@@ -41,12 +48,13 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
     );
   };
 
-  const handleMessage = () => {
-    showModal(
-      <View style={{padding: dp(10)}}>
-        <Text>{author}</Text>
-      </View>,
+  const sandMessage = () => {
+    handleSendMessage(
+      `На сообщение от ${convertDate(new Date(createdAt))}\n` + message,
+      author,
     );
+    setShowForm(false);
+    setMessage('');
   };
 
   imageBase64.length > 0 &&
@@ -99,13 +107,36 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
             </TouchableOpacity>
           )}
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Button icon='message-draw' mode='text' onPress={handleMessage}>
-              Ответить
+            <Button
+              icon='message-draw'
+              mode='text'
+              onPress={() => setShowForm(!showForm)}>
+              {!showForm ? 'Ответить' : 'Закрыть'}
             </Button>
             <Text style={styles.importantDate}>
               {convertDate(new Date(createdAt))}
             </Text>
           </View>
+          {showForm && (
+            <View>
+              <TextInput
+                label='Ответ'
+                style={[styles.input, styles.textArea]}
+                value={message}
+                multiline
+                numberOfLines={2}
+                mode='outlined'
+                onChangeText={setMessage}
+              />
+              <Button
+                disabled={!message}
+                icon='send-circle-outline'
+                mode='text'
+                onPress={sandMessage}>
+                Отправить
+              </Button>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -150,5 +181,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'center',
     alignItems: 'center',
+  },
+  input: {
+    color: '#252525',
+  },
+  textArea: {
+    textAlignVertical: 'top',
   },
 });

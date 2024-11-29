@@ -50,7 +50,7 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
 
   const sandMessage = () => {
     handleSendMessage(
-      `На сообщение от ${convertDate(new Date(createdAt))}\n` + message,
+      `RE: от ${convertDate(new Date(createdAt))}\n${message}`,
       author,
     );
     setShowForm(false);

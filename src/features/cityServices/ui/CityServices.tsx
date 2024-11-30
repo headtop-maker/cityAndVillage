@@ -24,7 +24,7 @@ const CityServices: FC = () => {
   const ContactItem = ({item}: {item: ImportantContact}) => (
     <List.Accordion
       title={item.contactName}
-      left={props => <List.Icon {...props} icon='folder' />}
+      left={props => <List.Icon {...props} icon='contacts-outline' />}
       expanded={getExpanded(item.id)}
       onPress={() => handlePress(item.id)}>
       {item.contacts.map((contact, index) => (

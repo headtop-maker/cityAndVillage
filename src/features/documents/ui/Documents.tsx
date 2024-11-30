@@ -29,16 +29,18 @@ const renderItem = ({item}: {item: TDocuments[0]}) => {
     <TouchableOpacity
       style={styles.item}
       onPress={() => {
-        // dispatch(
-        //   setBanner({
-        //     icon: 'cloud-download-outline',
-        //     text: 'Идет загрузка файла проверьте панель уведомлений вашего устройства',
-        //     visible: true,
-        //   }),
-        // );
         getMemeType(filePath);
       }}>
-      <Text variant='bodyLarge'>{documentTitle || ''}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          flex: 1,
+        }}>
+        <Icon source='file-document-outline' color='#6e26f3' size={25} />
+        <Text variant='bodyLarge'>{documentTitle || ''}</Text>
+      </View>
+
       <Text variant='bodySmall' style={{alignSelf: 'flex-end'}}>
         {createdAt ? convertDate(new Date(createdAt)) : ''}
       </Text>
@@ -77,7 +79,11 @@ const Documents = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: '#F9F9F9',
+    paddingHorizontal: 16,
+  },
   item: {
     borderWidth: 0.5,
     alignContent: 'center',

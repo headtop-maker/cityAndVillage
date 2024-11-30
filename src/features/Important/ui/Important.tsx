@@ -34,20 +34,23 @@ const Important = () => {
     dispatch(getImportant(10));
   }, [dispatch]);
 
-  const renderItem = ({item}: {item: CounterState['important'][0]}) => {
-    return (
-      <ImportantItem
-        title={item.title}
-        description={item.description}
-        createdAt={item.createdAt}
-        isImportant={item.isImportant}
-        id={item.id}
-        imageBase64={item.imageBase64}
-        author={item.author}
-        handleSendMessage={handleSendMessage}
-      />
-    );
-  };
+  const renderItem = useCallback(
+    ({item}: {item: CounterState['important'][0]}) => {
+      return (
+        <ImportantItem
+          title={item.title}
+          description={item.description}
+          createdAt={item.createdAt}
+          isImportant={item.isImportant}
+          id={item.id}
+          imageBase64={item.imageBase64}
+          author={item.author}
+          handleSendMessage={handleSendMessage}
+        />
+      );
+    },
+    [],
+  );
 
   const handleSendMessage = async (message: string, recipient: string) => {
     if (!currentUserToken) return;

@@ -35,7 +35,7 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
             {
               width: imageSize.width,
               height: imageSize.height,
-              maxWidth: dp(400),
+              maxWidth: dp(300),
               maxHeight: dp(800),
               resizeMode: 'stretch',
             },

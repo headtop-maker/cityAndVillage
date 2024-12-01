@@ -19,7 +19,7 @@ import {
   requestStoragePermission,
 } from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
-import {navigationRef, Stack} from '../lib/navigationRef';
+import {navigate, navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
 import BootSplash from 'react-native-bootsplash';
 import {Alert} from 'react-native';
@@ -29,6 +29,7 @@ import {useAddFireBaseTokenMutation} from '../models/services';
 import {requestNotificationPermission} from '../lib/requestNotificationPermission';
 import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
 import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
+import {LinkingNav} from './types';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
@@ -70,6 +71,14 @@ const MainStack = () => {
         remoteMessage.notification.title,
         remoteMessage.notification.body,
       );
+      if (remoteMessage.data) {
+        if (remoteMessage.data.type === LinkingNav.message) {
+          navigate(SCREENS.ImportantScreen);
+        }
+        if (remoteMessage.data.type === LinkingNav.news) {
+          navigate(SCREENS.NewsScreen);
+        }
+      }
     });
   }, []);
 

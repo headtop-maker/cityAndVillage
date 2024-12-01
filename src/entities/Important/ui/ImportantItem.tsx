@@ -24,6 +24,7 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
   const [showForm, setShowForm] = useState(false);
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const {showModal} = useModal();
+  const parts = description.split('\n'); // Разделяем текст на части
 
   const handleImage = () => {
     if (!imageBase64 || imageBase64.length < 0) return;
@@ -49,10 +50,7 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
   };
 
   const sandMessage = () => {
-    handleSendMessage(
-      `RE: от ${convertDate(new Date(createdAt))}\n:${description}\n${message}`,
-      author,
-    );
+    handleSendMessage(`${description}\n${message}`, author);
     setShowForm(false);
     setMessage('');
   };
@@ -86,7 +84,17 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
         <View style={styles.importantTextBox}>
           <Text style={styles.importantTitle}>{title}</Text>
           <Text style={styles.importantText}>
-            {description ? description : ''}
+            {parts.map((part, index) => (
+              <Text
+                key={index}
+                style={
+                  index === parts.length - 1
+                    ? styles.normalText
+                    : styles.highlightedText
+                }>
+                {index === parts.length - 1 ? part : part + `\n`}
+              </Text>
+            ))}
           </Text>
           {imageBase64.length > 0 && (
             <TouchableOpacity
@@ -151,6 +159,14 @@ const styles = StyleSheet.create({
     margin: dp(5),
     backgroundColor: '#fafbff',
     padding: dp(5),
+  },
+  highlightedText: {
+    fontWeight: 'bold',
+    color: '#007bff',
+    marginBottom: 4,
+  },
+  normalText: {
+    color: '#333',
   },
   importantBox: {flexDirection: 'row', justifyContent: 'space-between'},
   importantImageBox: {

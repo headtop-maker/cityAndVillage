@@ -13,3 +13,8 @@ export type IRouteParamList = {
 };
 
 export type KeyScreen = keyof IRouteParamList;
+
+export enum LinkingNav {
+  message = 'message',
+  news = 'news',
+}

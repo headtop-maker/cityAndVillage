@@ -11,6 +11,7 @@ import {
 import {CounterState} from '../../../shared/models/types';
 import {chunkArray} from '../../../shared/lib/chunkArray';
 import {sleep} from '../../../shared/lib/sleep';
+import {LinkingNav} from '../../../shared/Navigation/types';
 
 export const getNews = createAsyncThunk(
   `${fetchApiDomain}/getNews`,
@@ -79,6 +80,9 @@ export const sendPush = createAsyncThunk(
             notification: {
               title: 'Вышла новость',
               body: title,
+            },
+            data: {
+              type: LinkingNav.news,
             },
           });
           await sleep(2000); // Задержка 5 секунд

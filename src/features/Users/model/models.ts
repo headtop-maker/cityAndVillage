@@ -9,6 +9,7 @@ import {
 } from '../../../shared/api/axiosInstance';
 import {setImportantDataType} from '../types/types';
 import {chunkArray} from '../../../shared/lib/chunkArray';
+import {LinkingNav} from '../../../shared/Navigation/types';
 
 export const getAllUsers = createAsyncThunk(
   `${fetchApiDomain}/getUsers`,
@@ -62,6 +63,9 @@ export const setImportantMessage = createAsyncThunk(
       notification: {
         title: 'Новое обращение от',
         body: `${data.authorName} \n ${data.author}  `,
+      },
+      data: {
+        type: LinkingNav.message,
       },
     });
 

@@ -395,7 +395,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
 
                         val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, outWidth,outHeight,true)
-                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos)
+                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos)
                         val b = baos.toByteArray()
                         val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)
                         fileParams.putString("base64Image", encodeImage.replaceFirst("\"", ""))

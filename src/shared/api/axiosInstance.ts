@@ -47,15 +47,16 @@ export const getTokens = (): Promise<
     url: `${TEMP_API}firebase-tokens/`,
   });
 
-export const sendPushApi = (data: {
+export const sendPushApi = (sendData: {
   tokens: string[];
   notification: {
     title: string;
     body: string;
   };
+  data?: Record<string, string>;
 }): Promise<AxiosResponse<{message: string}, unknown>> =>
   response.apiRequest({
-    data,
+    data: sendData,
     timeout: 3000,
     method: 'post',
     url: `${TEMP_API}firebase-tokens/send/`,

@@ -4,7 +4,7 @@ import {useGetUploadFilesQuery} from '../../../shared/models/services';
 
 const AddDocuments = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const {data, refetch} = useGetUploadFilesQuery();
+  const {data, refetch, isLoading} = useGetUploadFilesQuery();
 
   const handlePress = (fileName: string) => {
     setSelectedFile(fileName);
@@ -14,6 +14,8 @@ const AddDocuments = () => {
     <View style={styles.container}>
       <FlatList
         data={data}
+        refreshing={isLoading}
+        onRefresh={refetch}
         keyExtractor={(item, index) => `${item}-${index}`}
         renderItem={({item}) => (
           <TouchableOpacity
@@ -26,7 +28,7 @@ const AddDocuments = () => {
       {selectedFile && (
         <View style={styles.selectedFileContainer}>
           <Text style={styles.selectedFileText}>
-            Selected File: {selectedFile}
+            Выбран файл: {selectedFile}
           </Text>
         </View>
       )}

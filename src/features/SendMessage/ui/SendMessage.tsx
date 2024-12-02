@@ -138,11 +138,13 @@ const SendMessage = () => {
       )}
       {!!currentUserToken && dialog()}
       <TouchableOpacity
-        style={{flexDirection: 'row'}}
-        onPress={() => setVisible(true)}>
-        <Text variant='titleMedium'>
+        style={styles.dropdown}
+        onPress={() => setVisible(true)}
+        disabled={!currentUserToken}>
+        <Text style={styles.dropdownText}>
           Кому: {!selectedUser ? 'выбрать' : selectedUser}{' '}
         </Text>
+        <Icon source='chevron-down' size={20} color='#888' />
       </TouchableOpacity>
       {!image && (
         <Button
@@ -208,6 +210,21 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: '#131413',
+  },
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#DDD',
+  },
+  dropdownText: {
+    color: '#333',
+    fontSize: 14,
   },
   image: {
     marginTop: dp(10),

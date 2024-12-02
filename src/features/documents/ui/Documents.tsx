@@ -25,8 +25,8 @@ const getMemeType = async (url: string) => {
 const renderItem = ({item}: {item: TDocuments[0]}) => (
   <TouchableOpacity
     style={styles.card}
-    onPress={() => {
-      getMemeType(item.filePath);
+    onPress={async () => {
+      await getMemeType(item.filePath);
     }}>
     <View style={styles.iconContainer}>
       <Icon source='file-document-outline' size={30} color='#6A1B9A' />

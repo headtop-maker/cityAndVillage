@@ -63,6 +63,11 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
       });
     });
 
+  const handleMessageChange = (text: string) => {
+    const filteredText = text.replace(/\n/g, '');
+    setMessage(filteredText);
+  };
+
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
       <View style={styles.importantBox}>
@@ -86,11 +91,11 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
           <Text style={styles.importantText}>
             {parts.map((part, index) => (
               <Text
-                key={index}
+                key={index + 'importantTxt'}
                 style={
                   index === parts.length - 1
-                    ? styles.normalText
-                    : styles.highlightedText
+                    ? [styles.normalText]
+                    : [styles.highlightedText]
                 }>
                 {index === parts.length - 1 ? part : part + `\n`}
               </Text>
@@ -134,7 +139,7 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
                 multiline
                 numberOfLines={2}
                 mode='outlined'
-                onChangeText={setMessage}
+                onChangeText={handleMessageChange}
               />
               <Button
                 disabled={!message}

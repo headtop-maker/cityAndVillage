@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import AddDocuments from './AddDocuments';
-import {useGetDocumentsQuery} from '../../../shared/models/services';
+import {
+  useDeleteDocumentMutation,
+  useGetDocumentsQuery,
+} from '../../../shared/models/services';
 
 const DocumentsManage = () => {
-  const [deleteDocument, setDeleteDocument] = useState('');
+  const [deleteDocumentId] = useDeleteDocumentMutation();
   const {data, refetch, isLoading} = useGetDocumentsQuery();
+
+  const handleDelete = async (id: string) => {
+    await deleteDocumentId(id);
+  };
 
   return (
     <View style={styles.container}>
@@ -20,7 +27,7 @@ const DocumentsManage = () => {
             <Text style={styles.text}>{item.documentTitle}</Text>
             <TouchableOpacity
               style={styles.deleteButton}
-              onPress={() => setDeleteDocument(item.id)}>
+              onPress={() => handleDelete(item.id)}>
               <Text style={styles.deleteButtonText}>Удалить</Text>
             </TouchableOpacity>
           </View>

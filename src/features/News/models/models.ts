@@ -25,7 +25,6 @@ export const setFile = createAsyncThunk(
         );
 
         formData.append('file', {
-          // @ts-ignore
           uri: resizedImage.uri,
           type: 'image/jpeg',
           name: `${file.fileName}.jpg`,

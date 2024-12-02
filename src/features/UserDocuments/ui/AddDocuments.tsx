@@ -26,8 +26,10 @@ const AddDocuments = () => {
   const handleAddFile = async () => {
     await addDocument({
       documentTitle: inputValue,
-      filePath: TEMP_API + selectedFile,
+      filePath: TEMP_API + 'upload/' + selectedFile,
     });
+    setInputValue('');
+    setSelectedFile(null);
   };
 
   const handleOpenFile = () => {

@@ -14,7 +14,7 @@ import {Alert} from 'react-native';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
-  tagTypes: ['Category', 'FireBaseTokens'],
+  tagTypes: ['Category', 'FireBaseTokens', 'Documents'],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
     prepareHeaders: (headers, {getState}) => {
@@ -84,9 +84,27 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ['Category'],
     }),
+
     getDocuments: builder.query<TDocuments, void>({
       query: () => '/documents',
+      providesTags: ['Documents'],
     }),
+
+    addNewDocument: builder.mutation<
+      any,
+      {
+        documentTitle: string;
+        filePath: string;
+      }
+    >({
+      query: data => ({
+        url: '/documents',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Documents'],
+    }),
+
     getServiceByName: builder.query<ServiceTitle, string>({
       query: name => `/category/${name}`,
     }),
@@ -124,4 +142,5 @@ export const {
   useGetDocumentsQuery,
   useAddFireBaseTokenMutation,
   useGetUploadFilesQuery,
+  useAddNewDocumentMutation,
 } = serviceApi;

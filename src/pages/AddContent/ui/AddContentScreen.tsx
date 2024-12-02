@@ -5,6 +5,7 @@ import AddNews from '../../../features/News/ui/AddNews';
 import {SegmentedButtons} from 'react-native-paper';
 import Users from '../../../features/Users/ui/Users';
 import CategoryList from '../../../features/Category/ui/Category';
+import AddDocuments from '../../../features/Documents/ui/AddDocuments';
 
 // interface AddContentScreeProps {}
 
@@ -22,12 +23,14 @@ const AddContentScreen = () => {
             label: 'Создать новость',
           },
           {value: 'users', label: 'Пользователи'},
+          {value: 'documents', label: 'Документы'},
           {value: 'category', label: 'Категории'},
         ]}
       />
       {value === 'createNews' && <AddNews />}
       {value === 'users' && <Users />}
       {value === 'category' && <CategoryList />}
+      {value === 'documents' && <AddDocuments />}
     </View>
   );
 };

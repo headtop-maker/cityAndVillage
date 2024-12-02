@@ -97,6 +97,9 @@ export const serviceApi = createApi({
     getAppVersion: builder.query<IAppVersion, void>({
       query: () => '/version',
     }),
+    getUploadFiles: builder.query<string[], void>({
+      query: () => '/upload',
+    }),
     getAdmins: builder.query<
       {
         id: number;
@@ -120,4 +123,5 @@ export const {
   useGetAdminsQuery,
   useGetDocumentsQuery,
   useAddFireBaseTokenMutation,
+  useGetUploadFilesQuery,
 } = serviceApi;

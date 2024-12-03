@@ -15,6 +15,8 @@ import {
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
+import {dp} from '../../../shared/lib/getDP';
+import {setFile} from '../../News/models/models';
 
 const AddDocuments = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -38,9 +40,15 @@ const AddDocuments = () => {
     setSelectedFile(null);
   };
 
-  const handleOpenFile = () => {
+  const handleUpload = async () => {
+    dispatch(setFile());
+    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
+  };
+
+  const handleOpenFile = async () => {
+    await refetch();
     if (data.length === 0) return;
-    showModal(
+    await showModal(
       <FlatList
         data={data}
         refreshing={isLoading}
@@ -65,6 +73,9 @@ const AddDocuments = () => {
 
   return (
     <View>
+      <TouchableOpacity style={styles.addButton} onPress={handleUpload}>
+        <Text style={styles.addButtonText}>Загрузить файлы на сервер</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.addButton} onPress={handleOpenFile}>
         <Text style={styles.addButtonText}>Выбрать</Text>
       </TouchableOpacity>
@@ -89,8 +100,8 @@ const AddDocuments = () => {
 
 const styles = StyleSheet.create({
   item: {
-    padding: 12,
-    marginVertical: 8,
+    padding: dp(12),
+    marginVertical: dp(8),
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
   },
@@ -107,15 +118,16 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
+    padding: dp(10),
     borderRadius: 8,
     marginVertical: 8,
   },
   addButton: {
-    padding: 12,
+    padding: dp(12),
     backgroundColor: '#007BFF',
     borderRadius: 8,
     alignItems: 'center',
+    marginVertical: dp(2),
   },
   addButtonText: {
     color: '#fff',

@@ -5,7 +5,7 @@ import {
   useDeleteCategoryMutation,
   useGetServiceCategoryQuery,
 } from '../../../shared/models/services';
-import AddNewCategory from './AddNewCategory';
+import AddNewCategory from '../../../features/Category/ui/AddNewCategory';
 import {dp} from '../../../shared/lib/getDP';
 
 type Category = {

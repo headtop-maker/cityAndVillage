@@ -4,8 +4,8 @@ import {StyleSheet, View} from 'react-native';
 import AddNews from '../../../features/News/ui/AddNews';
 import {SegmentedButtons} from 'react-native-paper';
 import Users from '../../../features/Users/ui/Users';
-import CategoryList from '../../../features/Category/ui/Category';
-import DocumentsManage from '../../../features/UserDocuments/ui/DocumentsManage';
+import CategoryList from '../../../widgets/Category/ui/Category';
+import DocumentsManage from '../../../widgets/UserDocuments/ui/DocumentsManage';
 
 // interface AddContentScreeProps {}
 

@@ -25,6 +25,7 @@ import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 import {setFile} from '../models/models';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {dp} from '../../../shared/lib/getDP';
+import {serviceApi} from '../../../shared/models/services';
 
 // interface AddContentScreeProps {}
 
@@ -67,6 +68,7 @@ const AddNews = () => {
 
   const handleAddImage = async () => {
     dispatch(setFile());
+    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
   };
 
   const handleShowImage = async () => {

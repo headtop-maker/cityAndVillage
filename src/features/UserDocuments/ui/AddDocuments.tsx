@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,20 +8,26 @@ import {
   StyleSheet,
 } from 'react-native';
 import {
+  serviceApi,
   useAddNewDocumentMutation,
   useGetUploadFilesQuery,
 } from '../../../shared/models/services';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
+import {useAppDispatch} from '../../../shared/models/storeHooks';
 
 const AddDocuments = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
-
   const [addDocument] = useAddNewDocumentMutation();
+  const dispatch = useAppDispatch();
 
   const {data, refetch, isLoading} = useGetUploadFilesQuery();
   const {showModal, hideModal} = useModal();
+
+  useLayoutEffect(() => {
+    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
+  }, [dispatch]);
 
   const handleAddFile = async () => {
     await addDocument({
@@ -38,7 +44,10 @@ const AddDocuments = () => {
       <FlatList
         data={data}
         refreshing={isLoading}
-        onRefresh={refetch}
+        onRefresh={() => {
+          dispatch(serviceApi.util.invalidateTags(['UploadFile']));
+          refetch();
+        }}
         keyExtractor={(item, index) => `${item}-${index}`}
         renderItem={({item}) => (
           <TouchableOpacity

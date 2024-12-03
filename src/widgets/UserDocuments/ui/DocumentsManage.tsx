@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import AddDocuments from './AddDocuments';
+import AddDocuments from '../../../features/UserDocuments/ui/AddDocuments';
 
-import DeleteDocuments from './DeleteDocuments';
+import DeleteDocuments from '../../../features/UserDocuments/ui/DeleteDocuments';
 
 const DocumentsManage = () => {
   return (

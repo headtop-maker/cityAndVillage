@@ -127,7 +127,6 @@ export const serviceApi = createApi({
     }),
     getUploadFiles: builder.query<string[], void>({
       query: () => '/upload',
-      keepUnusedDataFor: 1,
       providesTags: ['UploadFile'],
     }),
     getAdmins: builder.query<

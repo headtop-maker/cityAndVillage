@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: dp(10),
     borderRadius: 8,
-    marginVertical: 8,
+    marginVertical: dp(8),
   },
   addButton: {
     padding: dp(12),

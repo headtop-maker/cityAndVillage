@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import {
-  serviceApi,
   useAddNewDocumentMutation,
   useGetUploadFilesQuery,
 } from '../../../shared/models/services';
@@ -26,10 +25,6 @@ const AddDocuments = () => {
 
   const {data, refetch, isLoading} = useGetUploadFilesQuery();
   const {showModal, hideModal} = useModal();
-
-  useLayoutEffect(() => {
-    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
-  }, [dispatch]);
 
   const handleAddFile = async () => {
     await addDocument({
@@ -52,7 +47,6 @@ const AddDocuments = () => {
         data={data}
         refreshing={isLoading}
         onRefresh={() => {
-          dispatch(serviceApi.util.invalidateTags(['UploadFile']));
           refetch();
         }}
         keyExtractor={(item, index) => `${item}-${index}`}
@@ -75,11 +69,10 @@ const AddDocuments = () => {
       <TouchableOpacity style={styles.addButton} onPress={handleUpload}>
         <Text style={styles.addButtonText}>Загрузить файлы на сервер</Text>
       </TouchableOpacity>
-      {data.length > 0 && (
-        <TouchableOpacity style={styles.addButton} onPress={handleOpenFile}>
-          <Text style={styles.addButtonText}>Выбрать</Text>
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity style={styles.addButton} onPress={handleOpenFile}>
+        <Text style={styles.addButtonText}>Выбрать</Text>
+      </TouchableOpacity>
 
       <Text style={styles.selectedFileText}>
         {selectedFile ? `Выбран: ${selectedFile}` : 'Выбрать файл'}

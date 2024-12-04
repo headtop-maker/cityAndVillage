@@ -15,7 +15,7 @@ import {useModal} from '../../Modal/ui/ModalProvider';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {dp} from '../../../shared/lib/getDP';
-import {setFile} from '../../News/models/models';
+import {setFileWithoutResize} from '../../News/models/models';
 
 const AddDocuments = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -36,13 +36,13 @@ const AddDocuments = () => {
   };
 
   const handleUpload = async () => {
-    await dispatch(setFile());
+    await dispatch(setFileWithoutResize());
     await refetch();
   };
 
   const handleOpenFile = async () => {
     if (data.length === 0) return;
-    await showModal(
+    showModal(
       <FlatList
         data={data}
         refreshing={isLoading}
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     padding: dp(10),
     borderRadius: 8,
     marginVertical: dp(8),
+    color: '#252525',
   },
   addButton: {
     padding: dp(12),

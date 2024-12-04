@@ -44,3 +44,24 @@ export const setFile = createAsyncThunk(
     }
   },
 );
+
+export const setFileWithoutResize = createAsyncThunk(
+  `${fetchApiDomain}/setFileWithoutResize`,
+  async (_, {rejectWithValue}) => {
+    const file: FileParamsType = await nativeFn.openFile();
+    console.log(file);
+    const formData = new FormData();
+
+    formData.append('file', {
+      uri: file.fileUri,
+      type: 'application/octet-stream',
+      name: `${file.fileName}.${file.fileType}`,
+    });
+    try {
+      await setFileApi(formData);
+    } catch (err) {
+      Alert.alert('Ошибка загрузки изображения', err.toString());
+      return rejectWithValue(err);
+    }
+  },
+);

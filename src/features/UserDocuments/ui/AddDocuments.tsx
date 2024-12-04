@@ -94,7 +94,7 @@ const AddDocuments = () => {
         style={styles.addButton}
         onPress={handleAddFile}
         disabled={!inputValue || !selectedFile}>
-        <Text style={styles.addButtonText}>Добавить документ</Text>
+        <Text style={styles.addButtonText}>Добавить в документы</Text>
       </TouchableOpacity>
     </View>
   );

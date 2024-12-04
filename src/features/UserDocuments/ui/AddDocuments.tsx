@@ -41,12 +41,11 @@ const AddDocuments = () => {
   };
 
   const handleUpload = async () => {
-    dispatch(setFile());
-    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
+    await dispatch(setFile());
+    await refetch();
   };
 
   const handleOpenFile = async () => {
-    await refetch();
     if (data.length === 0) return;
     await showModal(
       <FlatList
@@ -76,9 +75,12 @@ const AddDocuments = () => {
       <TouchableOpacity style={styles.addButton} onPress={handleUpload}>
         <Text style={styles.addButtonText}>Загрузить файлы на сервер</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.addButton} onPress={handleOpenFile}>
-        <Text style={styles.addButtonText}>Выбрать</Text>
-      </TouchableOpacity>
+      {data.length > 0 && (
+        <TouchableOpacity style={styles.addButton} onPress={handleOpenFile}>
+          <Text style={styles.addButtonText}>Выбрать</Text>
+        </TouchableOpacity>
+      )}
+
       <Text style={styles.selectedFileText}>
         {selectedFile ? `Выбран: ${selectedFile}` : 'Выбрать файл'}
       </Text>

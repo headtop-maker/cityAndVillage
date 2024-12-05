@@ -23,7 +23,9 @@ const AddDocuments = () => {
   const [addDocument] = useAddNewDocumentMutation();
   const dispatch = useAppDispatch();
 
-  const {data, refetch, isLoading} = useGetUploadFilesQuery();
+  const {data, refetch, isLoading} = useGetUploadFilesQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const {showModal, hideModal} = useModal();
 
   const handleAddFile = async () => {

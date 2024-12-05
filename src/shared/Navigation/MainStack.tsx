@@ -30,6 +30,7 @@ import {requestNotificationPermission} from '../lib/requestNotificationPermissio
 import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
 import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
 import {LinkingNav} from './types';
+import PrepareServiceScreen from '../../pages/PrepareService/PrepareServiceScreen';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
@@ -120,6 +121,10 @@ const MainStack = () => {
           <Stack.Screen
             name={SCREENS.RegistrationScreen}
             component={RegistrationScreen}
+          />
+          <Stack.Screen
+            name={SCREENS.PrepareServiceScreen}
+            component={PrepareServiceScreen}
           />
         </Stack.Group>
       </Stack.Navigator>

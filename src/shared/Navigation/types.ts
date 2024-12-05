@@ -10,6 +10,7 @@ export type IRouteParamList = {
   [SCREENS.CurrentNewsScreen]: undefined;
   [SCREENS.LoginScreen]: undefined;
   [SCREENS.RegistrationScreen]: undefined;
+  [SCREENS.PrepareServiceScreen]: undefined;
 };
 
 export type KeyScreen = keyof IRouteParamList;

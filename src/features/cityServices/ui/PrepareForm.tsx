@@ -1,12 +1,20 @@
 import React, {FC, useState} from 'react';
-import {StyleSheet, Alert, View} from 'react-native';
+import {
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  Image,
+  ScrollView,
+} from 'react-native';
 import {dp} from '../../../shared/lib/getDP';
-import {Button, TextInput} from 'react-native-paper';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const PrepareForm: FC = () => {
+  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [formData, setFormData] = useState({
     phone: '',
     email: '',
@@ -60,6 +68,15 @@ const PrepareForm: FC = () => {
   const handleImage = async () => {
     try {
       const result = await nativeFn.base64Image();
+      Image.getSize(
+        `data:image/jpeg;base64,${result.base64Image}`,
+        (widthImage, heightImage) => {
+          setImageSize({
+            width: Math.floor(widthImage),
+            height: Math.floor(heightImage),
+          });
+        },
+      );
       if (result.base64Image) {
         handleChange('image', result.base64Image);
       }
@@ -73,76 +90,123 @@ const PrepareForm: FC = () => {
   };
 
   return (
-    <View>
+    <ScrollView style={styles.container}>
       {!formData.image && (
-        <Button mode='text' onPress={handleImage}>
-          Добавить изображение
-        </Button>
+        <TouchableOpacity style={styles.imageButton} onPress={handleImage}>
+          <Text style={styles.imageButtonText}>Добавить изображение</Text>
+        </TouchableOpacity>
       )}
       {formData.image && (
-        <Button mode='text' onPress={removeImage}>
-          Удалить изображение
-        </Button>
+        <TouchableOpacity style={styles.imageButton} onPress={removeImage}>
+          <Text style={styles.imageButtonText}>Удалить изображение</Text>
+        </TouchableOpacity>
+      )}
+      {formData.image && (
+        <Image
+          style={[
+            {
+              width: imageSize.width,
+              height: imageSize.height,
+              maxWidth: dp(300),
+              alignSelf: 'center',
+              marginVertical: dp(5),
+            },
+          ]}
+          source={{
+            uri: 'data:image/jpeg;base64,' + formData.image,
+          }}
+        />
       )}
       <TextInput
         style={styles.input}
-        label='Телефон'
-        value={formData.phone}
+        placeholder='Телефон'
         onChangeText={value => handleChange('phone', value)}
-        mode='outlined'
+        value={formData.phone}
         keyboardType='phone-pad'
-        disabled={!currentUserToken}
+        editable={!!currentUserToken}
       />
       <TextInput
-        label='Email'
         style={styles.input}
         value={formData.email}
+        placeholder='Email'
         keyboardType='email-address'
-        mode='outlined'
         onChangeText={value => handleChange('email', value)}
-        disabled={!currentUserToken}
+        editable={!!currentUserToken}
       />
 
       <TextInput
-        label='Название услуги'
         style={styles.input}
         value={formData.title}
-        mode='outlined'
+        placeholder='Название услуги'
         onChangeText={value => handleChange('title', value)}
-        disabled={!currentUserToken}
+        editable={!!currentUserToken}
       />
 
       <TextInput
-        label='Описание'
-        style={[styles.input, styles.textArea]}
+        style={styles.textArea}
         value={formData.description}
         multiline
         numberOfLines={4}
-        mode='outlined'
+        placeholder='Описание'
         onChangeText={value => handleChange('description', value)}
-        disabled={!currentUserToken}
+        editable={!!currentUserToken}
       />
-      <Button
-        style={styles.button}
-        mode='outlined'
-        disabled={!currentUserToken}
-        onPress={handleSubmit}>
-        Отправить
-      </Button>
-    </View>
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitButtonText}>Отправить</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: dp(10),
+    backgroundColor: '#f9f9f9',
+  },
   input: {
-    width: dp(300),
-    color: '#252525',
+    marginBottom: dp(10),
+    padding: dp(10),
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: dp(8),
+    backgroundColor: '#fff',
+    fontSize: 16,
   },
   textArea: {
-    height: 100,
-    textAlignVertical: 'top',
+    marginBottom: dp(10),
+    padding: dp(10),
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    height: dp(100),
   },
-  button: {marginTop: dp(5)},
+  imageButton: {
+    marginBottom: dp(20),
+    padding: dp(15),
+    backgroundColor: '#6a5acd',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  imageButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  submitButton: {
+    padding: 15,
+    marginBottom: 20,
+    backgroundColor: '#6a5acd',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
 });
 
 export default PrepareForm;

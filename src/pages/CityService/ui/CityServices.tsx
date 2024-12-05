@@ -15,20 +15,39 @@ import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardIte
 import {Button, IconButton, Text, Tooltip} from 'react-native-paper';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
+import {navigate} from '../../../shared/lib/navigationRef';
+import SCREENS from '../../../shared/Navigation/screens';
 
 const CityServices = () => {
   const [selected, setSelected] = useState('');
   const isLoading = useAppSelector(selectIsLoading);
   const lists = useAppSelector(servicesSelectors.selectAll);
 
-  const {showModal} = useModal();
+  const {showModal, hideModal} = useModal();
   const dispatch = useAppDispatch();
+
+  const handleNavigate = () => {
+    navigate(SCREENS.PrepareServiceScreen);
+    hideModal();
+  };
 
   const handleShowModal = () => {
     showModal(
       <View style={{padding: dp(10)}}>
         <Text>Напишите нам </Text>
-        {/*<PrepareForm />*/}
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Tooltip title='Selected email'>
+            <IconButton
+              icon='lead-pencil'
+              selected
+              size={20}
+              onPress={handleNavigate}
+            />
+          </Tooltip>
+          <TouchableOpacity onPress={handleNavigate}>
+            <Text variant='titleMedium'>{'Заполнить форму'}</Text>
+          </TouchableOpacity>
+        </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Tooltip title='Selected email'>
             <IconButton

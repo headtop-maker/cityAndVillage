@@ -19,18 +19,20 @@ import {useAddPrepareAdsMutation} from '../../../shared/models/services';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {goBack} from '../../../shared/lib/navigationRef';
 
+const initial = {
+  phone: '',
+  email: '',
+  title: '',
+  categoryName: 'other',
+  description: '',
+  image: '',
+  imageSize: 0,
+};
+
 const PrepareForm: FC = () => {
   const [addPrepareAds, {isSuccess, isLoading}] = useAddPrepareAdsMutation();
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
-  const [formData, setFormData] = useState({
-    phone: '',
-    email: '',
-    title: '',
-    categoryName: 'other',
-    description: '',
-    image: '',
-    imageSize: 0,
-  });
+  const [formData, setFormData] = useState(initial);
   const userEmail = useAppSelector(selectCurrentUserEmail);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
   const {showModal} = useModal();
@@ -89,15 +91,7 @@ const PrepareForm: FC = () => {
       title: formData.title,
       description: formData.description,
     });
-    await setFormData({
-      phone: '',
-      email: '',
-      title: '',
-      categoryName: '',
-      description: '',
-      image: '',
-      imageSize: 0,
-    });
+    await setFormData(initial);
   };
 
   const handleImage = async () => {

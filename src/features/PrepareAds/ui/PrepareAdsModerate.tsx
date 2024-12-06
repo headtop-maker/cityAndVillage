@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -11,44 +11,17 @@ import {
 import {useGetPrepareAdsQuery} from '../../../shared/models/services';
 import {GetPrepareAds} from '../../../shared/models/types';
 
-interface Service {
-  _id: string;
-  phone: string;
-  email: string;
-  categoryName: string;
-  title: string;
-  description: string;
-  image: string;
-  id: string;
-}
-
-const servicesData: Service[] = [
-  {
-    _id: '670f8f73462e4c8311c9361d',
-    phone: '+795211111111',
-    email: 'name@name.com',
-    categoryName: 'build',
-    title: 'Пример новой услуги',
-    description:
-      'Трудолюбивый сотрудник Рушан подготовит территорию вашего дома.',
-    image: 'th-3852733366.jpg',
-    id: '670f8f73462e4c8311c9361d',
-  },
-];
-
 const PrepareAdsModerate = () => {
   const {data, refetch, isLoading} = useGetPrepareAdsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  const [services, setServices] = useState<Service[]>(servicesData);
 
   const handleDelete = (id: string) => {
     Alert.alert('Удалить', 'Вы уверены, что хотите удалить эту услугу?', [
       {text: 'Отмена', style: 'cancel'},
       {
         text: 'Удалить',
-        onPress: () =>
-          setServices(prev => prev.filter(service => service.id !== id)),
+        onPress: () => Alert.alert('Удалить', ` с ID ${id}`),
       },
     ]);
   };
@@ -69,6 +42,11 @@ const PrepareAdsModerate = () => {
         <Button
           title='Удалить'
           color='red'
+          onPress={() => handleDelete(item.id)}
+        />
+        <Button
+          title={item.categoryName}
+          color='gray'
           onPress={() => handleDelete(item.id)}
         />
         <Button

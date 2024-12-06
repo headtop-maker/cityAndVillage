@@ -133,10 +133,6 @@ export const serviceApi = createApi({
     getAppVersion: builder.query<IAppVersion, void>({
       query: () => '/version',
     }),
-    getPrepareAds: builder.query<GetPrepareAds, void>({
-      query: () => '/prepare-ads',
-      providesTags: ['PrepareAds'],
-    }),
 
     addPrepareAds: builder.mutation<GetPrepareAds, PrepareAds>({
       query: data => ({
@@ -147,6 +143,17 @@ export const serviceApi = createApi({
       invalidatesTags: ['PrepareAds'],
     }),
 
+    deletePrepareAds: builder.mutation<{data: string}, string>({
+      query: id => ({
+        url: `/prepare-ads/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['PrepareAds'],
+    }),
+    getPrepareAds: builder.query<GetPrepareAds, void>({
+      query: () => '/prepare-ads',
+      providesTags: ['PrepareAds'],
+    }),
     getUploadFiles: builder.query<string[], void>({
       query: () => '/upload',
       providesTags: ['UploadFile'],
@@ -179,4 +186,5 @@ export const {
   useDeleteDocumentMutation,
   useGetPrepareAdsQuery,
   useAddPrepareAdsMutation,
+  useDeletePrepareAdsMutation,
 } = serviceApi;

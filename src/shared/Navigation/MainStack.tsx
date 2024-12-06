@@ -6,7 +6,7 @@ import NewsScreen from '../../pages/News/ui/NewsScreen';
 import ImportantScreen from '../../pages/Importants/ImportantScreen';
 import TabScreen from '../../pages/Tab/TabScreen';
 import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
-import ServiceScreen from '../../pages/CityService/ui/CityServices';
+import ServiceScreen from '../../pages/CityAdsService/ui/CityServices';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
 import {useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';

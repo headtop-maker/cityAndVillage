@@ -99,3 +99,22 @@ export type IAppVersion = {
   currentVersion: string;
   description: string[];
 };
+
+export type PrepareAds = {
+  phone: string;
+  email: string;
+  categoryName: string;
+  title: string;
+  description: string;
+  image: string;
+};
+
+export type GetPrepareAds = {
+  id: string;
+  phone: string;
+  email: string;
+  categoryName: string;
+  title: string;
+  description: string;
+  image: string;
+}[];

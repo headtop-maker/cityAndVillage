@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Alert,
@@ -7,13 +7,20 @@ import {
   TextInput,
   Image,
   ScrollView,
+  View,
 } from 'react-native';
 import {dp} from '../../../shared/lib/getDP';
 import {useAppSelector} from '../../../shared/models/storeHooks';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import {nativeFn} from '../../../shared/lib/nativeFn';
+import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
+import {base64ByteSize} from '../../../shared/lib/base64ByteSize';
+import {useAddPrepareAdsMutation} from '../../../shared/models/services';
+import {useModal} from '../../Modal/ui/ModalProvider';
+import {goBack} from '../../../shared/lib/navigationRef';
 
 const PrepareForm: FC = () => {
+  const [addPrepareAds, {isSuccess, isLoading}] = useAddPrepareAdsMutation();
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [formData, setFormData] = useState({
     phone: '',
@@ -22,26 +29,36 @@ const PrepareForm: FC = () => {
     categoryName: 'other',
     description: '',
     image: '',
+    imageSize: 0,
   });
-
+  const userEmail = useAppSelector(selectCurrentUserEmail);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+  const {showModal} = useModal();
 
-  const handleChange = (key: keyof typeof formData, value: string) => {
+  const handleShowModal = () => {
+    showModal(
+      <View style={{padding: dp(10)}}>
+        <Text>Отправлено на модерацию. </Text>
+      </View>,
+    );
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleShowModal();
+      goBack();
+    }
+  }, [isSuccess]);
+
+  const handleChange = (key: keyof typeof formData, value: string | number) => {
     setFormData(prev => ({...prev, [key]: value}));
   };
 
-  const handleSubmit = () => {
-    // Валидация
-    const emailRegex = /^[^\s@]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const handleSubmit = async () => {
     const phoneRegex = /^\+\d{11,15}$/;
 
     if (!phoneRegex.test(formData.phone)) {
       Alert.alert('Ошибка', 'Введите корректный номер телефона.');
-      return;
-    }
-
-    if (!emailRegex.test(formData.email)) {
-      Alert.alert('Ошибка', 'Введите корректный email.');
       return;
     }
 
@@ -59,10 +76,28 @@ const PrepareForm: FC = () => {
       return;
     }
 
-    // Успешная отправка
-    Alert.alert('Успех', 'Форма успешно отправлена!', [
-      {text: 'ОК', onPress: () => {}},
-    ]);
+    if (formData.imageSize > 100) {
+      Alert.alert('Ошибка', 'Размер больше 100кб.');
+      return;
+    }
+
+    await addPrepareAds({
+      phone: formData.phone,
+      image: formData.image,
+      email: userEmail,
+      categoryName: 'other',
+      title: formData.title,
+      description: formData.description,
+    });
+    await setFormData({
+      phone: '',
+      email: '',
+      title: '',
+      categoryName: '',
+      description: '',
+      image: '',
+      imageSize: 0,
+    });
   };
 
   const handleImage = async () => {
@@ -77,7 +112,12 @@ const PrepareForm: FC = () => {
           });
         },
       );
+
       if (result.base64Image) {
+        handleChange(
+          'imageSize',
+          Math.floor(base64ByteSize(result.base64Image) / 1024),
+        );
         handleChange('image', result.base64Image);
       }
     } catch (error) {
@@ -127,11 +167,11 @@ const PrepareForm: FC = () => {
       />
       <TextInput
         style={styles.input}
-        value={formData.email}
+        value={userEmail}
         placeholder='Email'
         keyboardType='email-address'
         onChangeText={value => handleChange('email', value)}
-        editable={!!currentUserToken}
+        editable={false}
       />
 
       <TextInput
@@ -151,7 +191,10 @@ const PrepareForm: FC = () => {
         onChangeText={value => handleChange('description', value)}
         editable={!!currentUserToken}
       />
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+      <TouchableOpacity
+        style={styles.submitButton}
+        onPress={handleSubmit}
+        disabled={isLoading}>
         <Text style={styles.submitButtonText}>Отправить</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -165,8 +208,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   input: {
-    marginBottom: dp(10),
-    padding: dp(10),
+    marginBottom: dp(5),
+    padding: dp(7),
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: dp(8),
@@ -184,7 +227,7 @@ const styles = StyleSheet.create({
     height: dp(100),
   },
   imageButton: {
-    marginBottom: dp(20),
+    marginBottom: dp(3),
     padding: dp(15),
     backgroundColor: '#6a5acd',
     borderRadius: 8,

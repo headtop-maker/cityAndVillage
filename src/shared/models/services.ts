@@ -6,6 +6,8 @@ import {
   TDocuments,
   IAppVersion,
   ServiceTitleItem,
+  PrepareAds,
+  GetPrepareAds,
 } from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
@@ -14,7 +16,13 @@ import {Alert} from 'react-native';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
-  tagTypes: ['Category', 'FireBaseTokens', 'Documents', 'UploadFile'],
+  tagTypes: [
+    'Category',
+    'FireBaseTokens',
+    'Documents',
+    'UploadFile',
+    'PrepareAds',
+  ],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
     prepareHeaders: (headers, {getState}) => {
@@ -125,6 +133,20 @@ export const serviceApi = createApi({
     getAppVersion: builder.query<IAppVersion, void>({
       query: () => '/version',
     }),
+    getPrepareAds: builder.query<GetPrepareAds, void>({
+      query: () => '/prepare-ads',
+      providesTags: ['PrepareAds'],
+    }),
+
+    addPrepareAds: builder.mutation<GetPrepareAds, PrepareAds>({
+      query: data => ({
+        url: '/prepare-ads',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['PrepareAds'],
+    }),
+
     getUploadFiles: builder.query<string[], void>({
       query: () => '/upload',
       providesTags: ['UploadFile'],
@@ -155,4 +177,6 @@ export const {
   useGetUploadFilesQuery,
   useAddNewDocumentMutation,
   useDeleteDocumentMutation,
+  useGetPrepareAdsQuery,
+  useAddPrepareAdsMutation,
 } = serviceApi;

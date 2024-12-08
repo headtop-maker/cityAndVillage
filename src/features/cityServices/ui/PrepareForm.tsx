@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     borderRadius: dp(8),
     backgroundColor: '#fff',
     fontSize: 16,
+    color: '#252525',
   },
   textArea: {
     marginBottom: dp(10),
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 16,
     height: dp(100),
+    color: '#252525',
   },
   imageButton: {
     marginBottom: dp(3),

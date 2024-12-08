@@ -13,6 +13,8 @@ import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
 import {resetCurrentUser, setFireBaseTokenAdded} from './counterSlice';
 import {Alert} from 'react-native';
+import {sendPush} from '../../entities/News/models/models';
+import {setPushMessage} from '../../features/PrepareAds/models/actions';
 
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
@@ -135,12 +137,35 @@ export const serviceApi = createApi({
       query: () => '/version',
     }),
 
-    addServiceAds: builder.mutation<GetPrepareAds, PrepareAds>({
+    addServiceAds: builder.mutation<GetPrepareAds[0], PrepareAds>({
       query: data => ({
         url: '/adsboard',
         method: 'POST',
         body: data,
       }),
+      async onQueryStarted(_, {dispatch, queryFulfilled}) {
+        try {
+          const {data} = await queryFulfilled; // Ожидаем успешного ответа
+          !!data.email &&
+            dispatch(
+              setPushMessage({
+                email: data.email,
+                title: 'Услуга прошла модерацию',
+                body: 'Ваша услуга опубликована',
+              }),
+            );
+        } catch (error) {
+          if (error?.error?.status === 401) {
+            dispatch(resetCurrentUser());
+            Alert.alert(
+              'Не авторизован',
+              'Требуется ввести логин/пароль в приложении',
+            );
+          } else {
+            console.log('Ошибка при выполнении мутации:', error);
+          }
+        }
+      },
       invalidatesTags: ['ServiceAds'],
     }),
 

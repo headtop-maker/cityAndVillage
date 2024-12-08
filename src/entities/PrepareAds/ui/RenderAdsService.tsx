@@ -9,13 +9,18 @@ import {
   View,
 } from 'react-native';
 import React, {FC, useState} from 'react';
-import {GetPrepareAds, ServiceTitleItem} from '../../../shared/models/types';
+import {
+  GetPrepareAds,
+  PrepareAds,
+  ServiceTitleItem,
+} from '../../../shared/models/types';
 import {useModal} from '../../../features/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 
 type TRenderAdsService = {
   itemAds: GetPrepareAds[0];
   service: ServiceTitleItem[];
+  addService: (data: PrepareAds) => void;
   deletePrepareAds: (id: string) => void;
 };
 
@@ -23,13 +28,14 @@ const RenderAdsService: FC<TRenderAdsService> = ({
   itemAds,
   service,
   deletePrepareAds,
+  addService,
 }) => {
-  const [category, setCategory] = useState(itemAds.categoryName || '');
+  const {categoryName, description, email, id, image, phone, title} = itemAds;
+  const [category, setCategory] = useState(categoryName || '');
   const {showModal, hideModal} = useModal();
 
   const asyncDelete = async () => {
-    console.log(itemAds.id);
-    deletePrepareAds(itemAds.id);
+    deletePrepareAds(id);
   };
 
   const handleDelete = () => {
@@ -42,8 +48,26 @@ const RenderAdsService: FC<TRenderAdsService> = ({
     ]);
   };
 
-  const handlePublish = (id: string) => {
-    Alert.alert('Опубликовать', `Услуга с ID ${id} успешно опубликована!`);
+  const handlePublish = () => {
+    Alert.alert(
+      'Добавить услугу',
+      'При добавлении убедитесь в корректности категории.',
+      [
+        {text: 'Отмена', style: 'cancel'},
+        {
+          text: 'Добавить',
+          onPress: () =>
+            addService({
+              categoryName: category,
+              description: description,
+              phone: phone,
+              email: email,
+              title: title,
+              image: image,
+            }),
+        },
+      ],
+    );
   };
 
   const handleOpenCategory = async () => {
@@ -73,7 +97,7 @@ const RenderAdsService: FC<TRenderAdsService> = ({
         style={styles.image}
       />
       <Text style={styles.title}>{itemAds.title}</Text>
-      <Text style={styles.description}>{itemAds.description}</Text>
+      <Text style={styles.description}>{description}</Text>
       <View style={styles.buttonContainer}>
         <Button title='Удалить' color='red' onPress={handleDelete} />
         <Button
@@ -81,11 +105,7 @@ const RenderAdsService: FC<TRenderAdsService> = ({
           color='gray'
           onPress={() => handleOpenCategory()}
         />
-        <Button
-          title='Опубликовать'
-          color='green'
-          onPress={() => handlePublish(itemAds.id)}
-        />
+        <Button title='Опубликовать' color='green' onPress={handlePublish} />
       </View>
     </View>
   );

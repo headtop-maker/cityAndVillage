@@ -22,6 +22,7 @@ export const serviceApi = createApi({
     'Documents',
     'UploadFile',
     'PrepareAds',
+    'ServiceAds',
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
@@ -134,6 +135,15 @@ export const serviceApi = createApi({
       query: () => '/version',
     }),
 
+    addServiceAds: builder.mutation<GetPrepareAds, PrepareAds>({
+      query: data => ({
+        url: '/adsboard',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ServiceAds'],
+    }),
+
     addPrepareAds: builder.mutation<GetPrepareAds, PrepareAds>({
       query: data => ({
         url: '/prepare-ads',
@@ -187,4 +197,5 @@ export const {
   useGetPrepareAdsQuery,
   useAddPrepareAdsMutation,
   useDeletePrepareAdsMutation,
+  useAddServiceAdsMutation,
 } = serviceApi;

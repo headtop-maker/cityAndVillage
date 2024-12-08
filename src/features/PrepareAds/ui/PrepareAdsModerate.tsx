@@ -1,6 +1,7 @@
 import React, {memo} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import {
+  useAddServiceAdsMutation,
   useDeletePrepareAdsMutation,
   useGetPrepareAdsQuery,
   useGetServiceCategoryQuery,
@@ -9,6 +10,7 @@ import {GetPrepareAds} from '../../../shared/models/types';
 import RenderAdsService from '../../../entities/PrepareAds/ui/RenderAdsService';
 
 const PrepareAdsModerate = () => {
+  const [addService] = useAddServiceAdsMutation();
   const [deletePrepareAds] = useDeletePrepareAdsMutation();
   const {data: categoryList} = useGetServiceCategoryQuery();
   const {data, refetch, isLoading} = useGetPrepareAdsQuery(undefined, {
@@ -20,6 +22,7 @@ const PrepareAdsModerate = () => {
       itemAds={item}
       deletePrepareAds={(id: string) => deletePrepareAds(id)}
       service={categoryList}
+      addService={addService}
     />
   );
 

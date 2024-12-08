@@ -13,7 +13,6 @@ import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
 import {resetCurrentUser, setFireBaseTokenAdded} from './counterSlice';
 import {Alert} from 'react-native';
-import {sendPush} from '../../entities/News/models/models';
 import {setPushMessage} from '../../features/PrepareAds/models/actions';
 
 export const serviceApi = createApi({

@@ -29,7 +29,7 @@ const RenderAdsService: FC<TRenderAdsService> = ({
 
   const asyncDelete = async () => {
     console.log(itemAds.id);
-    await deletePrepareAds(itemAds.id);
+    deletePrepareAds(itemAds.id);
   };
 
   const handleDelete = () => {

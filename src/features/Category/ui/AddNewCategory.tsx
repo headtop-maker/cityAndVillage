@@ -17,13 +17,21 @@ const AddNewCategory: FC = () => {
     }
   };
 
+  const handleCategoryName = (text: string) => {
+    const latinRegex = /^[a-zA-Z]*$/;
+    const filteredText = text.replace(/\s/g, '');
+    if (latinRegex.test(filteredText)) {
+      setCategoryName(filteredText);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder='categoryName'
         value={categoryName}
-        onChangeText={setCategoryName}
+        onChangeText={handleCategoryName}
       />
       <TextInput
         style={styles.input}

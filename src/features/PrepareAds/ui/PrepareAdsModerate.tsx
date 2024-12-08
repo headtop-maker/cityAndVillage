@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import {
   useDeletePrepareAdsMutation,
@@ -23,8 +23,6 @@ const PrepareAdsModerate = () => {
     />
   );
 
-  console.log('categoryList', categoryList);
-
   return (
     <FlatList
       onRefresh={refetch}
@@ -43,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrepareAdsModerate;
+export default memo(PrepareAdsModerate);

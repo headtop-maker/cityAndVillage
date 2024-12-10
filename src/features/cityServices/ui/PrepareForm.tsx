@@ -11,13 +11,17 @@ import {
 } from 'react-native';
 import {dp} from '../../../shared/lib/getDP';
 import {useAppSelector} from '../../../shared/models/storeHooks';
-import {selectCurrentUserToken} from '../../../shared/models/selectors';
+import {
+  selectCurrentUserRole,
+  selectCurrentUserToken,
+} from '../../../shared/models/selectors';
 import {nativeFn} from '../../../shared/lib/nativeFn';
 import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
 import {base64ByteSize} from '../../../shared/lib/base64ByteSize';
 import {useAddPrepareAdsMutation} from '../../../shared/models/services';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {goBack} from '../../../shared/lib/navigationRef';
+import {userRole} from '../../../shared/models/types';
 
 const initial = {
   phone: '',
@@ -30,6 +34,8 @@ const initial = {
 };
 
 const PrepareForm: FC = () => {
+  const role = useAppSelector(selectCurrentUserRole);
+  const isAdmin = role === userRole.admin;
   const [addPrepareAds, {isSuccess, isLoading}] = useAddPrepareAdsMutation();
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [formData, setFormData] = useState(initial);
@@ -45,16 +51,17 @@ const PrepareForm: FC = () => {
     );
   };
 
+  const handleChange = (key: keyof typeof formData, value: string | number) => {
+    setFormData(prev => ({...prev, [key]: value}));
+  };
+
   useEffect(() => {
+    handleChange('email', userEmail);
     if (isSuccess) {
       handleShowModal();
       goBack();
     }
   }, [isSuccess]);
-
-  const handleChange = (key: keyof typeof formData, value: string | number) => {
-    setFormData(prev => ({...prev, [key]: value}));
-  };
 
   const handleSubmit = async () => {
     const phoneRegex = /^\+\d{11,15}$/;
@@ -86,7 +93,7 @@ const PrepareForm: FC = () => {
     await addPrepareAds({
       phone: formData.phone,
       image: formData.image,
-      email: userEmail,
+      email: formData.email,
       categoryName: 'other',
       title: formData.title,
       description: formData.description,
@@ -161,11 +168,11 @@ const PrepareForm: FC = () => {
       />
       <TextInput
         style={styles.input}
-        value={userEmail}
+        value={formData.email}
         placeholder='Email'
         keyboardType='email-address'
         onChangeText={value => handleChange('email', value)}
-        editable={false}
+        editable={isAdmin}
       />
 
       <TextInput

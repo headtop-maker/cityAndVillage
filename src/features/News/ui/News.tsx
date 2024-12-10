@@ -9,17 +9,27 @@ import {
 } from '../../../shared/models/storeHooks';
 import {selectNews, selectNewsLoading} from '../models/selectors';
 import {getNews} from '../../../entities/News/models/models';
-import {CounterState} from '../../../shared/models/types';
+import {CounterState, userRole} from '../../../shared/models/types';
 import {Button} from 'react-native-paper';
+import {selectCurrentUserRole} from '../../../shared/models/selectors';
+import {useDeleteNewsMutation} from '../../../shared/models/services';
 
 const News = () => {
+  const [deleteNewsItem] = useDeleteNewsMutation();
   const news = useAppSelector(selectNews);
   const isLoading = useAppSelector(selectNewsLoading);
+  const role = useAppSelector(selectCurrentUserRole);
+  const isAdmin = role === userRole.admin;
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     dispatch(getNews());
   }, [dispatch]);
+
+  const handleDelete = async (id: string) => {
+    await deleteNewsItem(id);
+    await dispatch(getNews());
+  };
 
   const renderItem = ({item}: {item: CounterState['news'][0]}) => {
     return (
@@ -30,6 +40,8 @@ const News = () => {
         description={item.description}
         id={item.id}
         author={item.author}
+        isAdmin={isAdmin}
+        deleteItem={handleDelete}
       />
     );
   };
@@ -43,7 +55,7 @@ const News = () => {
         refreshing={isLoading}
         onRefresh={() => dispatch(getNews())}
         ListEmptyComponent={
-          <Button mode="text" onPress={() => dispatch(getNews())}>
+          <Button mode='text' onPress={() => dispatch(getNews())}>
             Обновить список новостей
           </Button>
         }

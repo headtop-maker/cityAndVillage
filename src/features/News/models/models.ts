@@ -60,7 +60,7 @@ export const setFileWithoutResize = createAsyncThunk(
     try {
       await setFileApi(formData);
     } catch (err) {
-      Alert.alert('Ошибка загрузки изображения', err.toString());
+      Alert.alert('Ошибка загрузки', err.toString());
       return rejectWithValue(err);
     }
   },

@@ -24,6 +24,8 @@ export const serviceApi = createApi({
     'UploadFile',
     'PrepareAds',
     'ServiceAds',
+    'Adsboard',
+    'News',
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: TEMP_API,
@@ -93,6 +95,14 @@ export const serviceApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Category'],
+    }),
+
+    deleteNews: builder.mutation<{data: string}, string>({
+      query: id => ({
+        url: `/news/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['News'],
     }),
 
     getDocuments: builder.query<TDocuments, void>({
@@ -168,6 +178,14 @@ export const serviceApi = createApi({
       invalidatesTags: ['ServiceAds'],
     }),
 
+    deleteServiceAds: builder.mutation<{data: string}, string>({
+      query: id => ({
+        url: `/adsboard/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Adsboard'],
+    }),
+
     addPrepareAds: builder.mutation<GetPrepareAds, PrepareAds>({
       query: data => ({
         url: '/prepare-ads',
@@ -222,4 +240,6 @@ export const {
   useAddPrepareAdsMutation,
   useDeletePrepareAdsMutation,
   useAddServiceAdsMutation,
+  useDeleteServiceAdsMutation,
+  useDeleteNewsMutation,
 } = serviceApi;

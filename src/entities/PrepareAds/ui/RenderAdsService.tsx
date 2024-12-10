@@ -98,6 +98,8 @@ const RenderAdsService: FC<TRenderAdsService> = ({
       />
       <Text style={styles.title}>{itemAds.title}</Text>
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.description}>Email: {email}</Text>
+      <Text style={styles.description}>тел: {phone}</Text>
       <View style={styles.buttonContainer}>
         <Button title='Удалить' color='red' onPress={handleDelete} />
         <Button

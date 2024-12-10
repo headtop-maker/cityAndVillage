@@ -8,7 +8,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../shared/models/storeHooks';
-import {selectIsLoading} from '../../../shared/models/selectors';
+import {
+  selectCurrentUserRole,
+  selectIsLoading,
+} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {getServices} from '../../../entities/ProfessionalServices/serviceList/model/actions';
 import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardItem';
@@ -17,11 +20,16 @@ import {useModal} from '../../../features/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';
+import {userRole} from '../../../shared/models/types';
+import {useDeleteServiceAdsMutation} from '../../../shared/models/services';
 
 const CityServices = () => {
+  const [deleteServiceAds] = useDeleteServiceAdsMutation();
   const [selected, setSelected] = useState('');
   const isLoading = useAppSelector(selectIsLoading);
   const lists = useAppSelector(servicesSelectors.selectAll);
+  const role = useAppSelector(selectCurrentUserRole);
+  const isAdmin = role === userRole.admin;
 
   const {showModal, hideModal} = useModal();
   const dispatch = useAppDispatch();
@@ -81,6 +89,11 @@ const CityServices = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    await deleteServiceAds(id);
+    await handleOnRefrash();
+  };
+
   return (
     <View
       style={{
@@ -98,6 +111,8 @@ const CityServices = () => {
               item={item}
               selected={selected}
               setSelected={handleSelected}
+              isAdmin={isAdmin}
+              deleteItem={handleDelete}
             />
           )}
           refreshing={isLoading}

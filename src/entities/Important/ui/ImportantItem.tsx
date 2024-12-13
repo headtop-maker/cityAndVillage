@@ -34,14 +34,13 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
           style={[
             styles.image,
             {
-              width: imageSize.width,
-              height: imageSize.height,
-              maxWidth: dp(300),
-              maxHeight: dp(800),
-              resizeMode: 'stretch',
+              width: imageSize.width / 2,
+              height: imageSize.height / 2,
+              resizeMode: 'contain',
             },
           ]}
           source={{
+            cache: 'force-cache',
             uri: imageBase64,
           }}
         />
@@ -108,9 +107,9 @@ const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
                 style={[
                   styles.image,
                   {
-                    width: imageSize.width / 1.5,
-                    height: imageSize.height / 1.5,
-                    maxWidth: dp(300),
+                    width: imageSize.width / 2.5,
+                    height: imageSize.height / 2.5,
+                    resizeMode: 'contain',
                   },
                 ]}
                 source={{

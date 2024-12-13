@@ -380,7 +380,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                     if(bitmap!= null) {
                         val baos = ByteArrayOutputStream()
 
-                        val maxSize = 400
+                        val maxSize = 600
                         val outWidth: Int
                         val outHeight: Int
                         val inWidth: Int = bitmap.width

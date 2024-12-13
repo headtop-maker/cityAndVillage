@@ -108,8 +108,8 @@ const PrepareForm: FC = () => {
         `data:image/jpeg;base64,${result.base64Image}`,
         (widthImage, heightImage) => {
           setImageSize({
-            width: Math.floor(widthImage),
-            height: Math.floor(heightImage),
+            width: Math.floor(widthImage / 1.5),
+            height: Math.floor(heightImage / 1.5),
           });
         },
       );
@@ -149,8 +149,10 @@ const PrepareForm: FC = () => {
               width: imageSize.width,
               height: imageSize.height,
               maxWidth: dp(300),
+              maxHeight: dp(400),
               alignSelf: 'center',
               marginVertical: dp(5),
+              resizeMode: 'contain',
             },
           ]}
           source={{

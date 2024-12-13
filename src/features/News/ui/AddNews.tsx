@@ -95,15 +95,15 @@ const AddNews = () => {
     <SafeAreaView style={styles.container}>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.ScrollArea>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              legacyImplementation={false}
-              data={images}
-              renderItem={imageItems}
-              keyExtractor={(id, index) => id + 'images' + index}
-            />
-          </Dialog.ScrollArea>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            legacyImplementation={false}
+            data={images}
+            renderItem={imageItems}
+            keyExtractor={(id, index) => id + 'images' + index}
+            numColumns={2}
+            contentContainerStyle={styles.dialog}
+          />
         </Dialog>
       </Portal>
       <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
@@ -172,10 +172,10 @@ export default AddNews;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 0.6,
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
+  dialog: {padding: 15},
   refresh: {
     alignItems: 'flex-end',
   },

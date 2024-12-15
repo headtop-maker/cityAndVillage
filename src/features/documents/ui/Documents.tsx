@@ -29,7 +29,7 @@ const getMemeType = async (url: string) => {
 };
 
 const handleDownload = (data: {documentTitle: string; filePath: string}) => {
-  Alert.alert('Получить', `Скачать файл ${data.documentTitle} ?`, [
+  Alert.alert('Получить', `Файл: ${data.documentTitle} ?`, [
     {text: 'Отмена', style: 'cancel'},
     {
       text: 'Скачать',

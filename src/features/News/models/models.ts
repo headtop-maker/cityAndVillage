@@ -1,13 +1,13 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {setFileApi} from '../../../shared/api/axiosInstance';
+import {setFileApi, setImageFileApi} from '../../../shared/api/axiosInstance';
 import {fetchApiDomain} from '../../../shared/constants';
 import {FileParamsType} from '../../../shared/types';
 
 import {nativeFn} from '../../../shared/lib/nativeFn';
 import {Alert} from 'react-native';
 
-export const setFile = createAsyncThunk(
+export const setImageFile = createAsyncThunk(
   `${fetchApiDomain}/setFile`,
   async (_, {rejectWithValue}) => {
     const file: FileParamsType = await nativeFn.openFile();
@@ -26,8 +26,8 @@ export const setFile = createAsyncThunk(
 
         formData.append('file', {
           uri: resizedImage.uri,
-          type: 'image/jpeg',
-          name: `${file.fileName}.jpg`,
+          type: 'application/octet-stream',
+          name: encodeURIComponent(`${file.fileName}.${file.fileType}`),
         });
       } catch (error) {
         Alert.alert('Ошибка сжатия изображения', error.toString());
@@ -37,7 +37,7 @@ export const setFile = createAsyncThunk(
     await compressImage(file.fileUri);
 
     try {
-      await setFileApi(formData);
+      await setImageFileApi(formData);
     } catch (err) {
       Alert.alert('Ошибка загрузки изображения', err.toString());
       return rejectWithValue(err);

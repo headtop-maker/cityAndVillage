@@ -56,7 +56,7 @@ export const getImageForNews = createAsyncThunk(
       const response = await getImageFromServer();
 
       return response.data.map(item => {
-        return {url: `${TEMP_API}upload/${item}`};
+        return {url: `${TEMP_API}imageUpload/${item}`};
       });
     } catch (err) {
       return rejectWithValue(err);

@@ -68,7 +68,7 @@ export const getImageFromServer = (): Promise<
   response.apiRequest({
     timeout: 3000,
     method: 'get',
-    url: `${TEMP_API}upload/`,
+    url: `${TEMP_API}imageUpload/`,
   });
 
 export const createUser = (
@@ -144,6 +144,20 @@ export const setFileApi = (
     data: formData,
     method: 'post',
     url: `${TEMP_API}upload/file`,
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'multipart/form-data',
+    },
+  });
+
+export const setImageFileApi = (
+  formData: FormData,
+): Promise<AxiosResponse<Record<string, unknown>, unknown>> =>
+  response.apiRequest({
+    timeout: 3000,
+    data: formData,
+    method: 'post',
+    url: `${TEMP_API}imageUpload/file`,
     headers: {
       Accept: 'application/json',
       'Content-type': 'multipart/form-data',

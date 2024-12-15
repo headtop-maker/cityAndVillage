@@ -22,7 +22,7 @@ import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 
-import {setFile} from '../models/models';
+import {setImageFile} from '../models/models';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {dp} from '../../../shared/lib/getDP';
 import {serviceApi} from '../../../shared/models/services';
@@ -67,7 +67,7 @@ const AddNews = () => {
   };
 
   const handleAddImage = async () => {
-    dispatch(setFile());
+    dispatch(setImageFile());
     dispatch(serviceApi.util.invalidateTags(['UploadFile']));
   };
 

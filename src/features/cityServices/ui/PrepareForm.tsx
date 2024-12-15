@@ -197,7 +197,7 @@ const PrepareForm: FC = () => {
       <TouchableOpacity
         style={styles.submitButton}
         onPress={handleSubmit}
-        disabled={isLoading}>
+        disabled={isLoading || !currentUserToken}>
         <Text style={styles.submitButtonText}>Отправить</Text>
       </TouchableOpacity>
     </ScrollView>

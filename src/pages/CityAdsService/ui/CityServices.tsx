@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Linking, SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
 import {servicesSelectors} from '../../../shared/models/servicesSlice';
@@ -10,6 +16,7 @@ import {
 } from '../../../shared/models/storeHooks';
 import {
   selectCurrentUserRole,
+  selectCurrentUserToken,
   selectIsLoading,
 } from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
@@ -29,6 +36,7 @@ const CityServices = () => {
   const isLoading = useAppSelector(selectIsLoading);
   const lists = useAppSelector(servicesSelectors.selectAll);
   const role = useAppSelector(selectCurrentUserRole);
+  const currentUserToken = useAppSelector(selectCurrentUserToken);
   const isAdmin = role === userRole.admin;
 
   const {showModal, hideModal} = useModal();
@@ -43,20 +51,26 @@ const CityServices = () => {
     showModal(
       <View style={{padding: dp(10)}}>
         <Text>Напишите нам </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {!currentUserToken && (
+          <Text style={{color: '#ff0202'}}>Пользователь не авторизован !</Text>
+        )}
+        <View style={styles.contact}>
           <Tooltip title='Selected email'>
             <IconButton
               icon='lead-pencil'
               selected
               size={20}
-              onPress={handleNavigate}
+              onPress={() => !!currentUserToken && handleNavigate()}
+              disabled={!currentUserToken}
             />
           </Tooltip>
-          <TouchableOpacity onPress={handleNavigate}>
+          <TouchableOpacity
+            onPress={() => !!currentUserToken && handleNavigate()}
+            disabled={!currentUserToken}>
             <Text variant='titleMedium'>{'Заполнить форму'}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.contact}>
           <Tooltip title='Selected email'>
             <IconButton
               icon='email'
@@ -95,12 +109,7 @@ const CityServices = () => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-        flexDirection: 'column',
-      }}>
+    <View style={styles.container}>
       <SafeAreaView style={{flex: 1}}>
         <Animated.FlatList
           stickyHeaderIndices={[0]}
@@ -126,5 +135,14 @@ const CityServices = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+  },
+  contact: {flexDirection: 'row', alignItems: 'center'},
+});
 
 export default withModal(CityServices);

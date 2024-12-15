@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import {useGetDocumentsQuery} from '../../../shared/models/services';
 import {TDocuments} from '../../../shared/models/types';
 import {Button, Icon, Text} from 'react-native-paper';
@@ -22,11 +28,24 @@ const getMemeType = async (url: string) => {
   }
 };
 
+const handleDownload = (data: {documentTitle: string; filePath: string}) => {
+  Alert.alert('Получить', `Скачать файл ${data.documentTitle} ?`, [
+    {text: 'Отмена', style: 'cancel'},
+    {
+      text: 'Скачать',
+      onPress: async () => getMemeType(data.filePath),
+    },
+  ]);
+};
+
 const renderItem = ({item}: {item: TDocuments[0]}) => (
   <TouchableOpacity
     style={styles.card}
-    onPress={async () => {
-      await getMemeType(item.filePath);
+    onPress={() => {
+      handleDownload({
+        documentTitle: item.documentTitle,
+        filePath: item.filePath,
+      });
     }}>
     <View style={styles.iconContainer}>
       <Icon source='file-document-outline' size={30} color='#6A1B9A' />

@@ -22,9 +22,10 @@ import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {userRole} from '../../../shared/models/types';
 import {Button, TextInput, Text, Portal, Dialog} from 'react-native-paper';
 
-import {setFile} from '../models/models';
+import {setImageFile} from '../models/models';
 import useDimensions from '../../../shared/HOC/useDimensions';
 import {dp} from '../../../shared/lib/getDP';
+import {serviceApi} from '../../../shared/models/services';
 
 // interface AddContentScreeProps {}
 
@@ -66,7 +67,8 @@ const AddNews = () => {
   };
 
   const handleAddImage = async () => {
-    dispatch(setFile());
+    dispatch(setImageFile());
+    dispatch(serviceApi.util.invalidateTags(['UploadFile']));
   };
 
   const handleShowImage = async () => {
@@ -93,15 +95,15 @@ const AddNews = () => {
     <SafeAreaView style={styles.container}>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.ScrollArea>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              legacyImplementation={false}
-              data={images}
-              renderItem={imageItems}
-              keyExtractor={(id, index) => id + 'images' + index}
-            />
-          </Dialog.ScrollArea>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            legacyImplementation={false}
+            data={images}
+            renderItem={imageItems}
+            keyExtractor={(id, index) => id + 'images' + index}
+            numColumns={2}
+            contentContainerStyle={styles.dialog}
+          />
         </Dialog>
       </Portal>
       <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
@@ -155,8 +157,8 @@ const AddNews = () => {
         />
 
         <Button
-          mode='elevated'
-          style={{margin: rem / 3}}
+          mode='outlined'
+          style={{margin: dp(10)}}
           disabled={!isLockSend}
           onPress={handleClick}>
           Добавить
@@ -170,10 +172,10 @@ export default AddNews;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 0.6,
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
+  dialog: {padding: 15},
   refresh: {
     alignItems: 'flex-end',
   },

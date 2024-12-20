@@ -2,24 +2,27 @@ package com.cityandvillage
 
 import android.app.Activity
 import android.app.DownloadManager
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
+import android.util.Base64
 import android.util.DisplayMetrics
-import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
@@ -27,10 +30,12 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.facebook.react.bridge.WritableNativeArray
+import java.io.ByteArrayOutputStream
 import java.io.File
+import android.provider.Settings
 
 
 public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -173,6 +178,25 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
         }
     }
 
+    @ReactMethod
+    fun getBase64Image(path:String,promise: Promise) {
+        try {
+            Log.d("CURSOR",path)
+            val bm = BitmapFactory.decodeFile(path)
+            if(bm == null){
+                promise.reject("ERROR", "Ошибка выбора файла")
+            }
+            val baos = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.JPEG,10,baos)
+                val b = baos.toByteArray()
+                val encodeImage = Base64.encodeToString(b,Base64.DEFAULT)
+                promise.resolve(encodeImage)
+
+        } catch (e: Exception) {
+            promise.reject("ERROR", e)
+        }
+
+    }
 
     @ReactMethod
     fun getDownloadFiles(promise: Promise) {
@@ -183,7 +207,8 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             val result = WritableNativeArray()
             files?.forEach { file ->
 
-                if(file.absolutePath.contains("app-release")){
+                if(file.absolutePath.contains(".apk")){
+
                     val currentFile = File(file.absolutePath)
                     if (currentFile.exists()) {
                         val packageInfo: PackageInfo? = pm.getPackageArchiveInfo(file.absolutePath, 0)
@@ -203,6 +228,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                             result.pushString("absolutePath:"+file.absolutePath.toString())
                         }
                     }
+
                 }
             }
             promise.resolve(result)
@@ -246,7 +272,34 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
         }
     }
 
+    @ReactMethod
+    fun openAppPermissionSettings() {
+        val context: Context = reactApplicationContext
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", context.packageName, null)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
+    }
 
+    @ReactMethod
+    fun areNotificationsEnabled(promise: Promise) {
+        try {
+            val notificationManager =
+                reactApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val notificationsEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationManager.areNotificationsEnabled()
+            } else {
+                // На Android ниже 8.0 считаем, что уведомления включены
+                true
+            }
+
+            promise.resolve(notificationsEnabled)
+        } catch (e: Exception) {
+            promise.reject("ERROR", "Не удалось проверить статус уведомлений: ${e.message}")
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @ReactMethod
@@ -257,7 +310,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
             type = "*/*"
             putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS)
         }
-        reactApplicationContext.startActivityForResult(intent, 1, null);
+        reactApplicationContext.startActivityForResult(intent, 100, null);
     }
 
     private val activityEventListener =
@@ -267,11 +320,12 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                 requestCode: Int,
                 resultCode: Int,
                 intent: Intent?
-            ) {
+            ) {if (requestCode == 100) {
                 val fileParams: WritableMap = WritableNativeMap()
                 super.onActivityResult(requestCode, resultCode, intent)
-                intent?.data?.also { uri ->
+                intent?.data?.also { uri: Uri ->
                     Log.d("URINative", uri.toString())
+
                     val cursor = uri.let { it ->
                         reactApplicationContext.contentResolver.query(
                             it,
@@ -282,7 +336,6 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                         )
                     }
                     cursor?.moveToFirst()
-                    println(cursor?.getString(2))
                     fileParams.putString("fileName", cursor?.getString(2)?.split(".")!![0])
                     fileParams.putString("fileType", cursor.getString(2)?.split(".")!![1])
                     fileParams.putInt("fileByteSize", cursor.getString(5).toInt())
@@ -291,11 +344,73 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 
                 }
 
+            } }
+        }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @ReactMethod
+    fun base64Image(promise: Promise) {
+        this.promise = promise;
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/jpeg"
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS)
+        }
+        reactApplicationContext.startActivityForResult(intent, 200, null);
+    }
+
+    private val activityEventListenerBase64 =
+        object : BaseActivityEventListener() {
+            override fun onActivityResult(
+                activity: Activity?,
+                requestCode: Int,
+                resultCode: Int,
+                intent: Intent?
+            ) {
+                if (requestCode == 200) {
+                val fileParams: WritableMap = WritableNativeMap()
+                super.onActivityResult(requestCode, resultCode, intent)
+                intent?.data?.also { uri:Uri ->
+
+
+
+                    val bitmap = BitmapFactory.decodeStream(reactApplicationContext
+                        .contentResolver.openInputStream(uri))
+
+                    if(bitmap!= null) {
+                        val baos = ByteArrayOutputStream()
+
+                        val maxSize = 600
+                        val outWidth: Int
+                        val outHeight: Int
+                        val inWidth: Int = bitmap.width
+                        val inHeight: Int = bitmap.height
+                        if (inWidth > inHeight) {
+                            outWidth = maxSize
+                            outHeight = inHeight * maxSize / inWidth
+                        } else {
+                            outHeight = maxSize
+                            outWidth = inWidth * maxSize / inHeight
+                        }
+
+
+                        val scaledBitmap =  Bitmap.createScaledBitmap(bitmap, outWidth,outHeight,true)
+                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                        val b = baos.toByteArray()
+                        val encodeImage = Base64.encodeToString(b, Base64.NO_WRAP)
+                        fileParams.putString("base64Image", encodeImage.replaceFirst("\"", ""))
+                        promise?.resolve(fileParams)
+                        bitmap.recycle()
+                    }
+                }
+
+             }
             }
         }
 
     init {
         reactContext.addActivityEventListener(activityEventListener)
+        reactContext.addActivityEventListener(activityEventListenerBase64)
     }
 
 }
@@ -332,5 +447,14 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
 //    } catch (e: Exception) {
 //        Log.e("ApkInfoModule", "Error retrieving APK info", e)
 //        promise.reject("ERROR", e)
+//    }
+//}
+
+// посмотреть URI
+//val cursor2 = reactContext.contentResolver.query(uri, null, null, null, null)
+//cursor2?.use {
+//    val columnNames = it.columnNames
+//    columnNames.forEach { columnName ->
+//        Log.d("columnNames ", columnName)
 //    }
 //}

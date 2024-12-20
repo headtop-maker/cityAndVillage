@@ -6,7 +6,7 @@ import NewsScreen from '../../pages/News/ui/NewsScreen';
 import ImportantScreen from '../../pages/Importants/ImportantScreen';
 import TabScreen from '../../pages/Tab/TabScreen';
 import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
-import ServiceScreen from '../../pages/CityService/ui/CityServices';
+import ServiceScreen from '../../pages/CityAdsService/ui/CityServices';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
 import {useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';
@@ -14,23 +14,33 @@ import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
 import {response} from '../api/axiosInstance';
 import {
+  requestMediaPermission,
   requestReadStoragePermission,
   requestStoragePermission,
 } from '../lib/permissions';
 import {checkStoragePermission} from '../lib/checkPermissions';
-import {navigationRef, Stack} from '../lib/navigationRef';
+import {navigate, navigationRef, Stack} from '../lib/navigationRef';
 import {requestUserPermission} from '../lib/requestUserPermission';
 import BootSplash from 'react-native-bootsplash';
 import {Alert} from 'react-native';
 
 import messaging from '@react-native-firebase/messaging';
+import {useAddFireBaseTokenMutation} from '../models/services';
+import {requestNotificationPermission} from '../lib/requestNotificationPermission';
+import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
+import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
+import {LinkingNav} from './types';
+import PrepareServiceScreen from '../../pages/PrepareService/PrepareServiceScreen';
 
 const MainStack = () => {
+  const [addToken] = useAddFireBaseTokenMutation();
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+  const userEmail = useAppSelector(selectCurrentUserEmail);
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
     !check && (await requestStoragePermission());
+
     !check && (await requestReadStoragePermission());
   };
 
@@ -38,9 +48,10 @@ const MainStack = () => {
     await requestUserPermission();
   };
 
-  const getToken = async () => {
-    const token = await messaging().getToken();
-    console.log('token', token);
+  const getFirebaseToken = async () => {
+    if (!currentUserToken || !userEmail) return;
+    const newFirebasetoken = await messaging().getToken();
+    newFirebasetoken && addToken({tokens: newFirebasetoken, owner: userEmail});
   };
 
   useLayoutEffect(() => {
@@ -49,15 +60,26 @@ const MainStack = () => {
 
   useLayoutEffect(() => {
     (async function () {
+      await requestNotificationPermission();
+      await requestNotificationLegacy();
+      await requestMediaPermission();
       await isPermissions();
       await firebasePermissions();
-      await getToken();
+      await getFirebaseToken();
     })();
     return messaging().onMessage(async remoteMessage => {
       Alert.alert(
         remoteMessage.notification.title,
         remoteMessage.notification.body,
       );
+      if (remoteMessage.data) {
+        if (remoteMessage.data.type === LinkingNav.message) {
+          navigate(SCREENS.ImportantScreen);
+        }
+        if (remoteMessage.data.type === LinkingNav.news) {
+          navigate(SCREENS.NewsScreen);
+        }
+      }
     });
   }, []);
 
@@ -99,6 +121,10 @@ const MainStack = () => {
           <Stack.Screen
             name={SCREENS.RegistrationScreen}
             component={RegistrationScreen}
+          />
+          <Stack.Screen
+            name={SCREENS.PrepareServiceScreen}
+            component={PrepareServiceScreen}
           />
         </Stack.Group>
       </Stack.Navigator>

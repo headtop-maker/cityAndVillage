@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Button, Dialog, Icon, Portal, Text} from 'react-native-paper';
 import {useGetAdminsQuery} from '../../../shared/models/services';
 import {
@@ -15,8 +22,11 @@ import {dp} from '../../../shared/lib/getDP';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {useModal} from '../../Modal/ui/ModalProvider';
+import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const SendMessage = () => {
+  const [image, setImage] = useState('');
+  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -31,10 +41,6 @@ const SendMessage = () => {
 
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   const hideDialog = () => setVisible(false);
 
@@ -59,6 +65,7 @@ const SendMessage = () => {
         title: 'От: ' + username,
         description: message,
         isImportant: false,
+        imageBase64: image ? `data:image/jpeg;base64,${image}` : '',
       }),
     );
 
@@ -70,8 +77,33 @@ const SendMessage = () => {
           </View>,
         );
       }
+      setImage('');
       setMessage('');
     }
+  };
+
+  const handleImage = async () => {
+    try {
+      const result = await nativeFn.base64Image();
+      Image.getSize(
+        `data:image/jpeg;base64,${result.base64Image}`,
+        (widthImage, heightImage) => {
+          setImageSize({
+            width: Math.floor(widthImage / 2),
+            height: Math.floor(heightImage / 2),
+          });
+        },
+      );
+      if (result.base64Image) {
+        setImage(result.base64Image);
+      }
+    } catch (error) {
+      Alert.alert('Ошибка сжатия изображения', error.toString());
+    }
+  };
+
+  const removeImage = () => {
+    setImage('');
   };
 
   const dialog = () => {
@@ -97,20 +129,55 @@ const SendMessage = () => {
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => refetch()}
-        style={{alignSelf: 'flex-end'}}>
-        {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
-      </TouchableOpacity>
+      {!!currentUserToken && (
+        <TouchableOpacity
+          onPress={() => refetch()}
+          style={{alignSelf: 'flex-end'}}>
+          {!!data && <Icon source='refresh' color='#6e26f3' size={25} />}
+        </TouchableOpacity>
+      )}
       {!!currentUserToken && dialog()}
       <TouchableOpacity
-        style={{flexDirection: 'row'}}
-        onPress={() => setVisible(true)}>
-        <Text variant='titleMedium'>
+        style={styles.dropdown}
+        onPress={() => setVisible(true)}
+        disabled={!currentUserToken}>
+        <Text style={styles.dropdownText}>
           Кому: {!selectedUser ? 'выбрать' : selectedUser}{' '}
         </Text>
+        <Icon source='chevron-down' size={20} color='#888' />
       </TouchableOpacity>
-
+      {!image && (
+        <Button
+          mode='outlined'
+          onPress={handleImage}
+          disabled={!currentUserToken}>
+          Добавить изображение
+        </Button>
+      )}
+      {image && (
+        <View>
+          <Image
+            style={[
+              styles.image,
+              {
+                width: imageSize.width,
+                height: imageSize.height,
+                maxWidth: dp(300),
+                maxHeight: dp(400),
+                alignSelf: 'center',
+                marginVertical: dp(5),
+                resizeMode: 'contain',
+              },
+            ]}
+            source={{
+              uri: 'data:image/jpeg;base64,' + image,
+            }}
+          />
+          <Button mode='outlined' onPress={removeImage}>
+            Удалить
+          </Button>
+        </View>
+      )}
       <View style={styles.textInputBlock}>
         <TextInput
           placeholder='Введите сообщение здесь...'
@@ -147,6 +214,27 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: '#131413',
+  },
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#DDD',
+  },
+  dropdownText: {
+    color: '#333',
+    fontSize: 14,
+  },
+  image: {
+    marginTop: dp(10),
+    marginBottom: dp(10),
+    borderRadius: 5,
+    alignSelf: 'center',
   },
 });
 

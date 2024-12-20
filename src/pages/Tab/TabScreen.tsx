@@ -6,7 +6,7 @@ import ImportantScreen from '../Importants/ImportantScreen';
 import MainScreen from '../Main/ui/MainScreen';
 import TabItem from './ui/TabItem';
 import AddContentScreen from '../AddContent/ui/AddContentScreen';
-import ServiceScreen from '../CityService/ui/CityServices';
+import ServiceScreen from '../CityAdsService/ui/CityServices';
 import {useAppSelector} from '../../shared/models/storeHooks';
 import {
   selectCurrentAppVersion,

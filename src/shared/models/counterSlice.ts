@@ -1,10 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {Action, AnyAction, PayloadAction} from '@reduxjs/toolkit';
-import {
-  crateNews,
-  getImageForNews,
-  getNews,
-} from '../../entities/News/models/models';
+import {getImageForNews, getNews} from '../../entities/News/models/models';
 import {getImportant} from '../../entities/Important/models/models';
 import {CounterState} from './types';
 import {createUsers} from '../../features/Registration/models/models';
@@ -47,6 +43,7 @@ const initialState: CounterState = {
   currentNewsId: '',
   currentUser: undefined,
   isNewVersion: false,
+  fireBaseTokenAdded: false,
   banner: {
     icon: '',
     text: '',
@@ -72,6 +69,9 @@ export const counterSlice = createSlice({
     setCurrentNewsId: (state, action: PayloadAction<string>) => {
       state.currentNewsId = action.payload;
     },
+    setFireBaseTokenAdded: (state, action: PayloadAction<boolean>) => {
+      state.fireBaseTokenAdded = action.payload;
+    },
     setCurrentAppVersion: (state, action: PayloadAction<string>) => {
       state.currentAppVersion = action.payload;
     },
@@ -95,9 +95,6 @@ export const counterSlice = createSlice({
         state.news = action.payload;
       })
       .addCase(getImportant.fulfilled, (state, action) => {
-        state.important = action.payload;
-      })
-      .addCase(crateNews.fulfilled, (state, action) => {
         state.important = action.payload;
       })
       .addCase(getImageForNews.fulfilled, (state, action) => {
@@ -161,13 +158,13 @@ export const counterSlice = createSlice({
 
 export const {
   resetModalText,
-  incrementByAmount,
   setCurrentNewsId,
   resetCurrentUser,
   setErrorText,
   setBanner,
   setAppInFiles,
   setCurrentAppVersion,
+  setFireBaseTokenAdded,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

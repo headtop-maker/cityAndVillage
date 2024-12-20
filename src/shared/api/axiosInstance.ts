@@ -28,14 +28,38 @@ export const getCurrentImportant = (
     url: `${TEMP_API}important/${userEmail}`,
   });
 
-export const createNews = (
+export const createNewsApi = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
-): Promise<AxiosResponse<any, unknown>> =>
+): Promise<AxiosResponse<CounterState['news'][0], unknown>> =>
   response.apiRequest({
     data,
     timeout: 3000,
     method: 'post',
     url: `${TEMP_API}news`,
+  });
+
+export const getTokens = (): Promise<
+  AxiosResponse<{id: string; tokens: string; owner: string}[], unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}firebase-tokens/`,
+  });
+
+export const sendPushApi = (sendData: {
+  tokens: string[];
+  notification: {
+    title: string;
+    body: string;
+  };
+  data?: Record<string, string>;
+}): Promise<AxiosResponse<{message: string}, unknown>> =>
+  response.apiRequest({
+    data: sendData,
+    timeout: 3000,
+    method: 'post',
+    url: `${TEMP_API}firebase-tokens/send/`,
   });
 
 export const getImageFromServer = (): Promise<
@@ -44,7 +68,7 @@ export const getImageFromServer = (): Promise<
   response.apiRequest({
     timeout: 3000,
     method: 'get',
-    url: `${TEMP_API}upload`,
+    url: `${TEMP_API}imageUpload/`,
   });
 
 export const createUser = (
@@ -119,7 +143,21 @@ export const setFileApi = (
     timeout: 3000,
     data: formData,
     method: 'post',
-    url: `${TEMP_API}upload`,
+    url: `${TEMP_API}upload/file`,
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'multipart/form-data',
+    },
+  });
+
+export const setImageFileApi = (
+  formData: FormData,
+): Promise<AxiosResponse<Record<string, unknown>, unknown>> =>
+  response.apiRequest({
+    timeout: 3000,
+    data: formData,
+    method: 'post',
+    url: `${TEMP_API}imageUpload/file`,
     headers: {
       Accept: 'application/json',
       'Content-type': 'multipart/form-data',
@@ -133,6 +171,17 @@ export const getServicesByCategory = (
     timeout: 3000,
     method: 'get',
     url: `${TEMP_API}adsboard/${serviceCategory}`,
+  });
+
+export const getFirebaseUserTokenAPI = (
+  owner: string,
+): Promise<
+  AxiosResponse<{id: string; tokens: string; owner: string}[], unknown>
+> =>
+  response.apiRequest({
+    timeout: 3000,
+    method: 'get',
+    url: `${TEMP_API}firebase-tokens/${owner}`,
   });
 
 export const getAppVersionFromServer = (): Promise<

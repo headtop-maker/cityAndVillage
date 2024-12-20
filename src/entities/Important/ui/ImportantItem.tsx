@@ -1,21 +1,75 @@
-import React, {FC} from 'react';
+import React, {FC, memo, useState} from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
+import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {Button, TextInput} from 'react-native-paper';
 
-const ImportantItem: FC<CounterState['important'][0]> = ({
+type TImportantItem = {
+  handleSendMessage: (message: string, recipient: string) => void;
+};
+
+const ImportantItem: FC<CounterState['important'][0] & TImportantItem> = ({
   title,
   description,
   createdAt,
   isImportant,
+  imageBase64,
+  author,
+  handleSendMessage,
 }) => {
+  const [message, setMessage] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [imageSize, setImageSize] = useState({width: 0, height: 0});
+  const {showModal} = useModal();
+  const parts = description.split('\n'); // Разделяем текст на части
+
+  const handleImage = () => {
+    if (!imageBase64 || imageBase64.length < 0) return;
+    showModal(
+      <View style={{padding: dp(10)}}>
+        <Image
+          style={[
+            styles.image,
+            {
+              width: imageSize.width / 2,
+              height: imageSize.height / 2,
+              resizeMode: 'contain',
+            },
+          ]}
+          source={{
+            cache: 'force-cache',
+            uri: imageBase64,
+          }}
+        />
+      </View>,
+    );
+  };
+
+  const sandMessage = () => {
+    handleSendMessage(`${description}\n${message}`, author);
+    setShowForm(false);
+    setMessage('');
+  };
+
+  imageBase64.length > 0 &&
+    Image.getSize(imageBase64, (widthImage, heightImage) => {
+      setImageSize({
+        width: Math.floor(widthImage),
+        height: Math.floor(heightImage),
+      });
+    });
+
+  const handleMessageChange = (text: string) => {
+    const filteredText = text.replace(/\n/g, '');
+    setMessage(filteredText);
+  };
+
   return (
     <View style={[styles.importantContainer, styles.shadow]}>
-      <TouchableOpacity
-        style={styles.importantBox}
-        onPress={() => console.log('kkk')}>
+      <View style={styles.importantBox}>
         <View style={styles.importantImageBox}>
           {isImportant === true && (
             <Image
@@ -33,17 +87,75 @@ const ImportantItem: FC<CounterState['important'][0]> = ({
         </View>
         <View style={styles.importantTextBox}>
           <Text style={styles.importantTitle}>{title}</Text>
-          <Text>{description ? description : ''}</Text>
-          <Text style={styles.importantDate}>
-            {convertDate(new Date(createdAt))}
+          <Text style={styles.importantText}>
+            {parts.map((part, index) => (
+              <Text
+                key={index + 'importantTxt'}
+                style={
+                  index === parts.length - 1
+                    ? [styles.normalText]
+                    : [styles.highlightedText]
+                }>
+                {index === parts.length - 1 ? part : part + `\n`}
+              </Text>
+            ))}
           </Text>
+          {imageBase64.length > 0 && (
+            <TouchableOpacity
+              onPress={() => imageBase64.length > 0 && handleImage()}>
+              <Image
+                style={[
+                  styles.image,
+                  {
+                    width: imageSize.width / 2.5,
+                    height: imageSize.height / 2.5,
+                    resizeMode: 'contain',
+                  },
+                ]}
+                source={{
+                  uri: imageBase64,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              icon='message-draw'
+              mode='text'
+              onPress={() => setShowForm(!showForm)}>
+              {!showForm ? 'Ответить' : 'Закрыть'}
+            </Button>
+            <Text style={styles.importantDate}>
+              {convertDate(new Date(createdAt))}
+            </Text>
+          </View>
+          {showForm && (
+            <View>
+              <TextInput
+                label='Ответ'
+                style={[styles.input, styles.textArea]}
+                value={message}
+                multiline
+                numberOfLines={2}
+                mode='outlined'
+                onChangeText={handleMessageChange}
+              />
+              <Button
+                disabled={!message}
+                icon='send-circle-outline'
+                mode='text'
+                onPress={sandMessage}>
+                Отправить
+              </Button>
+            </View>
+          )}
         </View>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default ImportantItem;
+export default memo(ImportantItem);
 
 const styles = StyleSheet.create({
   importantContainer: {
@@ -52,27 +164,48 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafbff',
     padding: dp(5),
   },
+  highlightedText: {
+    fontWeight: 'bold',
+    color: '#007bff',
+    marginBottom: 4,
+  },
+  normalText: {
+    color: '#333',
+  },
   importantBox: {flexDirection: 'row', justifyContent: 'space-between'},
   importantImageBox: {
     width: '20%',
-    justifyContent: 'center',
     alignItems: 'center',
   },
-  importantTitle: {fontWeight: 'bold'},
-  importantDate: {fontWeight: 'bold', textAlign: 'right'},
+  importantTitle: {fontWeight: 'bold', color: '#0e0e0e'},
+  importantText: {color: '#0e0e0e'},
+  importantDate: {fontWeight: 'bold', textAlign: 'right', color: '#0e0e0e'},
   importantTextBox: {width: '80%'},
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#7d7d7d',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 6,
   },
   importantImage: {
-    width: dp(50),
-    height: dp(50),
+    width: dp(40),
+    height: dp(40),
+  },
+  image: {
+    marginTop: dp(10),
+    marginBottom: dp(10),
+    borderRadius: 5,
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    color: '#252525',
+  },
+  textArea: {
+    textAlignVertical: 'top',
   },
 });

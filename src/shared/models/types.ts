@@ -20,6 +20,8 @@ export interface CounterState {
     title: string;
     description: string;
     isImportant: boolean;
+    imageBase64?: string;
+    author: string;
   }[];
   imageForNewsFromServer: TImageResponse['photos'];
   actionState: {
@@ -28,6 +30,7 @@ export interface CounterState {
     modalText: string;
     showIndicator: boolean;
   };
+  fireBaseTokenAdded: boolean;
   banner: {
     text: string;
     icon: string;
@@ -96,3 +99,22 @@ export type IAppVersion = {
   currentVersion: string;
   description: string[];
 };
+
+export type PrepareAds = {
+  phone: string;
+  email: string;
+  categoryName: string;
+  title: string;
+  description: string;
+  image: string;
+};
+
+export type GetPrepareAds = {
+  id: string;
+  phone: string;
+  email: string;
+  categoryName: string;
+  title: string;
+  description: string;
+  image: string;
+}[];

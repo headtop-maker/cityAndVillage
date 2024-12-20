@@ -19,8 +19,7 @@ const SetRegistration = () => {
   const [blockBtn, setBlockBtn] = useState(false);
 
   const fullNamePattern = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)$/;
-  const emailPattern =
-    /^[A-Za-z0-9][A-Za-z0-9.]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const emailPattern = /^[^\s@]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const dispatch = useAppDispatch();
 

@@ -16,10 +16,13 @@ export const getAppVersion = createAsyncThunk(
 
       try {
         const files = await KotlinModules.getDownloadFiles();
+
         const filesInApp =
           files.length > 0 &&
-          parseAppData(files).find(item =>
-            isNewerVersion(versionName, item.versionName),
+          parseAppData(files).find(
+            item =>
+              isNewerVersion(versionName, item.versionName) &&
+              item.appName === 'CityAndVillage',
           )?.fileName;
         if (filesInApp) {
           dispatch(setAppInFiles(filesInApp));

@@ -25,7 +25,7 @@ const ImageItem: FC<CounterState['imageForNewsFromServer'][0] & TImageItem> = ({
 };
 const styles = StyleSheet.create({
   newsImage: {
-    height: 200,
+    height: 150,
     width: 'auto',
     borderRadius: 10,
   },
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
     backgroundColor: '#fafbff',
+    flex: 1,
   },
   newsTextBlock: {
     margin: 15,

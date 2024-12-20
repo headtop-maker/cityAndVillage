@@ -1,10 +1,10 @@
 import React, {useLayoutEffect, useState} from 'react';
 
-import {StyleSheet, View, FlatList} from 'react-native';
+import {StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
 
 import withModal from '../../../shared/HOC/withModal';
 import CityServices from '../../../features/cityServices/ui/CityServices';
-import {Text} from 'react-native-paper';
+import {Icon, Text} from 'react-native-paper';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
 import Documents from '../../../features/documents/ui/Documents';
@@ -14,6 +14,7 @@ import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
 
 import {dp} from '../../../shared/lib/getDP';
+import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
@@ -24,8 +25,15 @@ const MainScreen = () => {
     }
   }, []);
 
+  const handleSettings = async () => {
+    await nativeFn.openAppPermissionSettings();
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.icon} onPress={handleSettings}>
+        <Icon source='application-cog' color='#6e26f3' size={30} />
+      </TouchableOpacity>
       <FlatList
         data={[]}
         renderItem={null}
@@ -33,7 +41,6 @@ const MainScreen = () => {
           <View style={styles.wrapper}>
             <MyBanner />
             <UpdateApp />
-
             <View style={styles.service}>
               <ServiceItem
                 setSection={setSection}
@@ -95,6 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: dp(15),
   },
+  icon: {position: 'absolute', right: dp(20), bottom: dp(50), zIndex: 10},
 });
 
 export default withModal(MainScreen);

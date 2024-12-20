@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {FlatList, Linking, TouchableOpacity} from 'react-native';
 
 import {Button, Icon, List} from 'react-native-paper';
@@ -8,6 +8,7 @@ import {useGetAllImportantContactsQuery} from '../../../shared/models/services';
 const CityServices: FC = () => {
   const [expanded, setExpanded] = useState<string>('');
   const {data, refetch} = useGetAllImportantContactsQuery();
+
   const handlePress = (id: string) => {
     if (id === expanded) {
       setExpanded('');
@@ -20,14 +21,10 @@ const CityServices: FC = () => {
     return id === expanded;
   };
 
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-
   const ContactItem = ({item}: {item: ImportantContact}) => (
     <List.Accordion
       title={item.contactName}
-      left={props => <List.Icon {...props} icon='folder' />}
+      left={props => <List.Icon {...props} icon='contacts-outline' />}
       expanded={getExpanded(item.id)}
       onPress={() => handlePress(item.id)}>
       {item.contacts.map((contact, index) => (
@@ -35,7 +32,7 @@ const CityServices: FC = () => {
           key={'contact' + index}
           title={`Контакт ${index + 1}`}
           onPress={() => {
-            Linking.openURL(`tel:${contact}}`);
+            Linking.openURL(`tel:${contact}`);
           }}
           left={props => <List.Icon {...props} icon='phone' />}
           description={contact}

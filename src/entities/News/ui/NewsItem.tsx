@@ -9,16 +9,13 @@ import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
 import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
-import {Button} from 'react-native-paper';
+import {Button, IconButton, Tooltip} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
 
-const NewsItem: FC<CounterState['news'][0]> = ({
-  id,
-  title,
-  createdAt,
-  image,
-}) => {
+const NewsItem: FC<
+  CounterState['news'][0] & {isAdmin: boolean; deleteItem: (id: string) => void}
+> = ({id, title, createdAt, image, isAdmin, deleteItem}) => {
   const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
@@ -47,7 +44,18 @@ const NewsItem: FC<CounterState['news'][0]> = ({
       <View style={styles.newsTextBlock}>
         <Text style={styles.newsText}>{title}</Text>
         <View style={styles.newsMetaText}>
+          {isAdmin && (
+            <Tooltip title='Selected phone'>
+              <IconButton
+                icon='delete-outline'
+                selected
+                size={dp(20)}
+                onPress={() => !!isAdmin && deleteItem(id)}
+              />
+            </Tooltip>
+          )}
           <Text>{convertDate(new Date(createdAt))}</Text>
+
           <Button mode='text' onPress={handleNavigate}>
             подробнее...
           </Button>

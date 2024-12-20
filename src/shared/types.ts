@@ -16,4 +16,5 @@ export type FileParamsType = {
   fileType: string;
   fileByteSize: number;
   fileUri: string;
+  filePath: string;
 };

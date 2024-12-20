@@ -23,6 +23,11 @@ export const selectIsLoading = createSelector(
   state => state.actionState.loadind,
 );
 
+export const selectFireBaseTokenAdded = createSelector(
+  selectRootCounter,
+  state => state.fireBaseTokenAdded,
+);
+
 export const selectBannerIcon = createSelector(
   selectRootCounter,
   state => state.banner.icon,

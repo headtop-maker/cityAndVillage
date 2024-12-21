@@ -117,6 +117,14 @@ const Users = () => {
         value={query}
         onChangeText={setQuery}
       />
+
+      <FlatList
+        data={filteredData}
+        renderItem={userItems}
+        keyExtractor={item => item.id + 'users'}
+        onRefresh={() => fetchUsers()}
+        refreshing={false}
+      />
       <DialogItem
         visible={visible}
         hideDialog={hideDialog}
@@ -133,14 +141,6 @@ const Users = () => {
         setChecked={setChecked}
         checked={checked}
       />
-
-      <FlatList
-        data={filteredData}
-        renderItem={userItems}
-        keyExtractor={item => item.id + 'users'}
-        onRefresh={() => fetchUsers()}
-        refreshing={false}
-      />
     </View>
   );
 };
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ecf3fe',
-    justifyContent: 'center',
   },
   input: {
     height: dp(50),

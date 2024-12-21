@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {Button, Icon, Text} from 'react-native-paper';
 import {userRole} from '../../../shared/models/types';
 import {FC} from 'react';
 import {dp} from '../../../shared/lib/getDP';
@@ -39,6 +39,7 @@ const UserItem: FC<UserItemProps> = ({
           <View style={styles.role}>
             <Text variant='bodyLarge'>Роль : {item.userRole}</Text>
           </View>
+          <Icon source='chevron-down' size={30} color='#888' />
         </View>
 
         <View style={styles.actionBtn}>

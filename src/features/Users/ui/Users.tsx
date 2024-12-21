@@ -1,5 +1,5 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, TextInput} from 'react-native';
 import {
   useAppDispatch,
   useAppSelector,
@@ -18,6 +18,7 @@ import {
 import {dp} from '../../../shared/lib/getDP';
 
 const Users = () => {
+  const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const [importantText, setImportantText] = useState('');
   const [visible, setVisible] = useState(false);
@@ -30,6 +31,14 @@ const Users = () => {
 
   const allUsers = useAppSelector(selectAllUsers);
   const dispatch = useAppDispatch();
+
+  const sortUser =
+    allUsers.length > 0 &&
+    [...allUsers].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+
+  const filteredData = sortUser.filter(item =>
+    item.name.toLowerCase().includes(query.toLowerCase()),
+  );
 
   const recipient = allUsers?.find(item => item.id === selectedId)?.email;
   const currentBanned = allUsers?.find(item => item.id === selectedId)?.banned;
@@ -102,6 +111,12 @@ const Users = () => {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder='Введите ФИО'
+        value={query}
+        onChangeText={setQuery}
+      />
       <DialogItem
         visible={visible}
         hideDialog={hideDialog}
@@ -118,8 +133,9 @@ const Users = () => {
         setChecked={setChecked}
         checked={checked}
       />
+
       <FlatList
-        data={allUsers}
+        data={filteredData}
         renderItem={userItems}
         keyExtractor={item => item.id + 'users'}
         onRefresh={() => fetchUsers()}
@@ -136,6 +152,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ecf3fe',
     justifyContent: 'center',
+  },
+  input: {
+    height: dp(50),
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: dp(8),
+    fontSize: 16,
+    color: 'blue',
+    backgroundColor: '#FFFFFF',
+    margin: dp(5),
   },
   item: {
     backgroundColor: '#f9c2ff',

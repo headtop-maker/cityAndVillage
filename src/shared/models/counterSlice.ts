@@ -39,7 +39,7 @@ const initialState: CounterState = {
     modalText: '',
     showIndicator: true,
   },
-  allUsers: undefined,
+  allUsers: [],
   currentNewsId: '',
   currentUser: undefined,
   isNewVersion: false,

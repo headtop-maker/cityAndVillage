@@ -37,15 +37,14 @@ export interface CounterState {
     visible: boolean;
   };
 
-  allUsers:
-    | {
-        id: number;
-        name: string;
-        email: string;
-        banned: boolean;
-        userRole: userRole;
-      }[]
-    | undefined;
+  allUsers: {
+    id: number;
+    name: string;
+    email: string;
+    banned: boolean;
+    userRole: userRole;
+  }[];
+
   currentUser:
     | {
         userName: string;

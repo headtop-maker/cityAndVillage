@@ -35,10 +35,13 @@ const Users = () => {
   const sortUser =
     allUsers.length > 0 &&
     [...allUsers].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+  console.log('sortUser', sortUser);
 
-  const filteredData = sortUser.filter(item =>
-    item.name.toLowerCase().includes(query.toLowerCase()),
-  );
+  const filteredData =
+    sortUser.length > 0 &&
+    sortUser.filter(item =>
+      item.name.toLowerCase().includes(query.toLowerCase()),
+    );
 
   const recipient = allUsers?.find(item => item.id === selectedId)?.email;
   const currentBanned = allUsers?.find(item => item.id === selectedId)?.banned;

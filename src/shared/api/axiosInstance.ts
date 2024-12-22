@@ -6,7 +6,8 @@ import {loginUserData} from '../../features/Login/model/types';
 import {setImportantDataType} from '../../features/Users/types/types';
 import ApiCall from './ApiCall';
 
-export const TEMP_API = 'http://193.32.188.98:3000/';
+// export const TEMP_API = 'http://193.32.188.98:3000/';
+export const TEMP_API = 'http://192.168.1.101:3000/';
 
 export const response = new ApiCall();
 

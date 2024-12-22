@@ -35,7 +35,6 @@ const Users = () => {
   const sortUser =
     allUsers.length > 0 &&
     [...allUsers].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-  console.log('sortUser', sortUser);
 
   const filteredData =
     sortUser.length > 0 &&

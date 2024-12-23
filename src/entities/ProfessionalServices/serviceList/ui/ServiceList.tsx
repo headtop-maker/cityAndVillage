@@ -8,6 +8,7 @@ import {setErrorText} from '../../../../shared/models/counterSlice';
 import {getServices} from '../model/actions';
 import {callOtherFn} from '../../../../shared/api/ApiCall';
 import {useGetServiceCategoryQuery} from '../../../../shared/models/services';
+import {dp} from '../../../../shared/lib/getDP';
 
 const ServiceList = () => {
   const {data, error, refetch} = useGetServiceCategoryQuery(undefined, {
@@ -49,7 +50,7 @@ const ServiceList = () => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: '#FFFFFF'}}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -70,7 +71,8 @@ const ServiceList = () => {
 };
 
 const styles = StyleSheet.create({
-  item: {margin: 3},
+  item: {margin: dp(3)},
+  container: {backgroundColor: '#FFFFFF'},
   title: {
     fontSize: 32,
   },

@@ -10,7 +10,9 @@ import {callOtherFn} from '../../../../shared/api/ApiCall';
 import {useGetServiceCategoryQuery} from '../../../../shared/models/services';
 
 const ServiceList = () => {
-  const {data, error, refetch} = useGetServiceCategoryQuery();
+  const {data, error, refetch} = useGetServiceCategoryQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [checked, setChecked] = useState<string>('');
   const dispatch = useAppDispatch();

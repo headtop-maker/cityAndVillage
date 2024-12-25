@@ -37,7 +37,7 @@ const AddNewCategory: FC = () => {
         style={styles.input}
         placeholder='description'
         value={description}
-        onChangeText={setDescription}
+        onChangeText={data => setDescription(data.trim())}
       />
       <Button title='Создать' onPress={handleSubmit} />
     </View>

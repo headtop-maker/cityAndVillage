@@ -45,7 +45,8 @@ const SendMessage = () => {
   const hideDialog = () => setVisible(false);
 
   const handleChangeMessage = (text: string) => {
-    setMessage(text);
+    const filteredText = text.replace(/\n/g, '');
+    setMessage(filteredText);
   };
 
   const setRecipient = (email: string, name: string) => {

@@ -1,6 +1,6 @@
-import React, {useCallback, useLayoutEffect} from 'react';
-import {View, FlatList, TouchableOpacity} from 'react-native';
-import ImportantItem from '../../../entities/Important/ui/ImportantItem';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   useAppDispatch,
   useAppSelector,
@@ -8,7 +8,7 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
-import {Button, Icon, Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import withModal from '../../../shared/HOC/withModal';
 import {setImportantMessage} from '../../Users/model/models';
 import {dp} from '../../../shared/lib/getDP';
@@ -18,8 +18,13 @@ import {
 } from '../../../entities/News/models/selectors';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import {useModal} from '../../Modal/ui/ModalProvider';
+import MessageCard from '../../../entities/Important/ui/MessageCard';
+import ReplyForm from '../../../entities/Important/ui/ReplyForm';
 
 const Important = () => {
+  const [activeMessage, setActiveMessage] = useState<string | null>(null);
+  const [sendDescription, setSendDescription] = useState('');
+  const [recipient, setRecipient] = useState('');
   const important = useAppSelector(selectImportant);
   const isLoading = useAppSelector(selectImportantLoading);
   const dispatch = useAppDispatch();
@@ -34,25 +39,57 @@ const Important = () => {
     dispatch(getImportant(10));
   }, [dispatch]);
 
+  const handleReply = (id: string) => {
+    setActiveMessage(id);
+  };
+
+  const clearData = () => {
+    setSendDescription('');
+    setActiveMessage(null);
+    setRecipient('');
+  };
+
+  const handleClose = () => {
+    clearData();
+  };
+
   const renderItem = useCallback(
     ({item}: {item: CounterState['important'][0]}) => {
+      const {
+        title,
+        description,
+        createdAt,
+        isImportant,
+        id,
+        imageBase64,
+        author,
+      } = item;
       return (
-        <ImportantItem
-          title={item.title}
-          description={item.description}
-          createdAt={item.createdAt}
-          isImportant={item.isImportant}
-          id={item.id}
-          imageBase64={item.imageBase64}
-          author={item.author}
-          handleSendMessage={handleSendMessage}
+        <MessageCard
+          title={title}
+          description={description}
+          createdAt={createdAt}
+          isImportant={isImportant}
+          id={id}
+          imageBase64={imageBase64}
+          author={author}
+          onReply={() => {
+            setSendDescription(description);
+            handleReply(id);
+            setRecipient(author);
+          }}
         />
       );
     },
     [],
   );
 
-  const handleSendMessage = async (message: string, recipient: string) => {
+  const handleSendReply = async (message: string) => {
+    await handleSendMessage(`${sendDescription}\n${message}`);
+    clearData();
+  };
+
+  const handleSendMessage = async (message: string) => {
     if (!currentUserToken) return;
 
     const result = await dispatch(
@@ -82,26 +119,64 @@ const Important = () => {
     prefetch();
   }, [dispatch, prefetch]);
   return (
-    <View>
-      <TouchableOpacity
-        onPress={() => prefetch()}
-        style={{alignSelf: 'flex-end'}}>
-        {!!important && <Icon source='refresh' color='#6e26f3' size={25} />}
-      </TouchableOpacity>
-      <FlatList
-        data={important}
-        renderItem={renderItem}
-        keyExtractor={(id, index) => id + 'important' + index}
-        refreshing={isLoading}
-        onRefresh={() => dispatch(getImportant(10))}
-        ListEmptyComponent={
-          <Button mode='text' onPress={() => prefetch()}>
-            Обновить список сообщений
-          </Button>
-        }
-      />
+    <View style={styles.container}>
+      <View style={{flex: 1}}>
+        <FlatList
+          data={important}
+          renderItem={renderItem}
+          keyExtractor={(id, index) => id + 'important' + index}
+          refreshing={isLoading}
+          initialNumToRender={5}
+          maxToRenderPerBatch={10}
+          removeClippedSubviews={true}
+          onRefresh={() => dispatch(getImportant(10))}
+          ListEmptyComponent={
+            <Button mode='text' onPress={() => prefetch()}>
+              Обновить список сообщений
+            </Button>
+          }
+        />
+      </View>
+      {activeMessage && (
+        <View style={styles.replyContainer}>
+          <View style={styles.sendText}>
+            <View>
+              <Text style={styles.highlightedText}>В ответ на:</Text>
+              <Text style={styles.message}>{sendDescription}</Text>
+            </View>
+
+            <TouchableOpacity onPress={() => handleClose()}>
+              <Icon name='close' size={20} color='#888' />
+            </TouchableOpacity>
+          </View>
+          <ReplyForm onSend={handleSendReply} />
+        </View>
+      )}
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {flex: 1, justifyContent: 'space-between'},
+  replyContainer: {
+    borderTopWidth: 0.5,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+    borderTopColor: '#ddd',
+  },
+  sendText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  message: {
+    fontSize: 14,
+    color: '#555',
+    marginVertical: 3,
+  },
+  highlightedText: {
+    fontWeight: 'bold',
+    color: '#6b00ff',
+  },
+});
 export default withModal(Important);

@@ -15,7 +15,7 @@ import {dp} from '../../../shared/lib/getDP';
 
 const NewsItem: FC<
   CounterState['news'][0] & {isAdmin: boolean; deleteItem: (id: string) => void}
-> = ({id, title, createdAt, image, isAdmin, deleteItem}) => {
+> = ({id, title, createdAt, image, isAdmin, deleteItem, description}) => {
   const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
@@ -42,7 +42,8 @@ const NewsItem: FC<
       )}
 
       <View style={styles.newsTextBlock}>
-        <Text style={styles.newsText}>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
         <View style={styles.newsMetaText}>
           {isAdmin && (
             <Tooltip title='Selected phone'>
@@ -75,7 +76,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: dp(8),
+    color: '#333',
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+  },
   newsImage: {
     height: dp(190),
     borderRadius: dp(10),

@@ -47,8 +47,6 @@ const AddNews = () => {
     dispatch(getImageForNews());
   }, [dispatch]);
 
-  const isLockSend = !!title && !!description && !!imageSrc;
-
   const handleClick = () => {
     if (!currentRole || currentRole !== userRole.admin || !userName) {
       return;
@@ -163,7 +161,6 @@ const AddNews = () => {
             mode='outlined'
             style={{margin: dp(10)}}
             onPress={handleClick}>
-            disabled={isLockSend}
             Добавить
           </Button>
         </View>

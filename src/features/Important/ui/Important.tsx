@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
@@ -26,6 +27,8 @@ import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import MessageCard from '../../../entities/Important/ui/MessageCard';
 import ReplyForm from '../../../entities/Important/ui/ReplyForm';
+
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
 const Important = () => {
   const [activeMessage, setActiveMessage] = useState<string | null>(null);
@@ -60,22 +63,16 @@ const Important = () => {
   };
 
   const handleImage = useCallback(
-    (imageBase64: string, imageSize: {width: number; height: number}) => {
+    (imageBase64: string) => {
       if (!imageBase64 || imageBase64.length < 0) return;
       showModal(
-        <View style={{padding: dp(10)}}>
+        <View style={styles.modalContent}>
           <Image
-            style={[
-              styles.image,
-              {
-                width: imageSize.width / 2,
-                height: imageSize.height / 2,
-                resizeMode: 'contain',
-              },
-            ]}
+            style={styles.imageModal}
             source={{
               uri: imageBase64,
             }}
+            resizeMode='contain'
           />
         </View>,
       );
@@ -195,6 +192,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopColor: '#ddd',
   },
+  modalContent: {
+    width: screenWidth * 0.8,
+    height: screenHeight * 0.8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
+    alignItems: 'center',
+    marginBottom: dp(3),
+  },
   sendText: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -209,12 +215,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#6b00ff',
   },
-  image: {
-    marginTop: dp(10),
-    marginBottom: dp(10),
-    borderRadius: 5,
-    alignSelf: 'center',
-    alignItems: 'center',
+  imageModal: {
+    width: '100%',
+    height: '100%',
   },
 });
 export default withModal(Important);

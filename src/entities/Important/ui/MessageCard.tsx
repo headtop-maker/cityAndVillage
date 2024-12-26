@@ -6,10 +6,7 @@ import {dp} from '../../../shared/lib/getDP';
 
 type TImportantItem = {
   onReply: () => void;
-  handleImage: (
-    imageBase64: string,
-    imageSize: {width: number; height: number},
-  ) => void;
+  handleImage: (imageBase64: string) => void;
 };
 
 const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
@@ -50,9 +47,7 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       </View>
       {imageBase64.length > 0 && (
         <TouchableOpacity
-          onPress={() =>
-            imageBase64.length > 0 && handleImage(imageBase64, imageSize)
-          }>
+          onPress={() => imageBase64.length > 0 && handleImage(imageBase64)}>
           <Image
             style={[
               styles.image,

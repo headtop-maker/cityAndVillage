@@ -1,12 +1,15 @@
-import React, {FC, memo, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
-import {useModal} from '../../../features/Modal/ui/ModalProvider';
 
 type TImportantItem = {
   onReply: () => void;
+  handleImage: (
+    imageBase64: string,
+    imageSize: {width: number; height: number},
+  ) => void;
 };
 
 const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
@@ -17,41 +20,21 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
   imageBase64,
   author,
   onReply,
+  handleImage,
 }) => {
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
 
-  const {showModal} = useModal();
   const parts = description.split('\n'); // Разделяем текст на части
 
-  imageBase64.length > 0 &&
-    Image.getSize(imageBase64, (widthImage, heightImage) => {
-      setImageSize({
-        width: Math.floor(widthImage),
-        height: Math.floor(heightImage),
+  useEffect(() => {
+    imageBase64.length > 0 &&
+      Image.getSize(imageBase64, (widthImage, heightImage) => {
+        setImageSize({
+          width: Math.floor(widthImage),
+          height: Math.floor(heightImage),
+        });
       });
-    });
-
-  const handleImage = () => {
-    if (!imageBase64 || imageBase64.length < 0) return;
-    showModal(
-      <View style={{padding: dp(10)}}>
-        <Image
-          style={[
-            styles.image,
-            {
-              width: imageSize.width / 2,
-              height: imageSize.height / 2,
-              resizeMode: 'contain',
-            },
-          ]}
-          source={{
-            cache: 'force-cache',
-            uri: imageBase64,
-          }}
-        />
-      </View>,
-    );
-  };
+  }, [imageBase64]);
 
   return (
     <View
@@ -67,7 +50,9 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       </View>
       {imageBase64.length > 0 && (
         <TouchableOpacity
-          onPress={() => imageBase64.length > 0 && handleImage()}>
+          onPress={() =>
+            imageBase64.length > 0 && handleImage(imageBase64, imageSize)
+          }>
           <Image
             style={[
               styles.image,

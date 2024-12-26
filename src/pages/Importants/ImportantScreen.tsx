@@ -63,9 +63,3 @@ const styles = StyleSheet.create({
 });
 
 export default withModal(ImportantScreen);
-
-{
-  /* <TouchableOpacity style={styles.icon}>
-<Avatar.Icon size={50} icon='pencil-plus-outline' color='#FFFFFF' />
-</TouchableOpacity> */
-}

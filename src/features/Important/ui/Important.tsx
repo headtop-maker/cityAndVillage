@@ -1,5 +1,11 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
-import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   useAppDispatch,
@@ -53,6 +59,30 @@ const Important = () => {
     clearData();
   };
 
+  const handleImage = useCallback(
+    (imageBase64: string, imageSize: {width: number; height: number}) => {
+      if (!imageBase64 || imageBase64.length < 0) return;
+      showModal(
+        <View style={{padding: dp(10)}}>
+          <Image
+            style={[
+              styles.image,
+              {
+                width: imageSize.width / 2,
+                height: imageSize.height / 2,
+                resizeMode: 'contain',
+              },
+            ]}
+            source={{
+              uri: imageBase64,
+            }}
+          />
+        </View>,
+      );
+    },
+    [showModal],
+  );
+
   const renderItem = useCallback(
     ({item}: {item: CounterState['important'][0]}) => {
       const {
@@ -78,10 +108,11 @@ const Important = () => {
             handleReply(id);
             setRecipient(author);
           }}
+          handleImage={handleImage}
         />
       );
     },
-    [],
+    [handleImage],
   );
 
   const handleSendReply = async (message: string) => {
@@ -177,6 +208,13 @@ const styles = StyleSheet.create({
   highlightedText: {
     fontWeight: 'bold',
     color: '#6b00ff',
+  },
+  image: {
+    marginTop: dp(10),
+    marginBottom: dp(10),
+    borderRadius: 5,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });
 export default withModal(Important);

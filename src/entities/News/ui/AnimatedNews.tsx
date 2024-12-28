@@ -8,11 +8,8 @@ import {
 import {Text} from 'react-native-paper';
 import Animated, {
   clamp,
-  Easing,
   useAnimatedStyle,
   useSharedValue,
-  withClamp,
-  withTiming,
 } from 'react-native-reanimated';
 import {dp} from '../../../shared/lib/getDP';
 
@@ -67,7 +64,6 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
       offsetX.value = param < 0 ? param : 0;
 
       const val = translationY.value / initY;
-      const val2 = translationX.value / 2.3;
       console.log('offsetX', offsetX.value, initX * val);
     })
     .onFinalize(() => {

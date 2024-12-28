@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -8,8 +8,10 @@ import {
 import {Text} from 'react-native-paper';
 import Animated, {
   clamp,
+  Easing,
   useAnimatedStyle,
   useSharedValue,
+  withClamp,
   withTiming,
 } from 'react-native-reanimated';
 import {dp} from '../../../shared/lib/getDP';
@@ -28,50 +30,69 @@ type TNewsAnimatedImage = {
     | undefined;
 };
 
-const {height} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('screen');
 
 const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
   const initY = height / 2.5;
+  const initX = width;
   const translationY = useSharedValue(initY);
   const prevTranslationY = useSharedValue(initY);
+
+  const translationX = useSharedValue(initX);
+  const prevTranslationX = useSharedValue(initX);
+
+  const offsetX = useSharedValue(0);
+  const currentOffsetX = useSharedValue(0);
 
   const pan = Gesture.Pan()
     .minDistance(1)
     .onStart(() => {
       prevTranslationY.value = translationY.value;
+      prevTranslationX.value = translationX.value;
     })
     .onUpdate(event => {
-      const maxTranslateY = height;
-
       translationY.value = clamp(
         prevTranslationY.value + event.translationY,
         initY,
-        maxTranslateY / 1.4,
+        height / 1.4,
       );
+
+      translationX.value = clamp(
+        initX * (translationY.value / initY),
+        initX,
+        4000,
+      );
+      const param = currentOffsetX.value + event.translationX;
+
+      offsetX.value = param < 0 ? param : 0;
+
+      const val = translationY.value / initY;
+      const val2 = translationX.value / 2.3;
+      console.log('offsetX', offsetX.value, initX * val);
     })
-    .onFinalize(event => {
-      if (event.translationY > 0) {
-        translationY.value = withTiming(height / 1.4);
-      } else {
-        translationY.value = withTiming(initY);
-      }
+    .onFinalize(() => {
+      currentOffsetX.value = offsetX.value;
     })
     .runOnJS(true);
 
   const animatedStyles = useAnimatedStyle(() => ({
     height: translationY.value,
+    width: translationX.value,
+    transform: [{translateX: offsetX.value}],
   }));
 
   return (
     <GestureHandlerRootView>
       <GestureDetector gesture={pan}>
         <View>
-          <Animated.Image
-            style={[styles.newsImage, animatedStyles]}
-            source={{
-              uri: uri,
-            }}
-          />
+          <Animated.View style={[animatedStyles]}>
+            <Image
+              style={[styles.image]}
+              source={{
+                uri: uri,
+              }}
+            />
+          </Animated.View>
           <View style={styles.resize} />
           <Animated.View>
             <View style={styles.newsItem}>
@@ -96,9 +117,9 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
 };
 
 const styles = StyleSheet.create({
-  newsImage: {
-    margin: dp(10),
-    borderRadius: dp(5),
+  image: {
+    width: '100%',
+    height: '100%',
   },
   newsDescription: {
     margin: dp(10),

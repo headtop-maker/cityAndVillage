@@ -61,10 +61,10 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
       );
       const param = currentOffsetX.value + event.translationX;
 
-      offsetX.value = param < 0 ? param : 0;
+      const rightBorder = initX - translationX.value;
 
-      const val = translationY.value / initY;
-      console.log('offsetX', offsetX.value, initX * val);
+      offsetX.value =
+        param < 0 ? (param < rightBorder ? rightBorder : param) : 0;
     })
     .onFinalize(() => {
       currentOffsetX.value = offsetX.value;

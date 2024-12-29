@@ -30,7 +30,7 @@ type TNewsAnimatedImage = {
 const {height, width} = Dimensions.get('screen');
 
 const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
-  const initY = height / 2.5;
+  const initY = height / 3.5;
   const initX = width;
   const translationY = useSharedValue(initY);
   const prevTranslationY = useSharedValue(initY);
@@ -87,6 +87,7 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
               source={{
                 uri: uri,
               }}
+              resizeMode='contain'
             />
           </Animated.View>
           <View style={styles.resize} />

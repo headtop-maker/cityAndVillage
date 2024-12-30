@@ -1,5 +1,11 @@
 import React, {FC} from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  View,
+  ImageBackground,
+} from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -82,13 +88,19 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
       <GestureDetector gesture={pan}>
         <View>
           <Animated.View style={[animatedStyles]}>
-            <Image
-              style={[styles.image]}
-              source={{
-                uri: uri,
-              }}
-              resizeMode='contain'
-            />
+            <ImageBackground
+              source={{uri: uri}}
+              style={styles.background}
+              blurRadius={20}
+              resizeMode='cover'>
+              <Image
+                style={[styles.image]}
+                source={{
+                  uri: uri,
+                }}
+                resizeMode='contain'
+              />
+            </ImageBackground>
           </Animated.View>
           <View style={styles.resize} />
           <Animated.View>
@@ -125,6 +137,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingLeft: dp(10),
     paddingRight: dp(10),
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   resize: {
     height: dp(5),

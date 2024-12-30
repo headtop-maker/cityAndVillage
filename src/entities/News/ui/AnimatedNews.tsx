@@ -105,7 +105,7 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
           <View style={styles.resize} />
           <Animated.View>
             <View style={styles.newsItem}>
-              <Text variant='titleLarge' style={styles.newsText}>
+              <Text variant='titleLarge' style={styles.newsTitle}>
                 {current?.title}
               </Text>
             </View>
@@ -117,7 +117,7 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
         style={styles.newsContainer}
         showsVerticalScrollIndicator={true}
         persistentScrollbar={true}>
-        <Text variant='bodyLarge' style={styles.newsDescription}>
+        <Text variant='bodyLarge' style={styles.newsContent}>
           {current?.description}
         </Text>
       </Animated.ScrollView>
@@ -130,13 +130,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  newsDescription: {
-    margin: dp(10),
+  newsContent: {
+    fontSize: 16,
+    lineHeight: dp(22),
+    color: '#4F4F4F',
   },
   newsContainer: {
-    backgroundColor: '#FFFFFF',
     paddingLeft: dp(10),
     paddingRight: dp(10),
+    borderRadius: dp(10),
+    margin: dp(5),
   },
   background: {
     width: '100%',
@@ -152,8 +155,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#700082',
     marginTop: dp(5),
   },
-  newsText: {
-    alignSelf: 'flex-start',
+  newsTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: dp(12),
+    color: '#333333',
   },
   newsItem: {
     margin: dp(15),
@@ -163,7 +169,7 @@ const styles = StyleSheet.create({
   circle: {
     height: dp(120),
     width: dp(120),
-    borderRadius: 500,
+    borderRadius: 50,
     borderWidth: 1,
   },
 });

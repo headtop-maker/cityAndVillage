@@ -146,10 +146,11 @@ const styles = StyleSheet.create({
   },
   resize: {
     height: dp(5),
-    width: dp(70),
+    width: dp(50),
     alignSelf: 'center',
     borderRadius: dp(10),
-    backgroundColor: '#969696',
+    backgroundColor: '#700082',
+    marginTop: dp(5),
   },
   newsText: {
     alignSelf: 'flex-start',

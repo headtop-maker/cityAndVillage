@@ -18,19 +18,11 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {dp} from '../../../shared/lib/getDP';
+import {CounterState} from '../../../shared/models/types';
 
 type TNewsAnimatedImage = {
   uri: string | undefined;
-  current:
-    | {
-        id: string;
-        createdAt: Date;
-        title: string;
-        description: string;
-        image: string;
-        author: string;
-      }
-    | undefined;
+  current: CounterState['news'][0];
 };
 
 const {height, width} = Dimensions.get('screen');

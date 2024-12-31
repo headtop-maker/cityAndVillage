@@ -8,7 +8,6 @@ import SCREENS from '../../../shared/Navigation/screens';
 import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
-import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {Button, IconButton, Tooltip} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
@@ -37,13 +36,11 @@ const NewsItem: FC<
             uri: image,
           }}
         />
-      ) : (
-        <Image style={styles.defaultImage} source={ImagesAssets.defaultImage} />
-      )}
+      ) : null}
 
       <View style={styles.newsTextBlock}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
+        {title && <Text style={styles.title}>{title}</Text>}
+        {description && <Text style={styles.description}>{description}</Text>}
         <View style={styles.newsMetaText}>
           {isAdmin && (
             <Tooltip title='Selected phone'>
@@ -57,9 +54,11 @@ const NewsItem: FC<
           )}
           <Text>{convertDate(new Date(createdAt))}</Text>
 
-          <Button mode='text' onPress={handleNavigate}>
-            подробнее...
-          </Button>
+          {image && (
+            <Button mode='text' onPress={handleNavigate}>
+              подробнее...
+            </Button>
+          )}
         </View>
       </View>
     </TouchableOpacity>

@@ -13,18 +13,10 @@ import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
 import AnimatedNews from './AnimatedNews';
 
 import {dp} from '../../../shared/lib/getDP';
-
-interface TCurrent {
-  id: string;
-  createdAt: Date;
-  title: string;
-  description: string;
-  image: string;
-  author: string;
-}
+import {CounterState} from '../../../shared/models/types';
 
 const CurrentNews = () => {
-  const [currentNews, setCurrentNews] = useState<TCurrent>();
+  const [currentNews, setCurrentNews] = useState<CounterState['news'][0]>();
   const leftShake = useAnimatedShake();
   const rightShake = useAnimatedShake();
 

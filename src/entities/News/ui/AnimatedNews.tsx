@@ -36,7 +36,7 @@ type TNewsAnimatedImage = {
 const {height, width} = Dimensions.get('screen');
 
 const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
-  const initY = height / 3.5;
+  const initY = height / 3.4;
   const initX = width;
   const translationY = useSharedValue(initY);
   const prevTranslationY = useSharedValue(initY);
@@ -57,7 +57,7 @@ const AnimatedNews: FC<TNewsAnimatedImage> = ({uri, current}) => {
       translationY.value = clamp(
         prevTranslationY.value + event.translationY,
         initY,
-        height / 1.4,
+        height / 1.32,
       );
 
       translationX.value = clamp(
@@ -165,12 +165,6 @@ const styles = StyleSheet.create({
     margin: dp(15),
     borderColor: '#5e0788',
     borderBottomLeftRadius: dp(10),
-  },
-  circle: {
-    height: dp(120),
-    width: dp(120),
-    borderRadius: 50,
-    borderWidth: 1,
   },
 });
 

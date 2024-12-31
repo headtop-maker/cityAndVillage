@@ -40,7 +40,7 @@ export const crateNews = createAsyncThunk(
       const response = await createNewsApi(data);
       if ('data' in response) {
         const title = response.data.title;
-        title && dispatch(sendPush(title));
+        dispatch(sendPush(title || ''));
       }
       return response.data;
     } catch (err) {

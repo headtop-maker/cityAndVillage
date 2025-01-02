@@ -27,7 +27,7 @@ export const setImageFile = createAsyncThunk(
         formData.append('file', {
           uri: resizedImage.uri,
           type: 'application/octet-stream',
-          name: encodeURIComponent(`${file.fileName}.${file.fileType}`),
+          name: encodeURIComponent(`${file.filePath}`),
         });
       } catch (error) {
         Alert.alert('Ошибка сжатия изображения', error.toString());
@@ -55,7 +55,7 @@ export const setFileWithoutResize = createAsyncThunk(
     formData.append('file', {
       uri: file.fileUri,
       type: 'application/octet-stream',
-      name: encodeURIComponent(`${file.fileName}.${file.fileType}`),
+      name: encodeURIComponent(`${file.filePath}`),
     });
     try {
       await setFileApi(formData);

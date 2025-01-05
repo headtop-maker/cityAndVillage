@@ -12,6 +12,8 @@ export const setImageFile = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     const file: FileParamsType = await nativeFn.openFile();
 
+    const fileType = file.filePath.split('.').at(-1);
+
     const formData = new FormData();
 
     const compressImage = async (uri: string) => {
@@ -27,7 +29,7 @@ export const setImageFile = createAsyncThunk(
         formData.append('file', {
           uri: resizedImage.uri,
           type: 'application/octet-stream',
-          name: encodeURIComponent(`${file.filePath}`),
+          name: encodeURIComponent(`${file.fileName}.${fileType}`),
         });
       } catch (error) {
         Alert.alert('Ошибка сжатия изображения', error.toString());
@@ -50,12 +52,14 @@ export const setFileWithoutResize = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     const file: FileParamsType = await nativeFn.openFile();
 
+    const fileType = file.filePath.split('.').at(-1);
+
     const formData = new FormData();
 
     formData.append('file', {
       uri: file.fileUri,
       type: 'application/octet-stream',
-      name: encodeURIComponent(`${file.filePath}`),
+      name: encodeURIComponent(`${file.fileName}.${fileType}`),
     });
     try {
       await setFileApi(formData);

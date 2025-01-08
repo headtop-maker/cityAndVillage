@@ -117,18 +117,7 @@ export const setImportantMessageApi = (
 export const setBannedUserApi = (
   id: number,
   banned: boolean,
-): Promise<
-  AxiosResponse<
-    {
-      id: number;
-      name: string;
-      email: string;
-      banned: boolean;
-      userRole: userRole;
-    },
-    unknown
-  >
-> =>
+): Promise<AxiosResponse<CounterState['allUsers'][0], unknown>> =>
   response.apiRequest({
     data: {banned},
     timeout: 3000,

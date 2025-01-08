@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Alert,
   Image,
   StyleSheet,
   TextInput,
@@ -22,11 +21,9 @@ import {dp} from '../../../shared/lib/getDP';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {useModal} from '../../Modal/ui/ModalProvider';
-import {nativeFn} from '../../../shared/lib/nativeFn';
+import useAddImage from '../../../shared/Hooks/useAddImage';
 
 const SendMessage = () => {
-  const [image, setImage] = useState('');
-  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -39,6 +36,7 @@ const SendMessage = () => {
   const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
 
+  const {handleImage, image, imageSize, removeImage} = useAddImage();
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
 
@@ -78,33 +76,9 @@ const SendMessage = () => {
           </View>,
         );
       }
-      setImage('');
+      removeImage();
       setMessage('');
     }
-  };
-
-  const handleImage = async () => {
-    try {
-      const result = await nativeFn.base64Image();
-      Image.getSize(
-        `data:image/jpeg;base64,${result.base64Image}`,
-        (widthImage, heightImage) => {
-          setImageSize({
-            width: Math.floor(widthImage / 2),
-            height: Math.floor(heightImage / 2),
-          });
-        },
-      );
-      if (result.base64Image) {
-        setImage(result.base64Image);
-      }
-    } catch (error) {
-      Alert.alert('Ошибка сжатия изображения', error.toString());
-    }
-  };
-
-  const removeImage = () => {
-    setImage('');
   };
 
   const dialog = () => {

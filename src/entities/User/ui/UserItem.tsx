@@ -1,18 +1,12 @@
 import * as React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button, Icon, Text} from 'react-native-paper';
-import {userRole} from '../../../shared/models/types';
+import {CounterState} from '../../../shared/models/types';
 import {FC} from 'react';
 import {dp} from '../../../shared/lib/getDP';
 
 interface UserItemProps {
-  item: {
-    id: number;
-    name: string;
-    email: string;
-    banned: boolean;
-    userRole: userRole;
-  };
+  item: CounterState['allUsers'][0];
   setSelectedId: (data: number | undefined) => void;
   selectedId: number | undefined;
   showDialog: () => void;

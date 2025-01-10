@@ -159,7 +159,7 @@ const SendMessage = () => {
           value={message}
           onChangeText={handleChangeMessage}
           multiline={true}
-          maxLength={100}
+          maxLength={400}
           editable={!!currentUserToken}
           style={styles.textInput}
         />

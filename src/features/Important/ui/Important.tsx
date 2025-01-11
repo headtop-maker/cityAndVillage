@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#FFFFFF',
     borderTopColor: '#ddd',
+    margin: dp(10),
   },
   modalContent: {
     width: screenWidth * 0.8,

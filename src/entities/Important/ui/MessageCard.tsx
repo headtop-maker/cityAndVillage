@@ -64,14 +64,15 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
         </TouchableOpacity>
       )}
       <Text style={styles.message}>
-        {' '}
         {parts.map((part, index) => (
           <Text
             key={index + 'importantTxt'}
             style={
               index === parts.length - 1
                 ? [styles.normalText]
-                : [styles.highlightedText]
+                : index % 2 === 0
+                ? [styles.highlightedTextOdd]
+                : [styles.highlightedTextEven]
             }>
             {index === parts.length - 1 ? part : part + `\n`}
           </Text>
@@ -117,9 +118,14 @@ const styles = StyleSheet.create({
   textArea: {
     textAlignVertical: 'top',
   },
-  highlightedText: {
+  highlightedTextOdd: {
     fontWeight: 'bold',
     color: '#007bff',
+    marginBottom: 4,
+  },
+  highlightedTextEven: {
+    fontWeight: 'bold',
+    color: '#0803c8',
     marginBottom: 4,
   },
   normalText: {

@@ -15,7 +15,7 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
-import {Button, Text} from 'react-native-paper';
+import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import withModal from '../../../shared/HOC/withModal';
 import {setImportantMessage} from '../../Users/model/models';
 import {dp} from '../../../shared/lib/getDP';
@@ -32,6 +32,8 @@ const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
 const Important = () => {
   const [activeMessage, setActiveMessage] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+  const [filterRecipient, setFilterRecipient] = useState('');
   const [sendDescription, setSendDescription] = useState('');
   const [recipient, setRecipient] = useState('');
   const important = useAppSelector(selectImportant);
@@ -41,6 +43,16 @@ const Important = () => {
   const userEmail = useAppSelector(selectCurrentUserEmail);
   const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
+  const uniqueRecipient = !!important && [
+    ...new Set(important.map(obj => obj.recipient)),
+  ];
+  const filterImportant = filterRecipient
+    ? important.filter(
+        item =>
+          (item.author === filterRecipient && item.recipient === userEmail) ||
+          (item.author === userEmail && item.recipient === filterRecipient),
+      )
+    : important;
 
   const {showModal} = useModal();
 
@@ -100,16 +112,19 @@ const Important = () => {
           id={id}
           imageBase64={imageBase64}
           author={author}
+          hideAnswer={author === userEmail}
           onReply={() => {
             setSendDescription(description);
             handleReply(id);
             setRecipient(author);
           }}
           handleImage={handleImage}
+          recipient={''}
+          authorName={''}
         />
       );
     },
-    [handleImage],
+    [handleImage, userEmail],
   );
 
   const handleSendReply = async (message: string) => {
@@ -143,14 +158,60 @@ const Important = () => {
     }
   };
 
+  const dialog = () => {
+    return (
+      <>
+        <Portal>
+          <Dialog visible={visible && !!uniqueRecipient} onDismiss={hideDialog}>
+            <Dialog.ScrollArea>
+              <TouchableOpacity
+                onPress={() => {
+                  setFilterRecipient('');
+                  hideDialog();
+                }}>
+                <Text>{'Все'}</Text>
+              </TouchableOpacity>
+              {!!uniqueRecipient &&
+                uniqueRecipient.map((item, index) => (
+                  <TouchableOpacity
+                    key={'unique' + index}
+                    onPress={() => {
+                      setFilterRecipient(item);
+                      hideDialog();
+                    }}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+            </Dialog.ScrollArea>
+          </Dialog>
+        </Portal>
+      </>
+    );
+  };
+
+  const hideDialog = () => setVisible(false);
+
   useLayoutEffect(() => {
     prefetch();
   }, [dispatch, prefetch]);
   return (
     <View style={styles.container}>
+      {!!uniqueRecipient && dialog()}
+
       <View style={{flex: 1}}>
+        {!!uniqueRecipient && (
+          <TouchableOpacity
+            style={styles.dropdown}
+            onPress={() => setVisible(true)}
+            disabled={!currentUserToken}>
+            <Text style={styles.dropdownText}>
+              Фильтр по: {!filterRecipient ? 'выбрать' : filterRecipient}{' '}
+            </Text>
+            <Icon source='chevron-down' size={20} color='#888' />
+          </TouchableOpacity>
+        )}
         <FlatList
-          data={important}
+          data={filterImportant}
           renderItem={renderItem}
           keyExtractor={(id, index) => id + 'important' + index}
           refreshing={isLoading}
@@ -219,6 +280,21 @@ const styles = StyleSheet.create({
   imageModal: {
     width: '100%',
     height: '100%',
+  },
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 5,
+    borderWidth: 1,
+    borderColor: '#DDD',
+  },
+  dropdownText: {
+    color: '#333',
+    fontSize: 14,
   },
 });
 export default withModal(Important);

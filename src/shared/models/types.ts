@@ -20,8 +20,10 @@ export interface CounterState {
     title: string;
     description: string;
     isImportant: boolean;
+    recipient: string;
     imageBase64?: string;
     author: string;
+    authorName: string;
   }[];
   imageForNewsFromServer: TImageResponse['photos'];
   actionState: {

@@ -28,6 +28,15 @@ export const getCurrentImportant = (
     url: `${TEMP_API}important/${userEmail}`,
   });
 
+export const getCurrentImportantAuthor = (
+  userEmail: string,
+): Promise<AxiosResponse<CounterState['important'], unknown>> =>
+  response.apiRequest({
+    timeout: 1000,
+    method: 'get',
+    url: `${TEMP_API}important/author/${userEmail}`,
+  });
+
 export const createNewsApi = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
 ): Promise<AxiosResponse<CounterState['news'][0], unknown>> =>

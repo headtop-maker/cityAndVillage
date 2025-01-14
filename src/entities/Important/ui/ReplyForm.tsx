@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderWidth: 1,
     shadowColor: '#000',
+    color: '#131413',
   },
   sendButton: {
     marginLeft: dp(8),

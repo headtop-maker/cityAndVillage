@@ -7,6 +7,7 @@ import {dp} from '../../../shared/lib/getDP';
 type TImportantItem = {
   onReply: () => void;
   handleImage: (imageBase64: string) => void;
+  hideAnswer: boolean;
 };
 
 const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
@@ -18,6 +19,7 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
   author,
   onReply,
   handleImage,
+  hideAnswer,
 }) => {
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
 
@@ -38,6 +40,7 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       style={[
         styles.card,
         isImportant ? styles.importantCard : styles.simpleCard,
+        {alignSelf: hideAnswer ? 'flex-end' : 'flex-start'},
       ]}>
       <View style={styles.header}>
         <View>
@@ -80,9 +83,11 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       </Text>
       <View style={styles.footer}>
         <Text style={styles.timestamp}>{convertDate(new Date(createdAt))}</Text>
-        <TouchableOpacity style={styles.replyButton} onPress={onReply}>
-          <Text style={styles.replyText}>Ответить</Text>
-        </TouchableOpacity>
+        {!hideAnswer && (
+          <TouchableOpacity style={styles.replyButton} onPress={onReply}>
+            <Text style={styles.replyText}>Ответить</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -100,6 +105,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    width: '92%',
   },
   image: {
     marginTop: dp(10),

@@ -6,8 +6,8 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  ScrollView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   useAppDispatch,
   useAppSelector,
@@ -15,7 +15,7 @@ import {
 import {getImportant} from '../../../entities/Important/models/models';
 import {selectImportant, selectImportantLoading} from '../models/selectors';
 import {CounterState} from '../../../shared/models/types';
-import {Button, Dialog, Portal, Text} from 'react-native-paper';
+import {Button, Dialog, Portal, Text, Icon} from 'react-native-paper';
 import withModal from '../../../shared/HOC/withModal';
 import {setImportantMessage} from '../../Users/model/models';
 import {dp} from '../../../shared/lib/getDP';
@@ -27,6 +27,7 @@ import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import MessageCard from '../../../entities/Important/ui/MessageCard';
 import ReplyForm from '../../../entities/Important/ui/ReplyForm';
+import {getUniqueRecipient} from '../lib/uniqueRecipient';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
@@ -43,9 +44,8 @@ const Important = () => {
   const userEmail = useAppSelector(selectCurrentUserEmail);
   const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
-  const uniqueRecipient = !!important && [
-    ...new Set(important.map(obj => obj.recipient)),
-  ];
+  const uniqueRecipient = !!important && getUniqueRecipient(important);
+
   const filterImportant = filterRecipient
     ? important.filter(
         item =>
@@ -164,24 +164,26 @@ const Important = () => {
         <Portal>
           <Dialog visible={visible && !!uniqueRecipient} onDismiss={hideDialog}>
             <Dialog.ScrollArea>
-              <TouchableOpacity
-                onPress={() => {
-                  setFilterRecipient('');
-                  hideDialog();
-                }}>
-                <Text>{'Все'}</Text>
-              </TouchableOpacity>
-              {!!uniqueRecipient &&
-                uniqueRecipient.map((item, index) => (
-                  <TouchableOpacity
-                    key={'unique' + index}
-                    onPress={() => {
-                      setFilterRecipient(item);
-                      hideDialog();
-                    }}>
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                ))}
+              <ScrollView style={{maxHeight: dp(500)}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFilterRecipient('');
+                    hideDialog();
+                  }}>
+                  <Text>{'Все'}</Text>
+                </TouchableOpacity>
+                {!!uniqueRecipient &&
+                  uniqueRecipient.map((item, index) => (
+                    <TouchableOpacity
+                      key={'unique' + index}
+                      onPress={() => {
+                        setFilterRecipient(item.email);
+                        hideDialog();
+                      }}>
+                      <Text style={styles.dialogText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </ScrollView>
             </Dialog.ScrollArea>
           </Dialog>
         </Portal>
@@ -207,7 +209,7 @@ const Important = () => {
             <Text style={styles.dropdownText}>
               Фильтр по: {!filterRecipient ? 'выбрать' : filterRecipient}{' '}
             </Text>
-            <Icon source='chevron-down' size={20} color='#888' />
+            <Icon source='chevron-down' size={dp(20)} color='#888' />
           </TouchableOpacity>
         )}
         <FlatList
@@ -235,7 +237,7 @@ const Important = () => {
             </View>
 
             <TouchableOpacity onPress={() => handleClose()}>
-              <Icon name='close' size={20} color='#888' />
+              <Icon source='close' size={20} color='#888' />
             </TouchableOpacity>
           </View>
           <ReplyForm onSend={handleSendReply} />
@@ -262,6 +264,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     marginBottom: dp(3),
+  },
+  dialogText: {
+    margin: dp(5),
+    fontSize: 16,
   },
   sendText: {
     flexDirection: 'row',

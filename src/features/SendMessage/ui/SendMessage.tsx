@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Image,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -88,14 +89,16 @@ const SendMessage = () => {
         <Portal>
           <Dialog visible={visible && !!data} onDismiss={hideDialog}>
             <Dialog.ScrollArea>
-              {!!data &&
-                data.map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => setRecipient(item.email, item.name)}>
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                ))}
+              <ScrollView style={{maxHeight: dp(500)}}>
+                {!!data &&
+                  data.map(item => (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => setRecipient(item.email, item.name)}>
+                      <Text style={styles.dialogText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </ScrollView>
             </Dialog.ScrollArea>
           </Dialog>
         </Portal>
@@ -190,6 +193,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: '#131413',
+  },
+  dialogText: {
+    margin: dp(5),
+    fontSize: 16,
   },
   dropdown: {
     flexDirection: 'row',

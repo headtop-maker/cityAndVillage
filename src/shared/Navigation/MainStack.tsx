@@ -8,7 +8,7 @@ import TabScreen from '../../pages/Tab/TabScreen';
 import AddContentScreen from '../../pages/AddContent/ui/AddContentScreen';
 import ServiceScreen from '../../pages/CityAdsService/ui/CityServices';
 import CurrentNewsScreen from '../../pages/News/ui/CurrentNewsScreen';
-import {useAppSelector} from '../models/storeHooks';
+import {useAppDispatch, useAppSelector} from '../models/storeHooks';
 import {selectCurrentUserToken} from '../models/selectors';
 import LoginScreen from '../../pages/Login/ui/LoginScreen';
 import RegistrationScreen from '../../pages/Registration/RegistrationScreen';
@@ -31,11 +31,14 @@ import {requestNotificationLegacy} from '../lib/requestNotificationLegacy';
 import {selectCurrentUserEmail} from '../../entities/News/models/selectors';
 import {LinkingNav} from './types';
 import PrepareServiceScreen from '../../pages/PrepareService/PrepareServiceScreen';
+import {getImportant} from '../../entities/Important/models/models';
+import {getNews} from '../../entities/News/models/models';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
   const currentUserToken = useAppSelector(selectCurrentUserToken);
   const userEmail = useAppSelector(selectCurrentUserEmail);
+  const dispatch = useAppDispatch();
 
   const isPermissions = async () => {
     const check = await checkStoragePermission();
@@ -74,9 +77,11 @@ const MainStack = () => {
       );
       if (remoteMessage.data) {
         if (remoteMessage.data.type === LinkingNav.message) {
+          await dispatch(getImportant(10));
           navigate(SCREENS.ImportantScreen);
         }
         if (remoteMessage.data.type === LinkingNav.news) {
+          await dispatch(getNews());
           navigate(SCREENS.NewsScreen);
         }
       }

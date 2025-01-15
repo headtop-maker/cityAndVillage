@@ -68,16 +68,15 @@ const SendMessage = () => {
       }),
     );
 
-    if (message !== '') {
-      if (setImportantMessage.fulfilled.match(result)) {
-        showModal(
-          <View style={{padding: dp(10)}}>
-            <Text>Сообщение успешно отправлено. </Text>
-          </View>,
-        );
-      }
-      removeImage();
-      setMessage('');
+    removeImage();
+    setMessage('');
+
+    if (setImportantMessage.fulfilled.match(result)) {
+      showModal(
+        <View style={{padding: dp(10)}}>
+          <Text>Сообщение успешно отправлено. </Text>
+        </View>,
+      );
     }
   };
 

@@ -22,6 +22,7 @@ import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import useAddImage from '../../../shared/Hooks/useAddImage';
+import {getImportant} from '../../../entities/Important/models/models';
 
 const SendMessage = () => {
   const [visible, setVisible] = useState(false);
@@ -77,6 +78,7 @@ const SendMessage = () => {
           <Text>Сообщение успешно отправлено. </Text>
         </View>,
       );
+      await dispatch(getImportant(10));
     }
   };
 

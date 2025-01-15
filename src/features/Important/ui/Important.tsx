@@ -35,6 +35,7 @@ const Important = () => {
   const [activeMessage, setActiveMessage] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
   const [filterRecipient, setFilterRecipient] = useState('');
+  const [filterRecipientName, setFilterRecipientName] = useState('');
   const [sendDescription, setSendDescription] = useState('');
   const [recipient, setRecipient] = useState('');
   const important = useAppSelector(selectImportant);
@@ -168,6 +169,7 @@ const Important = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setFilterRecipient('');
+                    setFilterRecipientName('');
                     hideDialog();
                   }}>
                   <Text>{'Все'}</Text>
@@ -178,6 +180,7 @@ const Important = () => {
                       key={'unique' + index}
                       onPress={() => {
                         setFilterRecipient(item.email);
+                        setFilterRecipientName(item.name);
                         hideDialog();
                       }}>
                       <Text style={styles.dialogText}>{item.name}</Text>
@@ -207,7 +210,7 @@ const Important = () => {
             onPress={() => setVisible(true)}
             disabled={!currentUserToken}>
             <Text style={styles.dropdownText}>
-              Фильтр по: {!filterRecipient ? 'выбрать' : filterRecipient}{' '}
+              Фильтр по: {!filterRecipient ? 'выбрать' : filterRecipientName}{' '}
             </Text>
             <Icon source='chevron-down' size={dp(20)} color='#888' />
           </TouchableOpacity>

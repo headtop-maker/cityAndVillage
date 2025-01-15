@@ -45,7 +45,11 @@ const Important = () => {
   const userEmail = useAppSelector(selectCurrentUserEmail);
   const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
-  const uniqueRecipient = !!important && getUniqueRecipient(important);
+  const uniqueRecipient =
+    !!important &&
+    getUniqueRecipient(important).sort((a, b) =>
+      a.name.localeCompare(b.name, 'ru'),
+    );
 
   const filterImportant = filterRecipient
     ? important.filter(

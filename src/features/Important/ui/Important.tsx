@@ -37,7 +37,7 @@ const Important = () => {
   const [filterRecipient, setFilterRecipient] = useState('');
   const [filterRecipientName, setFilterRecipientName] = useState('');
   const [sendDescription, setSendDescription] = useState('');
-  const [recipient, setRecipient] = useState('');
+  const [sendRecipient, setSendRecipient] = useState('');
   const important = useAppSelector(selectImportant);
   const isLoading = useAppSelector(selectImportantLoading);
   const dispatch = useAppDispatch();
@@ -72,7 +72,7 @@ const Important = () => {
   const clearData = () => {
     setSendDescription('');
     setActiveMessage(null);
-    setRecipient('');
+    setSendRecipient('');
   };
 
   const handleClose = () => {
@@ -107,6 +107,7 @@ const Important = () => {
         id,
         imageBase64,
         author,
+        recipient,
       } = item;
       return (
         <MessageCard
@@ -117,14 +118,14 @@ const Important = () => {
           id={id}
           imageBase64={imageBase64}
           author={author}
-          hideAnswer={author === userEmail}
+          isAuthor={author === userEmail}
           onReply={() => {
             setSendDescription(description);
             handleReply(id);
-            setRecipient(author);
+            setSendRecipient(author);
           }}
           handleImage={handleImage}
-          recipient={''}
+          recipient={recipient}
           authorName={''}
         />
       );
@@ -144,7 +145,7 @@ const Important = () => {
       setImportantMessage({
         author: userEmail,
         authorName: username,
-        recipient: recipient,
+        recipient: sendRecipient,
         title: 'От: ' + username,
         description: message,
         isImportant: false,

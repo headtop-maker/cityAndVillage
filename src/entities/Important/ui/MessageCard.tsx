@@ -7,7 +7,7 @@ import {dp} from '../../../shared/lib/getDP';
 type TImportantItem = {
   onReply: () => void;
   handleImage: (imageBase64: string) => void;
-  hideAnswer: boolean;
+  isAuthor: boolean;
 };
 
 const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
@@ -19,7 +19,8 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
   author,
   onReply,
   handleImage,
-  hideAnswer,
+  isAuthor,
+  recipient,
 }) => {
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
 
@@ -40,12 +41,19 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       style={[
         styles.card,
         isImportant ? styles.importantCard : styles.simpleCard,
-        {alignSelf: hideAnswer ? 'flex-end' : 'flex-start'},
+        {alignSelf: isAuthor ? 'flex-end' : 'flex-start'},
       ]}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.author}>{author}</Text>
-          <Text style={styles.normalText}>{title}</Text>
+          {!isAuthor ? (
+            <Text style={styles.author}>{author}</Text>
+          ) : (
+            <Text style={styles.normalText}>
+              кому:
+              <Text style={styles.author}> {recipient}</Text>
+            </Text>
+          )}
+          {!isAuthor && <Text style={styles.normalText}>{title}</Text>}
         </View>
       </View>
       {imageBase64.length > 0 && (
@@ -83,7 +91,7 @@ const MessageCard: FC<CounterState['important'][0] & TImportantItem> = ({
       </Text>
       <View style={styles.footer}>
         <Text style={styles.timestamp}>{convertDate(new Date(createdAt))}</Text>
-        {!hideAnswer && (
+        {!isAuthor && (
           <TouchableOpacity style={styles.replyButton} onPress={onReply}>
             <Text style={styles.replyText}>Ответить</Text>
           </TouchableOpacity>

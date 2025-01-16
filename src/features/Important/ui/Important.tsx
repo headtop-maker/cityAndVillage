@@ -209,7 +209,7 @@ const Important = () => {
       {!!uniqueRecipient && dialog()}
 
       <View style={{flex: 1}}>
-        {!!uniqueRecipient && (
+        {!!uniqueRecipient && important.length > 0 && (
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setVisible(true)}

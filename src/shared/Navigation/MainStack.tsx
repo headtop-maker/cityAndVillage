@@ -33,6 +33,8 @@ import {LinkingNav} from './types';
 import PrepareServiceScreen from '../../pages/PrepareService/PrepareServiceScreen';
 import {getImportant} from '../../entities/Important/models/models';
 import {getNews} from '../../entities/News/models/models';
+import DiscussionsListScreen from '../../pages/Discussions/ui/DiscussionsListScreen';
+import DiscussionsScreen from '../../pages/Discussions/ui/DiscussionsScreen';
 
 const MainStack = () => {
   const [addToken] = useAddFireBaseTokenMutation();
@@ -117,6 +119,20 @@ const MainStack = () => {
           <Stack.Screen
             name={SCREENS.CurrentNewsScreen}
             component={CurrentNewsScreen}
+          />
+        </Stack.Group>
+
+        <Stack.Group screenOptions={{headerShown: true}}>
+          <Stack.Screen
+            name={SCREENS.DiscussionsListScreen}
+            component={DiscussionsListScreen}
+            options={() => ({
+              title: 'Обсуждения',
+            })}
+          />
+          <Stack.Screen
+            name={SCREENS.DiscussionsScreen}
+            component={DiscussionsScreen}
           />
         </Stack.Group>
 

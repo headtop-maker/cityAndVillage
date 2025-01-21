@@ -51,7 +51,10 @@ const DialogText: FC<DialogItemProps> = ({
   return (
     <View style={styles.container}>
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
+        <Dialog
+          visible={visible}
+          onDismiss={hideDialog}
+          style={{backgroundColor: '#FFFFFF'}}>
           <Dialog.Title>Подтвердите</Dialog.Title>
           <Dialog.Content>
             <Text variant='bodyMedium'>{dialogText}</Text>
@@ -88,7 +91,7 @@ const DialogText: FC<DialogItemProps> = ({
               value={text}
               onChangeText={onChangeText}
               mode='flat'
-              style={{marginTop: 10}}
+              style={styles.input}
               multiline={true}
             />
           </Dialog.Content>
@@ -121,4 +124,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'center',
   },
+  input: {marginTop: 10, backgroundColor: '#FFFFFF'},
 });

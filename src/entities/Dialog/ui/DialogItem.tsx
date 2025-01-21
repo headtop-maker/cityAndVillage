@@ -23,10 +23,13 @@ const DialogItem: FC<DialogItemProps> = ({
   return (
     <View style={styles.container}>
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
+        <Dialog
+          visible={visible}
+          onDismiss={hideDialog}
+          style={{backgroundColor: '#FFFFFF'}}>
           <Dialog.Title>Подтвердите</Dialog.Title>
           <Dialog.Content>
-            <Text variant="bodyMedium">{dialogText}</Text>
+            <Text variant='bodyMedium'>{dialogText}</Text>
           </Dialog.Content>
 
           <Dialog.Actions>
@@ -42,5 +45,5 @@ const DialogItem: FC<DialogItemProps> = ({
 export default DialogItem;
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, backgroundColor: '#FFFFFF'},
 });

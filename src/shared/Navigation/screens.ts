@@ -10,6 +10,8 @@ enum SCREENS {
   LoginScreen = 'LoginScreen',
   RegistrationScreen = 'RegistrationScreen',
   PrepareServiceScreen = 'PrepareServiceScreen',
+  DiscussionsListScreen = 'DiscussionsListScreen',
+  DiscussionsScreen = 'DiscussionsScreen',
 }
 
 export default SCREENS;

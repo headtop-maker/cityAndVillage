@@ -1,9 +1,4 @@
 export const ImagesAssets = {
-  builder: require('./builder.png'),
-  electrician: require('./electrician.png'),
-  gardener: require('./gardener.png'),
-  loader: require('./loader.png'),
-  worker: require('./worker.png'),
   information: require('./information.png'),
   important: require('./important.png'),
   house: require('./house.png'),
@@ -18,4 +13,5 @@ export const ImagesAssets = {
   document: require('./document.png'),
   government: require('./government.png'),
   mail: require('./mail.png'),
+  discuss: require('./discuss.png'),
 };

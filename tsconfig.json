@@ -5,6 +5,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "lib": [ "es2015" ]
-  },
+    "moduleResolution": "Node",
+    "lib": [ "es2015" ],
+    "target": "ES2015"
+  }
 }

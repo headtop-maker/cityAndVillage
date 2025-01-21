@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {
-  Alert,
   Image,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -22,11 +22,10 @@ import {dp} from '../../../shared/lib/getDP';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
 import {useModal} from '../../Modal/ui/ModalProvider';
-import {nativeFn} from '../../../shared/lib/nativeFn';
+import useAddImage from '../../../shared/Hooks/useAddImage';
+import {getImportant} from '../../../entities/Important/models/models';
 
 const SendMessage = () => {
-  const [image, setImage] = useState('');
-  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -39,13 +38,15 @@ const SendMessage = () => {
   const username = useAppSelector(selectCurrentUserName);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
 
+  const {handleImage, image, imageSize, removeImage} = useAddImage();
   const {showModal} = useModal();
   const dispatch = useAppDispatch();
 
   const hideDialog = () => setVisible(false);
 
   const handleChangeMessage = (text: string) => {
-    setMessage(text);
+    const filteredText = text.replace(/\n/g, '');
+    setMessage(filteredText);
   };
 
   const setRecipient = (email: string, name: string) => {
@@ -69,41 +70,17 @@ const SendMessage = () => {
       }),
     );
 
-    if (message !== '') {
-      if (setImportantMessage.fulfilled.match(result)) {
-        showModal(
-          <View style={{padding: dp(10)}}>
-            <Text>Сообщение успешно отправлено. </Text>
-          </View>,
-        );
-      }
-      setImage('');
-      setMessage('');
-    }
-  };
+    removeImage();
+    setMessage('');
 
-  const handleImage = async () => {
-    try {
-      const result = await nativeFn.base64Image();
-      Image.getSize(
-        `data:image/jpeg;base64,${result.base64Image}`,
-        (widthImage, heightImage) => {
-          setImageSize({
-            width: Math.floor(widthImage / 2),
-            height: Math.floor(heightImage / 2),
-          });
-        },
+    if (setImportantMessage.fulfilled.match(result)) {
+      showModal(
+        <View style={{padding: dp(10)}}>
+          <Text>Сообщение успешно отправлено. </Text>
+        </View>,
       );
-      if (result.base64Image) {
-        setImage(result.base64Image);
-      }
-    } catch (error) {
-      Alert.alert('Ошибка сжатия изображения', error.toString());
+      await dispatch(getImportant(10));
     }
-  };
-
-  const removeImage = () => {
-    setImage('');
   };
 
   const dialog = () => {
@@ -112,14 +89,16 @@ const SendMessage = () => {
         <Portal>
           <Dialog visible={visible && !!data} onDismiss={hideDialog}>
             <Dialog.ScrollArea>
-              {!!data &&
-                data.map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => setRecipient(item.email, item.name)}>
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                ))}
+              <ScrollView style={{maxHeight: dp(500)}}>
+                {!!data &&
+                  data.map(item => (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => setRecipient(item.email, item.name)}>
+                      <Text style={styles.dialogText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </ScrollView>
             </Dialog.ScrollArea>
           </Dialog>
         </Portal>
@@ -184,7 +163,7 @@ const SendMessage = () => {
           value={message}
           onChangeText={handleChangeMessage}
           multiline={true}
-          maxLength={100}
+          maxLength={400}
           editable={!!currentUserToken}
           style={styles.textInput}
         />
@@ -214,6 +193,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: '#131413',
+  },
+  dialogText: {
+    margin: dp(5),
+    fontSize: 16,
   },
   dropdown: {
     flexDirection: 'row',

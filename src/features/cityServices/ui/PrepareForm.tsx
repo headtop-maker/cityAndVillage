@@ -15,13 +15,12 @@ import {
   selectCurrentUserRole,
   selectCurrentUserToken,
 } from '../../../shared/models/selectors';
-import {nativeFn} from '../../../shared/lib/nativeFn';
 import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
-import {base64ByteSize} from '../../../shared/lib/base64ByteSize';
 import {useAddPrepareAdsMutation} from '../../../shared/models/services';
 import {useModal} from '../../Modal/ui/ModalProvider';
 import {goBack} from '../../../shared/lib/navigationRef';
 import {userRole} from '../../../shared/models/types';
+import useAddImage from '../../../shared/Hooks/useAddImage';
 
 const initial = {
   phone: '',
@@ -29,7 +28,6 @@ const initial = {
   title: '',
   categoryName: 'other',
   description: '',
-  image: '',
   imageSize: 0,
 };
 
@@ -37,11 +35,11 @@ const PrepareForm: FC = () => {
   const role = useAppSelector(selectCurrentUserRole);
   const isAdmin = role === userRole.admin;
   const [addPrepareAds, {isSuccess, isLoading}] = useAddPrepareAdsMutation();
-  const [imageSize, setImageSize] = useState({width: 0, height: 0});
   const [formData, setFormData] = useState(initial);
   const userEmail = useAppSelector(selectCurrentUserEmail);
   const currentUserToken = useAppSelector(selectCurrentUserToken);
   const {showModal} = useModal();
+  const {handleImage, image, imageSize, removeImage} = useAddImage();
 
   const handleShowModal = () => {
     showModal(
@@ -80,7 +78,7 @@ const PrepareForm: FC = () => {
       Alert.alert('Ошибка', 'Поле "Описание" не может быть пустым.');
       return;
     }
-    if (!formData.image.trim()) {
+    if (!image.trim()) {
       Alert.alert('Ошибка', 'Изображение не может быть пустым.');
       return;
     }
@@ -92,7 +90,7 @@ const PrepareForm: FC = () => {
 
     await addPrepareAds({
       phone: formData.phone,
-      image: formData.image,
+      image: image,
       email: formData.email,
       categoryName: 'other',
       title: formData.title,
@@ -101,48 +99,19 @@ const PrepareForm: FC = () => {
     await setFormData(initial);
   };
 
-  const handleImage = async () => {
-    try {
-      const result = await nativeFn.base64Image();
-      Image.getSize(
-        `data:image/jpeg;base64,${result.base64Image}`,
-        (widthImage, heightImage) => {
-          setImageSize({
-            width: Math.floor(widthImage / 1.5),
-            height: Math.floor(heightImage / 1.5),
-          });
-        },
-      );
-
-      if (result.base64Image) {
-        handleChange(
-          'imageSize',
-          Math.floor(base64ByteSize(result.base64Image) / 1024),
-        );
-        handleChange('image', result.base64Image);
-      }
-    } catch (error) {
-      Alert.alert('Ошибка сжатия изображения', error.toString());
-    }
-  };
-
-  const removeImage = () => {
-    handleChange('image', '');
-  };
-
   return (
     <ScrollView style={styles.container}>
-      {!formData.image && (
+      {!image && (
         <TouchableOpacity style={styles.imageButton} onPress={handleImage}>
           <Text style={styles.imageButtonText}>Добавить изображение</Text>
         </TouchableOpacity>
       )}
-      {formData.image && (
+      {image && (
         <TouchableOpacity style={styles.imageButton} onPress={removeImage}>
           <Text style={styles.imageButtonText}>Удалить изображение</Text>
         </TouchableOpacity>
       )}
-      {formData.image && (
+      {image && (
         <Image
           style={[
             {
@@ -156,7 +125,7 @@ const PrepareForm: FC = () => {
             },
           ]}
           source={{
-            uri: 'data:image/jpeg;base64,' + formData.image,
+            uri: 'data:image/jpeg;base64,' + image,
           }}
         />
       )}

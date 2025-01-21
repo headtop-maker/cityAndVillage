@@ -2,12 +2,12 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
   ServiceTitle,
   ImportantContact,
-  userRole,
   TDocuments,
   IAppVersion,
   ServiceTitleItem,
   PrepareAds,
   GetPrepareAds,
+  CounterState,
 } from './types';
 import {RootState} from '../../app/store';
 import {TEMP_API} from '../api/axiosInstance';
@@ -210,16 +210,7 @@ export const serviceApi = createApi({
       query: () => '/upload',
       providesTags: ['UploadFile'],
     }),
-    getAdmins: builder.query<
-      {
-        id: number;
-        name: string;
-        email: string;
-        banned: boolean;
-        userRole: userRole;
-      }[],
-      void
-    >({
+    getAdmins: builder.query<CounterState['allUsers'], void>({
       query: () => `/auth/admins`,
     }),
   }),

@@ -13,18 +13,10 @@ import useAnimatedShake from '../../../shared/Hooks/useAnimatedShake';
 import AnimatedNews from './AnimatedNews';
 
 import {dp} from '../../../shared/lib/getDP';
-
-interface TCurrent {
-  id: string;
-  createdAt: Date;
-  title: string;
-  description: string;
-  image: string;
-  author: string;
-}
+import {CounterState} from '../../../shared/models/types';
 
 const CurrentNews = () => {
-  const [currentNews, setCurrentNews] = useState<TCurrent>();
+  const [currentNews, setCurrentNews] = useState<CounterState['news'][0]>();
   const leftShake = useAnimatedShake();
   const rightShake = useAnimatedShake();
 
@@ -63,25 +55,25 @@ const CurrentNews = () => {
         <AnimatedNews uri={currentNews?.image} current={currentNews} />
       )}
 
-      <Text style={styles.newsCreateAt}>
+      <Text style={styles.date}>
         {currentNews?.createdAt &&
           convertDate(new Date(currentNews?.createdAt))}
       </Text>
       <View style={styles.tools}>
         {leftShake.childrenShakeElement(
           <IconButton
-            icon='arrow-left-bold-box-outline'
+            icon='chevron-left-circle'
             selected
-            size={50}
+            size={40}
             onPress={() => getNews('Next')}
           />,
         )}
 
         {rightShake.childrenShakeElement(
           <IconButton
-            icon='arrow-right-bold-box-outline'
+            icon='chevron-right-circle'
             selected
-            size={50}
+            size={40}
             onPress={() => getNews('Prev')}
           />,
         )}
@@ -127,11 +119,11 @@ const styles = StyleSheet.create({
     borderRadius: dp(5),
   },
 
-  newsCreateAt: {
-    marginTop: dp(10),
-    marginRight: dp(10),
-    fontSize: dp(16),
-    fontWeight: '500',
-    alignSelf: 'flex-end',
+  date: {
+    marginTop: dp(12),
+    fontSize: 12,
+    textAlign: 'right',
+    color: '#9E9E9E',
+    marginRight: dp(15),
   },
 });

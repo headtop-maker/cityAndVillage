@@ -5,9 +5,9 @@ export interface CounterState {
   news: {
     id: string;
     createdAt: Date;
-    title: string;
-    description: string;
-    image: string;
+    title?: string;
+    description?: string;
+    image?: string;
     author: string;
   }[];
   appInFiles: string;
@@ -20,8 +20,10 @@ export interface CounterState {
     title: string;
     description: string;
     isImportant: boolean;
+    recipient: string;
     imageBase64?: string;
     author: string;
+    authorName: string;
   }[];
   imageForNewsFromServer: TImageResponse['photos'];
   actionState: {

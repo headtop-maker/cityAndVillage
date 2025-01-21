@@ -8,14 +8,13 @@ import SCREENS from '../../../shared/Navigation/screens';
 import {CounterState} from '../../../shared/models/types';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {setCurrentNewsId} from '../../../shared/models/counterSlice';
-import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {Button, IconButton, Tooltip} from 'react-native-paper';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
 
 const NewsItem: FC<
   CounterState['news'][0] & {isAdmin: boolean; deleteItem: (id: string) => void}
-> = ({id, title, createdAt, image, isAdmin, deleteItem}) => {
+> = ({id, title, createdAt, image, isAdmin, deleteItem, description}) => {
   const dispatch = useAppDispatch();
   const navigation =
     useNavigation<NativeStackNavigationProp<IRouteParamList>>();
@@ -29,7 +28,8 @@ const NewsItem: FC<
   return (
     <TouchableOpacity
       style={[styles.newsContainer, styles.shadow]}
-      onPress={handleNavigate}>
+      onPress={handleNavigate}
+      disabled={!image}>
       {image ? (
         <Image
           style={styles.newsImage}
@@ -37,12 +37,11 @@ const NewsItem: FC<
             uri: image,
           }}
         />
-      ) : (
-        <Image style={styles.defaultImage} source={ImagesAssets.defaultImage} />
-      )}
+      ) : null}
 
       <View style={styles.newsTextBlock}>
-        <Text style={styles.newsText}>{title}</Text>
+        {title && <Text style={styles.title}>{title}</Text>}
+        {description && <Text style={styles.description}>{description}</Text>}
         <View style={styles.newsMetaText}>
           {isAdmin && (
             <Tooltip title='Selected phone'>
@@ -56,9 +55,11 @@ const NewsItem: FC<
           )}
           <Text>{convertDate(new Date(createdAt))}</Text>
 
-          <Button mode='text' onPress={handleNavigate}>
-            подробнее...
-          </Button>
+          {image && (
+            <Button mode='text' onPress={handleNavigate}>
+              подробнее...
+            </Button>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -75,7 +76,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: dp(8),
+    color: '#333',
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+  },
   newsImage: {
     height: dp(190),
     borderRadius: dp(10),

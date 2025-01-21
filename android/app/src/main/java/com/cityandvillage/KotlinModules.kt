@@ -17,9 +17,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
+import android.provider.Settings
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
@@ -35,7 +38,6 @@ import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import java.io.ByteArrayOutputStream
 import java.io.File
-import android.provider.Settings
 
 
 public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBaseJavaModule(reactContext){
@@ -324,10 +326,10 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                 val fileParams: WritableMap = WritableNativeMap()
                 super.onActivityResult(requestCode, resultCode, intent)
                 intent?.data?.also { uri: Uri ->
-                    Log.d("URINative", uri.toString())
+                    val mContextResolver = reactApplicationContext.contentResolver
 
                     val cursor = uri.let { it ->
-                        reactApplicationContext.contentResolver.query(
+                        mContextResolver.query(
                             it,
                             null,
                             null,
@@ -336,10 +338,15 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                         )
                     }
                     cursor?.moveToFirst()
-                    fileParams.putString("fileName", cursor?.getString(2)?.split(".")!![0])
-                    fileParams.putString("fileType", cursor.getString(2)?.split(".")!![1])
-                    fileParams.putInt("fileByteSize", cursor.getString(5).toInt())
-                    fileParams.putString("fileUri", uri.toString())
+                    if (cursor != null) {
+                        val cIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                        fileParams.putString("fileName", cursor?.getString(2)?.split(".")!![0])
+                        fileParams.putString("fileType", mContextResolver.getType(uri))
+                        fileParams.putInt("fileByteSize", cursor.getString(5).toInt())
+                        fileParams.putString("fileUri", uri.toString())
+                        fileParams.putString("filePath",  cursor.getString(cIndex))
+                    }
+
                     promise?.resolve(fileParams)
 
                 }
@@ -380,7 +387,7 @@ public class KotlinModules(reactContext:ReactApplicationContext):ReactContextBas
                     if(bitmap!= null) {
                         val baos = ByteArrayOutputStream()
 
-                        val maxSize = 600
+                        val maxSize = 500
                         val outWidth: Int
                         val outHeight: Int
                         val inWidth: Int = bitmap.width

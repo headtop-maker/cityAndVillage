@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  ScrollView,
 } from 'react-native';
 import {
   useAppDispatch,
@@ -45,8 +46,6 @@ const AddNews = () => {
   useLayoutEffect(() => {
     dispatch(getImageForNews());
   }, [dispatch]);
-
-  const isLockSend = !!title && !!description && !!imageSrc;
 
   const handleClick = () => {
     if (!currentRole || currentRole !== userRole.admin || !userName) {
@@ -92,79 +91,81 @@ const AddNews = () => {
     />
   );
   return (
-    <SafeAreaView style={styles.container}>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            legacyImplementation={false}
-            data={images}
-            renderItem={imageItems}
-            keyExtractor={(id, index) => id + 'images' + index}
-            numColumns={2}
-            contentContainerStyle={styles.dialog}
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              legacyImplementation={false}
+              data={images}
+              renderItem={imageItems}
+              keyExtractor={(id, index) => id + 'images' + index}
+              numColumns={2}
+              contentContainerStyle={styles.dialog}
+            />
+          </Dialog>
+        </Portal>
+        <View
+          style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
+          <Text
+            style={[styles.titleTextStyle, {marginTop: rem / 2.5}]}
+            variant='titleLarge'>
+            Добавить новость
+          </Text>
+          <View style={styles.addFileContainer}>
+            <Button
+              mode='outlined'
+              style={{margin: rem / 3}}
+              onPress={handleAddImage}>
+              Загрузить
+            </Button>
+            <TouchableOpacity
+              style={[styles.refresh, {margin: rem / 3}]}
+              onPress={() => dispatch(getImageForNews())}>
+              <Image style={styles.imageRef} source={ImagesAssets.refresh} />
+            </TouchableOpacity>
+          </View>
+          <Button
+            mode='contained'
+            style={{margin: rem / 3}}
+            onPress={handleShowImage}>
+            Выбрать изображение
+          </Button>
+          <TextInput
+            style={styles.input}
+            label='Заголовок'
+            value={title}
+            onChangeText={setTitle}
+            mode='outlined'
           />
-        </Dialog>
-      </Portal>
-      <View style={[styles.inputContainer, styles.shadow, {margin: rem / 2.5}]}>
-        <Text
-          style={[styles.titleTextStyle, {marginTop: rem / 2.5}]}
-          variant='titleLarge'>
-          Добавить новость
-        </Text>
-        <View style={styles.addFileContainer}>
+          <TextInput
+            style={styles.input}
+            label='Описание новости'
+            value={description}
+            onChangeText={setDescription}
+            mode='outlined'
+            multiline={true}
+          />
+
+          <TextInput
+            style={styles.input}
+            label='Ссылка на изображение'
+            value={imageSrc}
+            onChangeText={setImageSrc}
+            mode='outlined'
+            disabled={true}
+          />
+
           <Button
             mode='outlined'
-            style={{margin: rem / 3}}
-            onPress={handleAddImage}>
-            Загрузить
+            style={{margin: dp(10)}}
+            onPress={handleClick}>
+            Добавить
           </Button>
-          <TouchableOpacity
-            style={[styles.refresh, {margin: rem / 3}]}
-            onPress={() => dispatch(getImageForNews())}>
-            <Image style={styles.imageRef} source={ImagesAssets.refresh} />
-          </TouchableOpacity>
         </View>
-        <Button
-          mode='contained'
-          style={{margin: rem / 3}}
-          onPress={handleShowImage}>
-          Выбрать изображение
-        </Button>
-        <TextInput
-          style={styles.input}
-          label='Заголовок'
-          value={title}
-          onChangeText={setTitle}
-          mode='outlined'
-        />
-        <TextInput
-          style={styles.input}
-          label='Описание новости'
-          value={description}
-          onChangeText={setDescription}
-          mode='outlined'
-          multiline={true}
-        />
-
-        <TextInput
-          style={styles.input}
-          label='Ссылка на изображение'
-          value={imageSrc}
-          onChangeText={setImageSrc}
-          mode='outlined'
-          disabled={true}
-        />
-
-        <Button
-          mode='outlined'
-          style={{margin: dp(10)}}
-          disabled={!isLockSend}
-          onPress={handleClick}>
-          Добавить
-        </Button>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 

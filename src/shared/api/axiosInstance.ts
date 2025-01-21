@@ -28,6 +28,15 @@ export const getCurrentImportant = (
     url: `${TEMP_API}important/${userEmail}`,
   });
 
+export const getCurrentImportantAuthor = (
+  userEmail: string,
+): Promise<AxiosResponse<CounterState['important'], unknown>> =>
+  response.apiRequest({
+    timeout: 1000,
+    method: 'get',
+    url: `${TEMP_API}important/author/${userEmail}`,
+  });
+
 export const createNewsApi = (
   data: Omit<CounterState['news'][0], 'id' | 'createdAt'>,
 ): Promise<AxiosResponse<CounterState['news'][0], unknown>> =>
@@ -117,18 +126,7 @@ export const setImportantMessageApi = (
 export const setBannedUserApi = (
   id: number,
   banned: boolean,
-): Promise<
-  AxiosResponse<
-    {
-      id: number;
-      name: string;
-      email: string;
-      banned: boolean;
-      userRole: userRole;
-    },
-    unknown
-  >
-> =>
+): Promise<AxiosResponse<CounterState['allUsers'][0], unknown>> =>
   response.apiRequest({
     data: {banned},
     timeout: 3000,

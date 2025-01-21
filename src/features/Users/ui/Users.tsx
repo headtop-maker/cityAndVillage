@@ -6,7 +6,7 @@ import {
 } from '../../../shared/models/storeHooks';
 import {getAllUsers, setBannedUser, setImportantMessage} from '../model/models';
 import {selectAllUsers} from '../model/selectors';
-import {userRole} from '../../../shared/models/types';
+import {CounterState, userRole} from '../../../shared/models/types';
 import UserItem from '../../../entities/User/ui/UserItem';
 import DialogItem from '../../../entities/Dialog/ui/DialogItem';
 import DialogText from '../../../entities/DialogText/ui/DialogText';
@@ -16,6 +16,7 @@ import {
   selectCurrentUserRole,
 } from '../../../entities/News/models/selectors';
 import {dp} from '../../../shared/lib/getDP';
+import useAddImage from '../../../shared/Hooks/useAddImage';
 
 const Users = () => {
   const [query, setQuery] = useState('');
@@ -24,6 +25,7 @@ const Users = () => {
   const [visible, setVisible] = useState(false);
   const [visibleImportant, setVisibleImportant] = useState(false);
   const [checked, setChecked] = useState(false);
+  const {handleImage, image, imageSize, removeImage} = useAddImage();
 
   const currentRole = useAppSelector(selectCurrentUserRole);
   const userName = useAppSelector(selectCurrentUserName);
@@ -59,17 +61,7 @@ const Users = () => {
   const lock =
     !currentRole || currentRole !== userRole.admin || !userName || !userEmail;
 
-  const userItems = ({
-    item,
-  }: {
-    item: {
-      id: number;
-      name: string;
-      email: string;
-      banned: boolean;
-      userRole: userRole;
-    };
-  }) => (
+  const userItems = ({item}: {item: CounterState['allUsers'][0]}) => (
     <UserItem
       item={item}
       selectedId={selectedId}
@@ -83,6 +75,7 @@ const Users = () => {
     setImportantText('');
     setSelectedId(undefined);
     setChecked(false);
+    removeImage();
   };
 
   const handleMessage = () => {
@@ -99,6 +92,7 @@ const Users = () => {
           title: 'От: ' + userName,
           description: importantText,
           isImportant: checked,
+          imageBase64: image ? `data:image/jpeg;base64,${image}` : '',
         }),
       );
     clearData();
@@ -142,6 +136,11 @@ const Users = () => {
         text={importantText}
         setChecked={setChecked}
         checked={checked}
+        key={'dialog' + selectedId}
+        handleImage={handleImage}
+        image={image}
+        removeImage={removeImage}
+        imageSize={imageSize}
       />
     </View>
   );

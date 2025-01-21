@@ -26,14 +26,16 @@ const SetRegistration = () => {
   const handleClick = async () => {
     try {
       setBlockBtn(true);
-      dispatch(createUsers({name, email: email.toLowerCase(), password}));
+      dispatch(
+        createUsers({name: name.trim(), email: email.toLowerCase(), password}),
+      );
     } finally {
       setBlockBtn(false);
     }
   };
 
   const hasNameErrors = () => {
-    return !fullNamePattern.test(name);
+    return !fullNamePattern.test(name.trim());
   };
 
   const hasEmailErrors = () => {

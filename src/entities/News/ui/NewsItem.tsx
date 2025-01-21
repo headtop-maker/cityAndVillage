@@ -28,7 +28,8 @@ const NewsItem: FC<
   return (
     <TouchableOpacity
       style={[styles.newsContainer, styles.shadow]}
-      onPress={handleNavigate}>
+      onPress={handleNavigate}
+      disabled={!image}>
       {image ? (
         <Image
           style={styles.newsImage}

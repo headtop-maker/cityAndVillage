@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {TouchableOpacity, Animated, StyleProp, ViewStyle} from 'react-native';
-import StarSVG from '../../../shared/assets/SvgComponents/StarSVG';
+import StarSVG from '../../../assets/SvgComponents/StarSVG';
 
 type TStar = {
   filled: boolean;

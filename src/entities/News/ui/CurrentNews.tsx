@@ -1,7 +1,7 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useAppSelector} from '../../../shared/models/storeHooks';
-import {selectCurrentNewsId} from '../../../features/getNews/models/selectors';
+import {selectCurrentNewsId} from '../../../features/GetNews/models/selectors';
 import {selectNews} from '../../../features/News/models/selectors';
 import {Icon, IconButton} from 'react-native-paper';
 

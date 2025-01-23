@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle} from 'react-native';
-import Star from '../../../entities/Rating/ui/Star';
+import Star from '../../../shared/Components/Rating/ui/Star';
 
 type TRating = {
   onChandge: (data: number) => void;

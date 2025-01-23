@@ -11,7 +11,7 @@ import {
   useAddNewDocumentMutation,
   useGetUploadFilesQuery,
 } from '../../../shared/models/services';
-import {useModal} from '../../Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
 import {useAppDispatch} from '../../../shared/models/storeHooks';
 import {dp} from '../../../shared/lib/getDP';

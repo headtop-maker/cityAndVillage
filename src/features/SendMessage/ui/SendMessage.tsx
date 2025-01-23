@@ -21,7 +21,7 @@ import {setImportantMessage} from '../../Users/model/models';
 import {dp} from '../../../shared/lib/getDP';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
-import {useModal} from '../../Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import useAddImage from '../../../shared/Hooks/useAddImage';
 import {getImportant} from '../../../entities/Important/models/models';
 

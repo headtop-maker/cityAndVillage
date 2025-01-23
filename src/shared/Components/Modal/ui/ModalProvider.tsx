@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {Modal, View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
-import {dp} from '../../../shared/lib/getDP';
+import {dp} from '../../../lib/getDP';
 
 type TModalContextType = {
   showModal: (content: ReactElement) => void;

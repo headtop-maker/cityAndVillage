@@ -24,7 +24,7 @@ import {
   selectCurrentUserName,
 } from '../../../entities/News/models/selectors';
 import {selectCurrentUserToken} from '../../../shared/models/selectors';
-import {useModal} from '../../Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import MessageCard from '../../../entities/Important/ui/MessageCard';
 import ReplyForm from '../../../entities/Important/ui/ReplyForm';
 import {getUniqueRecipient} from '../lib/uniqueRecipient';

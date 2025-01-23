@@ -17,7 +17,7 @@ import {
 } from '../../../shared/models/selectors';
 import {selectCurrentUserEmail} from '../../../entities/News/models/selectors';
 import {useAddPrepareAdsMutation} from '../../../shared/models/services';
-import {useModal} from '../../Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {goBack} from '../../../shared/lib/navigationRef';
 import {userRole} from '../../../shared/models/types';
 import useAddImage from '../../../shared/Hooks/useAddImage';

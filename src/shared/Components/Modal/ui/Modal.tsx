@@ -1,11 +1,11 @@
 import React from 'react';
 import {Modal, StyleSheet, View} from 'react-native';
-import {useAppSelector} from '../../../shared/models/storeHooks';
+import {useAppSelector} from '../../../models/storeHooks';
 import {selectModalText} from '../model/selectors';
 import {useDispatch} from 'react-redux';
-import {resetModalText} from '../../../shared/models/counterSlice';
+import {resetModalText} from '../../../models/counterSlice';
 import {Snackbar} from 'react-native-paper';
-import {dp} from '../../../shared/lib/getDP';
+import {dp} from '../../../lib/getDP';
 
 const ModalScreen = () => {
   const modalText = useAppSelector(selectModalText);

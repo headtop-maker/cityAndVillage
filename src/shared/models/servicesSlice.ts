@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {getServices} from '../../entities/ProfessionalServices/serviceList/model/actions';
+import {getServices} from '../../entities/CityAdsService/serviceList/model/actions';
 
 export const serviceAdapter = createEntityAdapter();
 export const servicesSelectors = serviceAdapter.getSelectors<RootState>(

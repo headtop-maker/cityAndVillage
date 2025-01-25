@@ -18,7 +18,6 @@ import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
-
   useLayoutEffect(() => {
     if (section) {
       setSection('government');

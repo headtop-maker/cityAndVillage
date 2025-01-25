@@ -7,8 +7,8 @@ import CityServices from '../../../features/cityServices/ui/CityServices';
 import {Icon, Text} from 'react-native-paper';
 
 import UpdateApp from '../../../features/Update/ui/UpdateApp';
-import Documents from '../../../features/documents/ui/Documents';
-import ServiceItem from '../../../entities/ProfessionalServices/serviceItem/ui/ServiceItem';
+import Documents from '../../../features/Documents/ui/Documents';
+import ServiceItem from '../../../entities/CityAdsService/serviceItem/ui/ServiceItem';
 import {TServiceItem} from '../../../shared/types';
 import SendMessage from '../../../features/SendMessage/ui/SendMessage';
 import MyBanner from '../../../shared/Components/Shake/ui/Banner';
@@ -18,7 +18,6 @@ import {nativeFn} from '../../../shared/lib/nativeFn';
 
 const MainScreen = () => {
   const [section, setSection] = useState<TServiceItem['imgSrc']>('government');
-
   useLayoutEffect(() => {
     if (section) {
       setSection('government');

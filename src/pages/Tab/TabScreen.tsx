@@ -15,7 +15,7 @@ import {
 } from '../../shared/models/selectors';
 import {userRole} from '../../shared/models/types';
 
-import ImportantBtn from '../../features/getNews/ui/ImportantBtn';
+import ImportantBtn from '../../features/GetNews/ui/ImportantBtn';
 import {Button, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';

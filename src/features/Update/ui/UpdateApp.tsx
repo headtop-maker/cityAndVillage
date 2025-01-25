@@ -2,7 +2,7 @@ import React, {memo, useEffect} from 'react';
 import {StyleSheet, View, NativeModules} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import useDimensions from '../../../shared/HOC/useDimensions';
-import {useModal} from '../../Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 import {TEMP_API} from '../../../shared/api/axiosInstance';
 import {

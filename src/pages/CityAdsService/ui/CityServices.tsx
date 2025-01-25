@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
-import ServiceList from '../../../entities/ProfessionalServices/serviceList/ui/ServiceList';
+import ServiceList from '../../../entities/CityAdsService/serviceList/ui/ServiceList';
 import {servicesSelectors} from '../../../shared/models/servicesSlice';
 import {callOtherFn} from '../../../shared/api/ApiCall';
 import {
@@ -20,10 +20,10 @@ import {
   selectIsLoading,
 } from '../../../shared/models/selectors';
 import withModal from '../../../shared/HOC/withModal';
-import {getServices} from '../../../entities/ProfessionalServices/serviceList/model/actions';
+import {getServices} from '../../../entities/CityAdsService/serviceList/model/actions';
 import ServiceCardItem from '../../../entities/CityService/ui/CityServiceCardItem';
 import {Button, IconButton, Text, Tooltip} from 'react-native-paper';
-import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 import {navigate} from '../../../shared/lib/navigationRef';
 import SCREENS from '../../../shared/Navigation/screens';

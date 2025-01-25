@@ -4,7 +4,7 @@ import {ImagesAssets} from '../../../shared/assets/picture/icons/ImageAssets';
 import {CounterState} from '../../../shared/models/types';
 import {convertDate} from '../../../shared/lib/convertDate';
 import {dp} from '../../../shared/lib/getDP';
-import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {Button, TextInput} from 'react-native-paper';
 
 type TImportantItem = {

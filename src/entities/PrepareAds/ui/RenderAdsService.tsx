@@ -14,7 +14,7 @@ import {
   PrepareAds,
   ServiceTitleItem,
 } from '../../../shared/models/types';
-import {useModal} from '../../../features/Modal/ui/ModalProvider';
+import {useModal} from '../../../shared/Components/Modal/ui/ModalProvider';
 import {dp} from '../../../shared/lib/getDP';
 
 type TRenderAdsService = {
